@@ -1,0 +1,24 @@
+# Dependencies
+node_modules
+
+# Build output
+dist
+build
+coverage
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode
+.idea
+
+# Other
+*.min.js
+*.min.css
+public/assets
+
+# Vite
+.vite

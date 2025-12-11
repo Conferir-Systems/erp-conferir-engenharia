@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-bgMain text-textMain font-sans;
+  }
+}
+
+@layer utilities {
+  /* Custom scrollbar for table containers */
+  .custom-scroll::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+  }
+
+  .custom-scroll::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  .custom-scroll::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+  }
+
+  .custom-scroll::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+  }
+}
