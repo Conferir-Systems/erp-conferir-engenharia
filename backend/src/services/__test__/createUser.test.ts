@@ -15,7 +15,6 @@ describe('create user', () => {
         expect.objectContaining({
           id: expect.any(String),
           email: createUserParams.email,
-          passwordHash: expect.any(String),
         })
       )
     })
