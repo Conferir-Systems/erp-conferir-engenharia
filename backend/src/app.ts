@@ -3,6 +3,8 @@ import cors from 'cors'
 import helmet from 'helmet'
 import morgan from 'morgan'
 
+import usersRoutes from './routes/users'
+
 const app = express()
 
 // Middleware
@@ -32,6 +34,8 @@ app.get('/api', (req: Request, res: Response) => {
     },
   })
 })
+
+app.use('/api', usersRoutes)
 
 // 404 handler
 app.use((req: Request, res: Response) => {
