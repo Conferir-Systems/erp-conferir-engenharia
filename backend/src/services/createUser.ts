@@ -1,24 +1,28 @@
 import { randomUUID } from 'node:crypto'
 import type { UserResponse } from '../models/users/users'
-import type { UserDatabaseRow } from '../models/users/userDatabase/users'
+import type { User } from '../models/users/users'
 import { userRepository } from '../repository/users'
 import { hashPassword } from './passwordHash'
 import { userTypeRepository } from '../repository/userTypes'
 
 export type CreateUserParams = {
+  firstName: string
+  lastName: string
   email: string
   password: string
-  type_user_id: string
+  typeUser: string
 }
 
 export async function createUser(
   params: CreateUserParams
 ): Promise<UserResponse> {
-  const createUserIntent: UserDatabaseRow = {
+  const createUserIntent: User = {
     id: randomUUID(),
+    firstName: params.firstName,
+    lastName: params.lastName,
     email: params.email,
-    password: await hashPassword(params.password),
-    type_user_id: params.type_user_id,
+    passwordHash: await hashPassword(params.password),
+    userType: params.typeUser,
   }
 
   await userRepository.createUser(createUserIntent)
@@ -26,10 +30,12 @@ export async function createUser(
 
   if (!createdUser) throw new Error('Failed to create user')
 
-  const userTypeId = createUserIntent.type_user_id
+  const userTypeId = createUserIntent.userType
+  const fullName: string = `${createUserIntent.firstName} ${createUserIntent.lastName}`
 
   const userResponse: UserResponse = {
     id: createUserIntent.id,
+    fullName: fullName,
     email: createUserIntent.email,
     userType: await userTypeRepository.findById(userTypeId),
   }
