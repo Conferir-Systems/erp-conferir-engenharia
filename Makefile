@@ -1,5 +1,5 @@
 # =============================================================================
-# Construction Manager - Makefile
+# Payment Measurement System - Makefile
 # =============================================================================
 # This file contains shortcuts for common development tasks
 # Usage: make <target>
