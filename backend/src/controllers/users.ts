@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import { createUser } from '../services/createUser'
 import { userRepository } from '../repository/users'
-import { serializeUser } from '../serializers/users'
 
 export async function createUserRequest(
   req: Request,
@@ -24,9 +23,7 @@ export async function getUser(req: Request, res: Response): Promise<void> {
 
     if (!user) throw new Error('User not found')
 
-    const userReponse = await serializeUser(user)
-
-    res.status(200).json(userReponse)
+    res.status(200).json(user)
   } catch (err) {
     res.status(500)
     console.error(err)

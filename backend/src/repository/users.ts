@@ -1,4 +1,5 @@
-import type { User, UserDatabaseRow } from '../models/users'
+import type { User } from '../models/users/users'
+import type { UserDatabaseRow } from '../models/users/userDatabase/users'
 import { db } from '../database/db'
 
 class UserRepository {
