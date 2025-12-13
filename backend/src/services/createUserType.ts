@@ -1,9 +1,8 @@
 import { randomUUID } from 'node:crypto'
-import type { UserTypeDatabaseRow } from '../models/users'
+import type { UserTypeDatabaseRow } from '../models/users/userDatabase/userTypes'
 import { userTypeRepository } from '../repository/userTypes'
 
 export type CreateUserTypeParams = {
-  id: string
   name: string
 }
 

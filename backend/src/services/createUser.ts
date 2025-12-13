@@ -1,7 +1,9 @@
 import { randomUUID } from 'node:crypto'
-import type { UserDatabaseRow, UserResponse } from '../models/users'
+import type { UserResponse } from '../models/users/users'
+import type { UserDatabaseRow } from '../models/users/userDatabase/users'
 import { userRepository } from '../repository/users'
 import { hashPassword } from './passwordHash'
+import { userTypeRepository } from '../repository/userTypes'
 
 export type CreateUserParams = {
   email: string
@@ -24,9 +26,12 @@ export async function createUser(
 
   if (!createdUser) throw new Error('Failed to create user')
 
+  const userTypeId = createUserIntent.type_user_id
+
   const userResponse: UserResponse = {
     id: createUserIntent.id,
     email: createUserIntent.email,
+    userType: await userTypeRepository.findById(userTypeId),
   }
 
   return userResponse
