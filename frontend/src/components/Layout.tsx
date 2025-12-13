@@ -35,7 +35,7 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
               M
             </div>
             <span className="text-xl font-bold text-textMain tracking-tight">
-              MEDCHECK
+              CONFERIR
             </span>
           </div>
         </div>

@@ -130,6 +130,48 @@ export const Input = ({
   </div>
 )
 
+// --- Select ---
+interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  label?: string
+  error?: string
+  options: { value: string; label: string }[]
+  className?: string
+  placeholder?: string
+  value?: string
+  onChange?: React.ChangeEventHandler<HTMLSelectElement>
+}
+
+export const Select = ({
+  label,
+  error,
+  options,
+  className = '',
+  placeholder,
+  ...props
+}: SelectProps) => (
+  <div className="flex flex-col gap-1.5 w-full">
+    {label && (
+      <label className="text-[14px] text-textSec font-medium">{label}</label>
+    )}
+    <select
+      className={`h-[38px] px-3 rounded-[4px] border border-border bg-white text-textMain text-sm focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary disabled:bg-gray-50 ${error ? 'border-statusRejected' : ''} ${className}`}
+      {...props}
+    >
+      {placeholder && (
+        <option value="" disabled>
+          {placeholder}
+        </option>
+      )}
+      {options.map((option) => (
+        <option key={option.value} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </select>
+    {error && <span className="text-xs text-statusRejected">{error}</span>}
+  </div>
+)
+
 // --- Table Components ---
 export const Table = ({
   children,
