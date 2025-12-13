@@ -23,7 +23,7 @@ describe('create user', () => {
     firstName: MOCK_USER_ADMIN.firstName,
     lastName: MOCK_USER_ADMIN.lastName,
     email: MOCK_USER_ADMIN.email,
-    password: 'Alexa123',
+    password: 'Alexa123!',
     typeUser: MOCK_USER_TYPE_ADMIN.id,
   }
 
