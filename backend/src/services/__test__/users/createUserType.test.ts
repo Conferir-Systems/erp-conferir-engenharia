@@ -1,9 +1,12 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { createUserType, CreateUserTypeParams } from '../users/createUserType'
-import { userTypeRepository } from '../../repository/users/userTypes'
+import {
+  createUserType,
+  CreateUserTypeParams,
+} from '../../users/createUserType'
+import { userTypeRepository } from '../../../repository/users/userTypes'
 import { MOCK_USER_TYPE_ADMIN } from './mocks/userTypes.mocks'
 
-vi.mock('../../repository/users/userTypes', () => ({
+vi.mock('../../../repository/users/userTypes', () => ({
   userTypeRepository: {
     createUserType: vi.fn(),
     findById: vi.fn(),

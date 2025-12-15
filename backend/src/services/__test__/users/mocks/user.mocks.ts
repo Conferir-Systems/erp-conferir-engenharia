@@ -1,5 +1,5 @@
 import { MOCK_USER_TYPE_ADMIN, MOCK_USER_TYPE_VISITOR } from './userTypes.mocks'
-import { User } from '../../../models/users/users'
+import { User } from '../../../../models/users/users'
 
 export const MOCK_USER_ADMIN: User = {
   id: '9ee534d9-fa4d-446b-939f-3b83a8fa2da2',

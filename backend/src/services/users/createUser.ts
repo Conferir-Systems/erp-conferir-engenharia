@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto'
 import type { UserResponse } from '../../models/users/users'
-import type { UserDatabaseRow } from '../../models/users/userDatabase/users'
+import type { UserDatabaseRow } from '../../models/users/users'
 import { userRepository } from '../../repository/users/users'
 import { hashPassword } from './passwordHash'
 import { userTypeRepository } from '../../repository/users/userTypes'

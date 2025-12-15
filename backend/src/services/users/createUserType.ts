@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto'
-import type { UserTypeDatabaseRow } from '../../models/users/userDatabase/userTypes'
+import type { UserTypeDatabaseRow } from '../../models/users/userTypes'
 import { userTypeRepository } from '../../repository/users/userTypes'
 
 export type CreateUserTypeParams = {
@@ -19,7 +19,7 @@ export async function createUserType(
     createUserTypeIntent.id
   )
 
-  if (!createdUserType) throw new Error('Failed to create user')
+  if (!createdUserType) throw new Error('Failed to create user type')
 
   const userResponse: UserTypeDatabaseRow = {
     id: createUserTypeIntent.id,
