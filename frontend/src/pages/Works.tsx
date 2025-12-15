@@ -64,9 +64,7 @@ export const Works = () => {
             <h1 className="text-2xl font-bold text-textMain">
               Gestão de Obras
             </h1>
-            <p className="text-textSec">
-              Obras cadastradas
-            </p>
+            <p className="text-textSec">Obras cadastradas</p>
           </div>
         </div>
         <Button onClick={() => setShowModal(true)}>
