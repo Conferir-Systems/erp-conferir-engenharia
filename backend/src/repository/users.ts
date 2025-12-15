@@ -4,7 +4,10 @@ import { db } from '../database/db'
 import { ConflictError, NotFoundError } from '../errors'
 export interface IUserRepository {
   createUser(user: User): Promise<void>
-  updateUser(id: string, updates: Partial<Omit<UserDatabaseRow, 'id'>>): Promise<void>
+  updateUser(
+    id: string,
+    updates: Partial<Omit<UserDatabaseRow, 'id'>>
+  ): Promise<void>
   findByEmail(email: string): Promise<User | null>
   findById(id: string): Promise<User | null>
 }

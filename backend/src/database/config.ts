@@ -1,42 +1,42 @@
-export type Environment = 'development' | 'test' | 'production';
+export type Environment = 'development' | 'test' | 'production'
 
 interface DatabaseConfig {
-  host: string;
-  port: number;
-  user: string;
-  password: string;
-  database: string;
-  poolMin: number;
-  poolMax: number;
+  host: string
+  port: number
+  user: string
+  password: string
+  database: string
+  poolMin: number
+  poolMax: number
 }
 
 interface ServerConfig {
-  port: number;
-  nodeEnv: Environment;
+  port: number
+  nodeEnv: Environment
 }
 
 interface AppConfig {
-  server: ServerConfig;
-  database: DatabaseConfig;
+  server: ServerConfig
+  database: DatabaseConfig
 }
 
 class Config {
-  private static instance: Config;
-  private config: AppConfig;
+  private static instance: Config
+  private config: AppConfig
 
   private constructor() {
-    this.config = this.loadConfig();
+    this.config = this.loadConfig()
   }
 
   public static getInstance(): Config {
     if (!Config.instance) {
-      Config.instance = new Config();
+      Config.instance = new Config()
     }
-    return Config.instance;
+    return Config.instance
   }
 
   private loadConfig(): AppConfig {
-    const nodeEnv = (process.env.NODE_ENV || 'development') as Environment;
+    const nodeEnv = (process.env.NODE_ENV || 'development') as Environment
 
     return {
       server: {
@@ -52,32 +52,32 @@ class Config {
         poolMin: Number(process.env.DB_POOL_MIN) || 2,
         poolMax: Number(process.env.DB_POOL_MAX) || 10,
       },
-    };
+    }
   }
 
   public get server(): ServerConfig {
-    return this.config.server;
+    return this.config.server
   }
 
   public get database(): DatabaseConfig {
-    return this.config.database;
+    return this.config.database
   }
 
   public get environment(): Environment {
-    return this.config.server.nodeEnv;
+    return this.config.server.nodeEnv
   }
 
   public isDevelopment(): boolean {
-    return this.config.server.nodeEnv === 'development';
+    return this.config.server.nodeEnv === 'development'
   }
 
   public isTest(): boolean {
-    return this.config.server.nodeEnv === 'test';
+    return this.config.server.nodeEnv === 'test'
   }
 
   public isProduction(): boolean {
-    return this.config.server.nodeEnv === 'production';
+    return this.config.server.nodeEnv === 'production'
   }
 }
 
-export const config = Config.getInstance();
+export const config = Config.getInstance()

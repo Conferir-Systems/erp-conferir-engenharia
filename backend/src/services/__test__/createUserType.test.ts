@@ -28,7 +28,8 @@ describe('create user type', () => {
       vi.mocked(userTypeRepository.findById).mockResolvedValue(
         MOCK_USER_TYPE_ADMIN
       )
-      const createdUserType = await userTypeService.createUserType(createUserTypeParams)
+      const createdUserType =
+        await userTypeService.createUserType(createUserTypeParams)
 
       expect(userTypeRepository.createUserType).toHaveBeenCalledWith(
         expect.objectContaining({

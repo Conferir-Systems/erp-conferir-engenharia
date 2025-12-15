@@ -22,7 +22,9 @@ function validateName(name: string, fieldName: string): void {
   }
 
   if (trimmed.length < 2 || trimmed.length > 50) {
-    throw new ValidationError(`${fieldName} must be between 2 and 50 characters`)
+    throw new ValidationError(
+      `${fieldName} must be between 2 and 50 characters`
+    )
   }
 
   if (/["'`<>\\;]/.test(trimmed)) {
@@ -81,11 +83,15 @@ function validatePassword(password: string): void {
   }
 
   if (!/[a-z]/.test(password)) {
-    throw new ValidationError('Password must contain at least one lowercase letter')
+    throw new ValidationError(
+      'Password must contain at least one lowercase letter'
+    )
   }
 
   if (!/[A-Z]/.test(password)) {
-    throw new ValidationError('Password must contain at least one uppercase letter')
+    throw new ValidationError(
+      'Password must contain at least one uppercase letter'
+    )
   }
 
   if (!/\d/.test(password)) {
@@ -93,7 +99,9 @@ function validatePassword(password: string): void {
   }
 
   if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password)) {
-    throw new ValidationError('Password must contain at least one special character')
+    throw new ValidationError(
+      'Password must contain at least one special character'
+    )
   }
 
   if (/\s/.test(password)) {

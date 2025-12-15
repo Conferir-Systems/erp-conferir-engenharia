@@ -1,7 +1,7 @@
 import type { Knex } from 'knex'
 import { config as appConfig } from './config'
 
-const dbConfig = appConfig.database;
+const dbConfig = appConfig.database
 
 const knexConfig: { [key: string]: Knex.Config } = {
   development: {
