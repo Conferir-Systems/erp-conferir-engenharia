@@ -21,10 +21,10 @@ export const Login = () => {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="w-16 h-16 bg-primary rounded-xl flex items-center justify-center text-white font-bold text-3xl mx-auto mb-4">
-            M
+            C
           </div>
           <h1 className="text-3xl font-bold text-textMain tracking-tight">
-            MEDCHECK
+            CONFERIR
           </h1>
           <p className="text-textSec mt-2">Sistema de Gestão de Medições</p>
         </div>
@@ -73,8 +73,17 @@ export const Login = () => {
           </div>
         </Card>
 
+        <div className="text-center mt-6">
+          <button
+            onClick={() => navigate('/register')}
+            className="text-sm text-textSec hover:text-textMain transition-colors"
+          >
+            Não tem uma conta? Cadastre-se
+          </button>
+        </div>
+
         <p className="text-center text-xs text-textSec mt-8">
-          &copy; 2024 MedCheck Systems. Todos os direitos reservados.
+          &copy; 2025 Conferir Systems. Todos os direitos reservados.
         </p>
       </div>
     </div>

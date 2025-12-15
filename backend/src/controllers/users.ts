@@ -11,8 +11,41 @@ export async function createUserRequest(
     const user = await createUser(userParams)
     res.status(201).json(user)
   } catch (err) {
-    res.status(500)
     console.error(err)
+
+    if (err instanceof Error) {
+      const errorMessage = err.message.toLowerCase()
+
+      if (errorMessage.includes('email already exists')) {
+        res.status(409).json({
+          message: err.message,
+          error: 'O e-mail informado já está cadastrado no sistema',
+        })
+        return
+      }
+
+      if (
+        errorMessage.includes('required') ||
+        errorMessage.includes('invalid') ||
+        errorMessage.includes('must be') ||
+        errorMessage.includes('cannot contain') ||
+        errorMessage.includes('contains invalid') ||
+        errorMessage.includes('at least') ||
+        errorMessage.includes('not found') ||
+        errorMessage.includes('cannot')
+      ) {
+        res.status(400).json({
+          message: err.message,
+          error: err.message,
+        })
+        return
+      }
+    }
+
+    res.status(500).json({
+      message: 'Internal server error',
+      error: 'Erro ao processar requisição',
+    })
   }
 }
 

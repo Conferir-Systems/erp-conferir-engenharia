@@ -3,7 +3,7 @@ import type { UserDatabaseRow } from '../models/users/userDatabase/users'
 import { db } from '../database/db'
 
 class UserRepository {
-  async createUser(user: UserDatabaseRow): Promise<void> {
+  async createUser(user: User): Promise<void> {
     try {
       await db('users').insert(this.userToTableRow(user))
     } catch (err) {
@@ -51,18 +51,22 @@ class UserRepository {
     return this.tableRowToUser(user)
   }
 
-  private userToTableRow(register: UserDatabaseRow): UserDatabaseRow {
+  private userToTableRow(register: User): UserDatabaseRow {
     return {
       id: register.id,
+      first_name: register.firstName,
+      last_name: register.lastName,
       email: register.email,
-      password: register.password,
-      type_user_id: register.type_user_id,
+      password: register.passwordHash,
+      type_user_id: register.userType,
     }
   }
 
   private tableRowToUser(row: UserDatabaseRow): User {
     return {
       id: row.id,
+      firstName: row.first_name,
+      lastName: row.last_name,
       email: row.email,
       passwordHash: row.password,
       userType: row.type_user_id,

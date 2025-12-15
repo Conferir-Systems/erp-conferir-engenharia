@@ -2,8 +2,8 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { createUser, CreateUserParams } from '../createUser'
 import { userRepository } from '../../repository/users'
 import { userTypeRepository } from '../../repository/userTypes'
-import { MOCK_USER_VISITOR } from './mocks/user.mocks'
-import { MOCK_USER_TYPE_VISITOR } from './mocks/userTypes.mocks'
+import { MOCK_USER_ADMIN } from './mocks/user.mocks'
+import { MOCK_USER_TYPE_ADMIN } from './mocks/userTypes.mocks'
 
 vi.mock('../../repository/users', () => ({
   userRepository: {
@@ -20,9 +20,11 @@ vi.mock('../../repository/userTypes', () => ({
 
 describe('create user', () => {
   const createUserParams: CreateUserParams = {
-    email: MOCK_USER_VISITOR.email,
-    password: 'Alexa123',
-    type_user_id: MOCK_USER_TYPE_VISITOR.id,
+    firstName: MOCK_USER_ADMIN.firstName,
+    lastName: MOCK_USER_ADMIN.lastName,
+    email: MOCK_USER_ADMIN.email,
+    password: 'Alexa123!',
+    typeUser: MOCK_USER_TYPE_ADMIN.id,
   }
 
   beforeEach(() => {
@@ -32,27 +34,30 @@ describe('create user', () => {
   describe('when the user doesnt not exists', () => {
     it('returns an user', async () => {
       vi.mocked(userRepository.createUser).mockResolvedValue(undefined)
-      vi.mocked(userRepository.findById).mockResolvedValue(MOCK_USER_VISITOR)
+      vi.mocked(userRepository.findById).mockResolvedValue(MOCK_USER_ADMIN)
       vi.mocked(userTypeRepository.findById).mockResolvedValue(
-        MOCK_USER_TYPE_VISITOR
+        MOCK_USER_TYPE_ADMIN
       )
       const createdUser = await createUser(createUserParams)
 
       expect(userRepository.createUser).toHaveBeenCalledWith(
         expect.objectContaining({
           id: expect.any(String),
-          email: MOCK_USER_VISITOR.email,
-          password: expect.any(String),
+          firstName: MOCK_USER_ADMIN.firstName,
+          lastName: MOCK_USER_ADMIN.lastName,
+          email: MOCK_USER_ADMIN.email,
+          passwordHash: expect.any(String),
         })
       )
       expect(userRepository.findById).toHaveBeenCalledWith(expect.any(String))
       expect(userTypeRepository.findById).toHaveBeenCalledWith(
-        MOCK_USER_TYPE_VISITOR.id
+        MOCK_USER_TYPE_ADMIN.id
       )
       expect(createdUser).toEqual({
         id: expect.any(String),
-        email: MOCK_USER_VISITOR.email,
-        userType: MOCK_USER_TYPE_VISITOR,
+        fullName: `${MOCK_USER_ADMIN.firstName} ${MOCK_USER_ADMIN.lastName}`,
+        email: MOCK_USER_ADMIN.email,
+        userType: MOCK_USER_TYPE_ADMIN,
       })
     })
   })
