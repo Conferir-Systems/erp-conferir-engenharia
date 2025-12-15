@@ -13,7 +13,7 @@ export type CreateWorkRequest = {
   code?: string
   address: string
   contractor?: string
-  status: 'ATIVA' | 'CONCLUIDA'
+  status?: 'ATIVA' | 'CONCLUIDA'
 }
 
 export type UpdateWorkRequest = {

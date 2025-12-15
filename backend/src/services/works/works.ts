@@ -4,7 +4,7 @@ import { workRepository } from '../../repository/works/works'
 
 export async function createWork(params: CreateWorkRequest): Promise<Work> {
   const createWorkIntent: Work = {
-    id: randomUUID(),
+    id: params.id || randomUUID(),
     name: params.name,
     code: params.code ?? null,
     address: params.address,

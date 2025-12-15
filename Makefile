@@ -131,7 +131,7 @@ test: test-backend
 
 test-backend:
 	@echo "🧪 Running backend tests..."
-	docker compose exec conf-api npm test
+	docker compose exec -e DB_TEST_HOST=conf-postgres conf-api npm test
 
 test-watch:
 	@echo "🧪 Running tests in watch mode..."
