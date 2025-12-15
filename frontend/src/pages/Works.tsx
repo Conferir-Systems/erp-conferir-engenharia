@@ -15,7 +15,7 @@ import {
 import { ArrowLeft, Building2, Plus, X } from 'lucide-react'
 import { ConstructionSite } from '../types'
 
-export const NewSite = () => {
+export const Works = () => {
   const navigate = useNavigate()
   const { sites, addSite /*currentUser*/ } = useAppContext()
 
@@ -35,7 +35,7 @@ export const NewSite = () => {
       return
     }
 
-    const newSite: ConstructionSite = {
+    const newWork: ConstructionSite = {
       id: `s-${Date.now()}`,
       name,
       address,
@@ -44,7 +44,7 @@ export const NewSite = () => {
       status: 'ATIVO',
     }
 
-    addSite(newSite)
+    addSite(newWork)
     setShowModal(false)
 
     // Clear inputs
@@ -65,7 +65,7 @@ export const NewSite = () => {
               Gestão de Obras
             </h1>
             <p className="text-textSec">
-              Visualize as obras cadastradas ou adicione novos empreendimentos.
+              Obras cadastradas
             </p>
           </div>
         </div>

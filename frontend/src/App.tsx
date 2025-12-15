@@ -8,7 +8,7 @@ import { SiteDashboard } from './pages/SiteDashboard'
 import { NewMeasurement } from './pages/NewMeasurement'
 import { MeasurementDetail } from './pages/MeasurementDetail'
 import { NewContract } from './pages/NewContract'
-import { NewSite } from './pages/NewSite'
+import { Works } from './pages/Works'
 import { RealizedMeasurements } from './pages/RealizedMeasurements'
 
 // Protected Route Wrapper
@@ -77,7 +77,7 @@ const AppRoutes = () => {
         path="/new-site"
         element={
           <ProtectedRoute>
-            <NewSite />
+            <Works />
           </ProtectedRoute>
         }
       />
