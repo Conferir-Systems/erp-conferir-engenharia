@@ -1,7 +1,14 @@
-import type { Work } from '../../models/works/works'
+import type { Work } from '../../types/works/works'
 import { db } from '../../database/db'
+import { NotFoundError } from '../../errors'
 
-class WorkRepository {
+export interface IWorkRepository {
+  createWork(work: Work): Promise<void>
+  updateWork(id: string, updates: Partial<Omit<Work, 'id'>>): Promise<void>
+  findById(id: string): Promise<Work | null>
+}
+
+class WorkRepository implements IWorkRepository {
   async createWork(work: Work): Promise<void> {
     await db('works').insert(this.workData(work))
   }
@@ -13,7 +20,7 @@ class WorkRepository {
     const result = await db('works').where({ id }).update(updates)
 
     if (result === 0) {
-      throw new Error('Work not found')
+      throw new NotFoundError('Work not found')
     }
   }
 

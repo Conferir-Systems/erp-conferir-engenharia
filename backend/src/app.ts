@@ -3,7 +3,7 @@ import cors from 'cors'
 import helmet from 'helmet'
 import morgan from 'morgan'
 
-import { errorHandler } from './middleware/errorHandler'
+import { errorHandler, notFoundHandler } from './middleware/errorHandler'
 
 import usersRoutes from './routes/users/users'
 import userTypesRoutes from './routes/users/userTypes'
@@ -21,6 +21,7 @@ app.use('/api', usersRoutes)
 app.use('/api', userTypesRoutes)
 app.use('/api', worksRoutes)
 
+app.use(notFoundHandler)
 app.use(errorHandler)
 
 export default app

@@ -3,6 +3,7 @@ import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AppProvider, useAppContext } from './context/AppContext'
 import { Layout } from './components/Layout'
 import { Login } from './pages/Login'
+import { Register } from './pages/Register'
 import { DirectorDashboard } from './pages/DirectorDashboard'
 import { SiteDashboard } from './pages/SiteDashboard'
 import { NewMeasurement } from './pages/NewMeasurement'
@@ -42,6 +43,7 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
+      <Route path="/register" element={<Register />} />
 
       {/* Director Routes */}
       <Route
