@@ -41,6 +41,11 @@ jobs:
         working-directory: ./backend
         run: npm ci
 
+      - name: Create test database
+        run: |
+          PGPASSWORD=postgres psql -h localhost -U postgres -c "SELECT 'CREATE DATABASE conf_test' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'conf_test')\gexec"
+        continue-on-error: true
+
       - name: Run migrations
         working-directory: ./backend
         run: npm run migrate:latest
