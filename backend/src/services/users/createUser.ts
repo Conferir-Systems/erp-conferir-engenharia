@@ -134,7 +134,7 @@ export class UserService {
       userType: params.typeUser,
     }
 
-    await this.userRepo.createUser(createUserIntent)
+    await this.userRepo.create(createUserIntent)
     const createdUser = await this.userRepo.findById(createUserIntent.id)
 
     if (!createdUser) throw new NotFoundError('Failed to create user')

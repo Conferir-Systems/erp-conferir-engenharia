@@ -91,11 +91,35 @@ echo -e "${YELLOW}Awaiting services starts...${NC}"
 sleep 5
 
 # Verify postgres
-if docker compose ps postgres | grep -q "healthy"; then
+if docker compose ps conf-postgres | grep -q "healthy"; then
     echo -e "${GREEN}✅ postgres ready${NC}"
 else
     echo -e "${YELLOW}⏳ postgres starting...${NC}"
+    sleep 3
 fi
+
+# 8. Create test database
+echo -e "${BLUE}⚙️  Creating test database...${NC}"
+docker exec -i conf-postgres psql -U postgres -d postgres <<-EOSQL
+    SELECT 'CREATE DATABASE conf_test'
+    WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'conf_test')\gexec
+EOSQL
+
+if [ $? -eq 0 ]; then
+    echo -e "${GREEN}✅ Test database 'conf_test' created${NC}"
+else
+    echo -e "${YELLOW}⚠️  Test database may already exist${NC}"
+fi
+
+# 9. Run migrations on test database
+echo -e "${BLUE}⚙️  Running migrations on test database...${NC}"
+cd backend
+if NODE_ENV=test npm run migrate:latest 2>/dev/null; then
+    echo -e "${GREEN}✅ Test database migrations completed${NC}"
+else
+    echo -e "${YELLOW}⚠️  Could not run migrations on test database (run 'npm run db:test:setup' later)${NC}"
+fi
+cd ..
 
 echo ""
 echo -e "${GREEN}"

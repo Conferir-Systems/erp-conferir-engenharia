@@ -15,7 +15,7 @@ export async function createWorkHandler(
   }
 }
 
-export async function getWork(
+export async function getWorkHandler(
   req: Request,
   res: Response,
   next: NextFunction

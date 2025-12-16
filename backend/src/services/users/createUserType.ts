@@ -18,7 +18,7 @@ export class UserTypeService {
       name: params.name,
     }
 
-    await this.userTypeRepo.createUserType(createUserTypeIntent)
+    await this.userTypeRepo.create(createUserTypeIntent)
     const createdUserType = await this.userTypeRepo.findById(
       createUserTypeIntent.id
     )
