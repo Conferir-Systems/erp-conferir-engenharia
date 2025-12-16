@@ -1,100 +1,65 @@
-import { Request, Response } from 'express'
-import { createWork, updateWork, deleteWork } from '../../services/works/works'
-import { workRepository } from '../../repository/works/works'
+import { Request, Response, NextFunction } from 'express'
+import { workService } from '../../services/instances'
+import { NotFoundError } from '../../errors'
 
 export async function createWorkHandler(
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> {
-  const workParams = req.body
   try {
-    const work = await createWork(workParams)
+    const work = await workService.createWork(req.body)
     res.status(201).json(work)
   } catch (err) {
-    console.error(err)
-    res.status(500).json({
-      error: 'Failed to create work',
-      message: err instanceof Error ? err.message : 'Unknown error',
-    })
+    next(err)
   }
 }
 
-export async function getWorkHandler(
+export async function getWork(
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> {
-  const id = req.params.id
   try {
-    const work = await workRepository.findById(id)
+    const work = await workService.getWorkById(req.params.id)
 
     if (!work) {
-      res.status(404).json({
-        error: 'Work not found',
-        message: `Work with id ${id} does not exist`,
-      })
-      return
+      throw new NotFoundError(`Work with id ${req.params.id} does not exist`)
     }
 
     res.status(200).json(work)
   } catch (err) {
-    console.error(err)
-    res.status(500).json({
-      error: 'Failed to fetch work',
-      message: err instanceof Error ? err.message : 'Unknown error',
-    })
+    next(err)
   }
 }
 
 export async function updateWorkHandler(
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> {
-  const id = req.params.id
-  const data = req.body
   try {
-    const work = await updateWork(id, data)
+    const work = await workService.updateWork(req.params.id, req.body)
 
     if (!work) {
-      res.status(404).json({
-        error: 'Work not found',
-        message: `Work with id ${id} does not exist`,
-      })
-      return
+      throw new NotFoundError(`Work with id ${req.params.id} does not exist`)
     }
 
     res.status(200).json(work)
   } catch (err) {
-    console.error(err)
-    res.status(500).json({
-      error: 'Failed to updated work',
-      message: err instanceof Error ? err.message : 'Unknown error',
-    })
+    next(err)
   }
 }
 
 export async function deleteWorkHandler(
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> {
-  const id = req.params.id
   try {
-    await deleteWork(id)
-
+    await workService.deleteWork(req.params.id)
     res.status(204).send()
   } catch (err) {
-    console.error(err)
-
-    if (err instanceof Error && err.message === 'Work not found') {
-      res.status(404).json({
-        error: 'Work not found',
-        message: `Work with id ${id} does not exist`,
-      })
-      return
-    }
-
-    res.status(500).json({
-      error: 'Failed to delete work',
-      message: err instanceof Error ? err.message : 'Unknown error',
-    })
+    next(err)
   }
 }

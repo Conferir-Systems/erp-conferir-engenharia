@@ -1,8 +1,15 @@
-import { UserTypeDatabaseRow } from '../../models/users/userTypes'
+import { UserTypeDatabaseRow } from '../../types/users/userTypes'
 import { db } from '../../database/db'
+import { ConflictError } from '../../errors'
 
-class UserTypeRepository {
-  async createUserType(userType: UserTypeDatabaseRow): Promise<void> {
+export interface IUserTypeRepository {
+  create(userType: UserTypeDatabaseRow): Promise<void>
+  findById(id: string): Promise<UserTypeDatabaseRow | null>
+  findAll(): Promise<UserTypeDatabaseRow[]>
+}
+
+class UserTypeRepository implements IUserTypeRepository {
+  async create(userType: UserTypeDatabaseRow): Promise<void> {
     try {
       await db('user_types').insert(this.userTypeToTableRow(userType))
     } catch (err) {
@@ -12,7 +19,7 @@ class UserTypeRepository {
           'duplicate key value violates unique constraint "user_types_name_unique"'
         )
       ) {
-        throw new Error('User type already exists')
+        throw new ConflictError('User type already exists')
       }
 
       throw err
@@ -25,6 +32,11 @@ class UserTypeRepository {
     if (!typeUser) return null
 
     return typeUser
+  }
+
+  async findAll(): Promise<UserTypeDatabaseRow[]> {
+    const userTypes = await db('user_types').select('*')
+    return userTypes
   }
 
   private userTypeToTableRow(

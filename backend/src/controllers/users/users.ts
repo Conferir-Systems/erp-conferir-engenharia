@@ -1,31 +1,36 @@
-import { Request, Response } from 'express'
-import { createUser } from '../../services/users/createUser'
-import { userRepository } from '../../repository/users/users'
+import { Request, Response, NextFunction } from 'express'
+import { userService } from '../../services/instances'
+import { NotFoundError } from '../../errors'
 
 export async function createUserRequest(
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> {
-  const userParams = req.body
   try {
-    const user = await createUser(userParams)
+    const userParams = req.body
+    const user = await userService.createUser(userParams)
     res.status(201).json(user)
   } catch (err) {
-    res.status(500)
-    console.error(err)
+    next(err)
   }
 }
 
-export async function getUser(req: Request, res: Response): Promise<void> {
-  const id = req.params.id
+export async function getUser(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
   try {
-    const user = await userRepository.findById(id)
+    const id = req.params.id
+    const user = await userService.getUserById(id)
 
-    if (!user) throw new Error('User not found')
+    if (!user) {
+      throw new NotFoundError('User not found')
+    }
 
     res.status(200).json(user)
   } catch (err) {
-    res.status(500)
-    console.error(err)
+    next(err)
   }
 }

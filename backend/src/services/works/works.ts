@@ -1,42 +1,51 @@
 import { randomUUID } from 'node:crypto'
-import type { Work, CreateWorkRequest } from '../../models/works/works'
-import { workRepository } from '../../repository/works/works'
+import type { Work, CreateWorkRequest } from '../../types/works/works'
+import { NotFoundError } from '../../errors'
+import type { IWorkRepository } from '../../repository/works/works'
 
-export async function createWork(params: CreateWorkRequest): Promise<Work> {
-  const createWorkIntent: Work = {
-    id: randomUUID(),
-    name: params.name,
-    code: params.code ?? null,
-    address: params.address,
-    contractor: params.contractor ?? null,
-    status: params.status || 'ATIVA',
+export class WorkService {
+  constructor(private workRepo: IWorkRepository) {}
+
+  async createWork(params: CreateWorkRequest): Promise<Work> {
+    const createWorkIntent: Work = {
+      id: randomUUID(),
+      name: params.name,
+      code: params.code ?? null,
+      address: params.address,
+      contractor: params.contractor ?? null,
+      status: params.status || 'ATIVA',
+    }
+
+    await this.workRepo.create(createWorkIntent)
+    const createdWork = await this.workRepo.findById(createWorkIntent.id)
+
+    if (!createdWork) throw new NotFoundError('Failed to create work')
+
+    return createdWork
   }
 
-  await workRepository.create(createWorkIntent)
-  const createdWork = await workRepository.findById(createWorkIntent.id)
+  async getWorkById(id: string): Promise<Work | null> {
+    return await this.workRepo.findById(id)
+  }
 
-  if (!createdWork) throw new Error('Failed to create work')
+  async updateWork(
+    id: string,
+    data: Partial<Omit<Work, 'id'>>
+  ): Promise<Work | null> {
+    await this.workRepo.update(id, data)
 
-  return createdWork
-}
+    const updatedWork = await this.workRepo.findById(id)
 
-export async function updateWork(
-  id: string,
-  data: Partial<Omit<Work, 'id'>>
-): Promise<Work> {
-  await workRepository.update(id, data)
+    if (!updatedWork) throw new NotFoundError('Failed to retrieve updated work')
 
-  const updatedWork = await workRepository.findById(id)
+    return updatedWork
+  }
 
-  if (!updatedWork) throw new Error('Failed to retrieve updated work')
+  async deleteWork(id: string): Promise<void> {
+    await this.workRepo.delete(id)
 
-  return updatedWork
-}
+    const deletedWork = await this.workRepo.findById(id)
 
-export async function deleteWork(id: string): Promise<void> {
-  await workRepository.delete(id)
-
-  const deletedWork = await workRepository.findById(id)
-
-  if (deletedWork) throw new Error('Failed to retrieve delete work')
+    if (deletedWork) throw new Error('Failed to delete work')
+  }
 }

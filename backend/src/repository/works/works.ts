@@ -1,21 +1,33 @@
-import type { Work } from '../../models/works/works'
+import type { Work } from '../../types/works/works'
 import { db } from '../../database/db'
+import { NotFoundError } from '../../errors'
 
-class WorkRepository {
+export interface IWorkRepository {
+  create(work: Work): Promise<void>
+  update(id: string, updates: Partial<Omit<Work, 'id'>>): Promise<void>
+  delete(id: string): Promise<void>
+  findById(id: string): Promise<Work | null>
+}
+
+class WorkRepository implements IWorkRepository {
   async create(work: Work): Promise<void> {
     await db('works').insert(this.data(work))
   }
 
   async update(id: string, updates: Partial<Omit<Work, 'id'>>): Promise<void> {
-    const response = await db('works').where({ id }).update(updates)
+    const result = await db('works').where({ id }).update(updates)
 
-    if (response === 0) throw new Error('Work not found')
+    if (result === 0) {
+      throw new NotFoundError('Work not found')
+    }
   }
 
   async delete(id: string): Promise<void> {
-    const response = await db('works').where({ id }).del()
+    const result = await db('works').where({ id }).del()
 
-    if (response === 0) throw new Error('Work not found')
+    if (result === 0) {
+      throw new NotFoundError('Work not found')
+    }
   }
 
   async findById(id: string): Promise<Work | null> {

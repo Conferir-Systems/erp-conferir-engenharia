@@ -8,12 +8,11 @@ export type Work = {
 }
 
 export type CreateWorkRequest = {
-  id: string
   name: string
   code?: string
   address: string
   contractor?: string
-  status: 'ATIVA' | 'CONCLUIDA'
+  status?: 'ATIVA' | 'CONCLUIDA'
 }
 
 export type UpdateWorkRequest = {
