@@ -38,6 +38,26 @@ class UserRepository
     }
   }
 
+  async update(
+    id: string,
+    updates: Partial<Omit<UserDatabaseRow, 'id'>>
+  ): Promise<void> {
+    try {
+      await super.update(id, updates)
+    } catch (err) {
+      if (
+        err instanceof Error &&
+        err.message.includes(
+          'duplicate key value violates unique constraint "users_email_unique"'
+        )
+      ) {
+        throw new ConflictError('Email already exists')
+      }
+
+      throw err
+    }
+  }
+
   async findByEmail(email: string): Promise<User | null> {
     const row = await this.db('users').where({ email }).first<UserDatabaseRow>()
 

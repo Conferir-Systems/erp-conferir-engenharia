@@ -63,7 +63,6 @@ export class UserService {
   ): Promise<UserResponse | null> {
     const dbUpdates = await mapUpdateUserRequestToDb(updates)
 
-    // Only update if there are actual changes
     if (Object.keys(dbUpdates).length === 0) {
       const row = await this.userRepo.findById(id)
       if (!row) return null
