@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto'
 import type { Work, CreateWorkRequest, UpdateWorkRequest } from '../types/works'
 import type { IWorkRepository } from '../repository/works'
+import { ConflictError } from '../errors'
 
 export class WorkService {
   constructor(private workRepo: IWorkRepository) {}
@@ -15,9 +16,22 @@ export class WorkService {
       status: params.status ?? 'ATIVA',
     }
 
-    await this.workRepo.create(createWorkIntent)
-    const createdWork = await this.workRepo.findById(createWorkIntent.id)
+    try {
+      await this.workRepo.create(createWorkIntent)
+    } catch (err) {
+      if (
+        err instanceof Error &&
+        err.message.includes(
+          'duplicate key value violates unique constraint "works_name_unique"'
+        )
+      ) {
+        throw new ConflictError('Work already exists')
+      }
 
+      throw err
+    }
+
+    const createdWork = await this.workRepo.findById(createWorkIntent.id)
     if (!createdWork) {
       throw new Error('Failed to create work')
     }
@@ -27,6 +41,10 @@ export class WorkService {
 
   async getWorkById(id: string): Promise<Work | null> {
     return await this.workRepo.findById(id)
+  }
+
+  async getAllWorks(): Promise<Work[]> {
+    return await this.workRepo.findAll()
   }
 
   async updateWork(
