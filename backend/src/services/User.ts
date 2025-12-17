@@ -12,7 +12,7 @@ export type CreateUserParams = {
   lastName: string
   email: string
   password: string
-  typeUser: string
+  userType: string
 }
 
 export class UserService {
@@ -28,7 +28,7 @@ export class UserService {
       lastName: params.lastName.trim(),
       email: params.email.trim().toLowerCase(),
       passwordHash: await hashPassword(params.password),
-      userType: params.typeUser,
+      userType: params.userType,
     }
 
     await this.userRepo.create(createUserIntent)

@@ -23,7 +23,7 @@ describe('UserService - updateUser', () => {
       lastName: 'Doe',
       email: 'john.doe@example.com',
       password: 'SecurePass123!',
-      typeUser: testUserTypeId,
+      userType: testUserTypeId,
     }
 
     const createdUser = await userService.createUser(createUserParams)
@@ -53,7 +53,7 @@ describe('UserService - updateUser', () => {
       firstName: 'Jane',
       lastName: 'Smith',
       email: 'jane.smith@example.com',
-      typeUser: adminUserTypeId,
+      userType: adminUserTypeId,
     }
 
     const result = await userService.updateUser(testUserId, updates)

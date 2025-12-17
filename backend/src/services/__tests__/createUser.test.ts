@@ -19,7 +19,7 @@ describe('createUser - Integration Tests', () => {
         lastName: 'User',
         email: 'test@example.com',
         password: 'Alexa123!',
-        typeUser: testUserTypeId,
+        userType: testUserTypeId,
       }
 
       const createdUser = await userService.createUser(createUserParams)
@@ -56,7 +56,7 @@ describe('createUser - Integration Tests', () => {
         lastName: 'User',
         email: 'duplicate@example.com',
         password: 'Password123!',
-        typeUser: testUserTypeId,
+        userType: testUserTypeId,
       }
 
       await userService.createUser(createUserParams)
@@ -74,7 +74,7 @@ describe('createUser - Integration Tests', () => {
         lastName: 'User',
         email: 'test@example.com',
         password: 'Password123!',
-        typeUser: '00000000-0000-0000-0000-000000000000',
+        userType: '00000000-0000-0000-0000-000000000000',
       }
 
       await expect(userService.createUser(createUserParams)).rejects.toThrow()

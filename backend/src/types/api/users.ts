@@ -5,7 +5,7 @@ export type CreateUserRequest = {
   lastName: string
   email: string
   password: string
-  typeUser: string
+  userType: string
 }
 
 export type UpdateUserRequest = {
@@ -13,7 +13,7 @@ export type UpdateUserRequest = {
   lastName?: string
   email?: string
   password?: string
-  typeUser?: string
+  userType?: string
 }
 
 export type UserResponse = {

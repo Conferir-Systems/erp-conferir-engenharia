@@ -44,7 +44,7 @@ services:
     depends_on:
       conf-postgres:
         condition: service_healthy
-    command: npm run dev:migrate
+    command: sh -c "npm run db:create-test && npm run dev:migrate"
     networks:
       - app-network
 

@@ -30,8 +30,8 @@ export async function mapUpdateUserRequestToDb(
   if (updates.password !== undefined) {
     dbUpdates.password = await hashPassword(updates.password)
   }
-  if (updates.typeUser !== undefined) {
-    dbUpdates.type_user_id = updates.typeUser
+  if (updates.userType !== undefined) {
+    dbUpdates.type_user_id = updates.userType
   }
 
   return dbUpdates
