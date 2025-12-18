@@ -15,6 +15,14 @@ export type CreateUserParams = {
   userType: string
 }
 
+export type UpdateUserParams = {
+  firstName?: string
+  lastName?: string
+  email?: string
+  password?: string
+  typeUser?: string
+}
+
 export class UserService {
   constructor(
     private userRepo: IUserRepository,
@@ -49,8 +57,22 @@ export class UserService {
     return userResponse
   }
 
-  async getUserById(id: string): Promise<User | null> {
-    return await this.userRepo.findById(id)
+  async getUserById(id: string): Promise<UserResponse | null> {
+    const userRegister = await this.userRepo.findById(id)
+
+    if (!userRegister) return null
+
+    const fullName: string = `${userRegister.firstName} ${userRegister.lastName}`
+    const userTypeId = userRegister.userType
+
+    const userResponse: UserResponse = {
+      id: userRegister.id,
+      fullName: fullName,
+      email: userRegister.email,
+      userType: await this.userTypeRepo.findById(userTypeId),
+    }
+
+    return userResponse
   }
 
   async getUserByEmail(email: string): Promise<User | null> {

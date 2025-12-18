@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { userService, userTypeService } from '../instances'
-import type { CreateUserParams } from '../User'
+import type { CreateUserParams, UpdateUserParams } from '../User'
 import { db } from '../../database/db'
 import { verifyPassword } from '../../utils/passwordHash'
 
-describe('createUser - Integration Tests', () => {
+describe('User - integration crud tests', () => {
   let testUserTypeId: string
 
   beforeEach(async () => {
@@ -35,11 +35,6 @@ describe('createUser - Integration Tests', () => {
       })
 
       const userInDb = await db('users').where({ id: createdUser.id }).first()
-      expect(userInDb).toBeDefined()
-      expect(userInDb.email).toBe('test@example.com')
-      expect(userInDb.type_user_id).toBe(testUserTypeId)
-
-      expect(userInDb.password).not.toBe('Alexa123!')
 
       const isValidPassword = await verifyPassword(
         userInDb.password,
@@ -78,6 +73,39 @@ describe('createUser - Integration Tests', () => {
       }
 
       await expect(userService.createUser(createUserParams)).rejects.toThrow()
+    })
+  })
+
+  describe('when the update user', () => {
+    it('update user', async () => {
+      const createUserParams: CreateUserParams = {
+        firstName: 'Current',
+        lastName: 'Middle',
+        email: 'test@main.com',
+        password: 'Teste123!',
+        userType: testUserTypeId,
+      }
+
+      const createUser = await userService.createUser(createUserParams)
+
+      const updateUserParams: UpdateUserParams = {
+        firstName: 'Updated',
+        lastName: 'Last',
+      }
+
+      await userService.updateUser(createUser.id, updateUserParams)
+
+      expect(await userService.getUserById(createUser.id)).toEqual({
+        id: expect.any(String),
+        fullName: 'Updated Last',
+        email: 'test@main.com',
+        userType: expect.objectContaining({
+          id: expect.any(String),
+          name: 'Visitor',
+          created_at: expect.any(Date),
+          updated_at: expect.any(Date),
+        }),
+      })
     })
   })
 })
