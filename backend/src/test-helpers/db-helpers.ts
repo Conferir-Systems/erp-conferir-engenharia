@@ -6,7 +6,7 @@ export async function createTestWork(overrides?: Partial<Work>): Promise<Work> {
   const defaultWork: Work = {
     id: crypto.randomUUID(),
     name: 'Test Work',
-    code: 'TEST-001',
+    code: 123,
     address: 'Test Address, 123',
     contractor: 'Test Contractor',
     status: 'ATIVA',
@@ -23,7 +23,7 @@ export async function createTestWorks(count: number): Promise<Work[]> {
   for (let i = 1; i <= count; i++) {
     const work = await createTestWork({
       name: `Test Work ${i}`,
-      code: `TEST-${String(i).padStart(3, '0')}`,
+      code: 100 + i,
       address: `Test Address ${i}`,
     })
     works.push(work)
