@@ -35,8 +35,8 @@ export async function createTestWorks(count: number): Promise<Work[]> {
 export async function createTestUser(
   overrides?: Partial<UserDatabaseRow>
 ): Promise<UserDatabaseRow> {
-  const typeUserExists = await db('user_types').where({ id: 1 }).first()
-  if (!typeUserExists) {
+  const userTypeExists = await db('user_types').where({ id: 1 }).first()
+  if (!userTypeExists) {
     await db('user_types').insert({
       id: 1,
       name: 'Admin',
