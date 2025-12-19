@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { workService } from '../instances'
-import type { CreateWorkRequest } from '../../types/works'
+import type { CreateWorkRequest } from '../../types/api/works'
 import { db } from '../../database/db'
 
 describe('Works - integration crud tests', () => {
@@ -8,6 +8,7 @@ describe('Works - integration crud tests', () => {
     it('creates a work in the database with all fields', async () => {
       const createWorkParams: CreateWorkRequest = {
         name: 'Residencial Alpha',
+        code: 101,
         address: 'Rua General Lima e Silva, Centro, Rio Grande do Sul',
         contractor: 'Roberto Macedo',
       }
@@ -27,6 +28,7 @@ describe('Works - integration crud tests', () => {
     it('creates a work with only required fields', async () => {
       const createWorkParams: CreateWorkRequest = {
         name: 'Obra IFSC',
+        code: 102,
         address: '1400, Canoas',
       }
 
@@ -46,6 +48,7 @@ describe('Works - integration crud tests', () => {
       it('updates the work successfully', async () => {
         const createWorkParams: CreateWorkRequest = {
           name: 'Obra 1',
+          code: 103,
           address: 'Endereço 1',
         }
 
@@ -82,6 +85,7 @@ describe('Works - integration crud tests', () => {
       it('deletes the work successfully', async () => {
         const createWorkParams: CreateWorkRequest = {
           name: 'Obra errada',
+          code: 104,
           address: 'Rua torta',
         }
 
