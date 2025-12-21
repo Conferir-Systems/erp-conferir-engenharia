@@ -1,4 +1,4 @@
-import { UserTypeDatabaseRow } from '../userTypes'
+import { UserTypeDatabaseRow } from '../database'
 
 export type CreateUserRequest = {
   firstName: string
