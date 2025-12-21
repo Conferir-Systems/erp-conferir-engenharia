@@ -39,4 +39,12 @@ export class SupplierService {
 
     return supplier
   }
+
+  async getAllSuppliers(): Promise<Supplier[] | null> {
+    const suppliers = await this.supplierRepo.findAll()
+
+    if (!suppliers) return []
+
+    return suppliers
+  }
 }

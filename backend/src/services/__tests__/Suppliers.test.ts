@@ -46,7 +46,7 @@ describe('Supplier - integration crud test', () => {
     })
   })
 
-  describe('when get user register', () => {
+  describe('when get supplier register', () => {
     it('get supplier register', async () => {
       const createSupplierParams: CreateSupplierParams = {
         name: 'Fornecedor',
@@ -68,6 +68,56 @@ describe('Supplier - integration crud test', () => {
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
       })
+    })
+  })
+
+  describe('when get all supplier', async () => {
+    it('get all suppliers', async () => {
+      const createFirstSupplierParams: CreateSupplierParams = {
+        name: 'Fornecedor 01',
+        typePerson: 'FISICA',
+        document: '12312312312',
+        pix: '47999999999',
+      }
+
+      const createSecondSupplierParams: CreateSupplierParams = {
+        name: 'Fornecedor 02',
+        typePerson: 'JURIDICA',
+        document: '12312312313',
+        pix: '51999999999',
+      }
+
+      await supplierService.createSupplier(createFirstSupplierParams)
+      await supplierService.createSupplier(createSecondSupplierParams)
+
+      const suppliers = await supplierService.getAllSuppliers()
+      expect(suppliers).toEqual([
+        {
+          id: expect.any(String),
+          name: 'Fornecedor 01',
+          typePerson: 'FISICA',
+          document: '12312312312',
+          pix: '47999999999',
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        },
+        {
+          id: expect.any(String),
+          name: 'Fornecedor 02',
+          typePerson: 'JURIDICA',
+          document: '12312312313',
+          pix: '51999999999',
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        },
+      ])
+    })
+  })
+
+  describe('when try get all suppliers, but dont have any register', () => {
+    it('return empty array', async () => {
+      const emptySuppliersResponse = await supplierService.getAllSuppliers()
+      expect(emptySuppliersResponse).toEqual([])
     })
   })
 })

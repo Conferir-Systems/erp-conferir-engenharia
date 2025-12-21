@@ -17,3 +17,10 @@ export const getSupplierHandler = asyncHandler(
     res.status(200).json(supplier)
   }
 )
+
+export const getSuppliersHandler = asyncHandler(
+  async (req: Request, res: Response) => {
+    const suppliers = await supplierService.getAllSuppliers()
+    res.status(200).json(suppliers)
+  }
+)

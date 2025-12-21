@@ -6,6 +6,7 @@ import { duplicateError } from '../utils/duplicateValueError'
 export interface ISupplierRepository {
   create(supplier: Supplier): Promise<void>
   findById(id: string): Promise<Supplier | null>
+  findAll(): Promise<Supplier[] | null>
 }
 
 class SupplierRepository
