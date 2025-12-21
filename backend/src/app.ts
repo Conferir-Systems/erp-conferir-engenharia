@@ -6,7 +6,7 @@ import usersRoutes from './routes/users'
 import userTypesRoutes from './routes/userTypes'
 import worksRoutes from './routes/works'
 import suppliersRoutes from './routes/suppliers'
-import { errorHandler, notFoundHandler } from './middleware/errorHandler'
+import { errorHandler, notFoundHandler } from './errors/middleware/errorHandler'
 
 const app = express()
 

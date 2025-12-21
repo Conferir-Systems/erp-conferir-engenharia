@@ -31,4 +31,12 @@ export class SupplierService {
 
     return createdSupplier
   }
+
+  async getSupplierById(id: string): Promise<Supplier | null> {
+    const supplier = await this.supplierRepo.findById(id)
+
+    if (!supplier) return null
+
+    return supplier
+  }
 }

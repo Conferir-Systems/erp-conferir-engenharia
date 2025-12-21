@@ -26,3 +26,9 @@ export const createSupplierSchema = z.object({
       }
     ),
 })
+
+export const getSupplierSchema = z.object({
+  params: z.object({
+    id: z.string().uuid('Invalid supplier ID'),
+  }),
+})

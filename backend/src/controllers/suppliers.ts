@@ -9,3 +9,11 @@ export const createSupplierHandler = asyncHandler(
     res.status(201).json(supplier)
   }
 )
+
+export const getSupplierHandler = asyncHandler(
+  async (req: Request, res: Response) => {
+    const id = req.params.id
+    const supplier = await supplierService.getSupplierById(id)
+    res.status(200).json(supplier)
+  }
+)
