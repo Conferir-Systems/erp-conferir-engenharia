@@ -28,7 +28,7 @@ class SupplierRepository
     }
   }
 
-  protected toDatabase(data: Supplier): SupplierDatabaseRow {
+  protected toDatabase(data: Supplier): Partial<SupplierDatabaseRow> {
     return {
       id: data.id,
       name: data.name,
@@ -45,6 +45,8 @@ class SupplierRepository
       typePerson: row.type_person,
       document: row.document,
       pix: row.pix,
+      createdAt: row.created_at,
+      updatedAt: row.updated_at,
     }
   }
 }

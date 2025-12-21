@@ -29,6 +29,6 @@ export type SupplierDatabaseRow = {
   type_person: 'FISICA' | 'JURIDICA'
   document: string
   pix?: string
-  created_at?: Date
-  updated_at?: Date
+  created_at: Date
+  updated_at: Date
 }

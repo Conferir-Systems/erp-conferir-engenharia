@@ -21,11 +21,13 @@ describe('Supplier - integration crud test', () => {
         typePerson: 'FISICA',
         document: '12312312312',
         pix: '47999999999',
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date),
       })
     })
   })
 
-  describe('when the supplier name, document or pix already used', async () => {
+  describe('when trying create new supplier, but the supplier name, document or pix already used', async () => {
     it('throws an error', async () => {
       const createSupplierParams: CreateSupplierParams = {
         name: 'Fornecedor',
@@ -41,6 +43,31 @@ describe('Supplier - integration crud test', () => {
       ).rejects.toThrow(
         /name already exists|document already exists|pix already exists/
       )
+    })
+  })
+
+  describe('when get user register', () => {
+    it('get supplier register', async () => {
+      const createSupplierParams: CreateSupplierParams = {
+        name: 'Fornecedor',
+        typePerson: 'FISICA',
+        document: '12312312312',
+        pix: '51999999999',
+      }
+
+      const supplier =
+        await supplierService.createSupplier(createSupplierParams)
+      const id = supplier.id
+      const supplierRow = await supplierService.getSupplierById(id)
+      expect(supplierRow).toEqual({
+        id: id,
+        name: 'Fornecedor',
+        typePerson: 'FISICA',
+        document: '12312312312',
+        pix: '51999999999',
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date),
+      })
     })
   })
 })

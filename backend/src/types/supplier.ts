@@ -4,4 +4,6 @@ export type Supplier = {
   typePerson: 'FISICA' | 'JURIDICA'
   document: string
   pix?: string
+  createdAt?: Date
+  updatedAt?: Date
 }

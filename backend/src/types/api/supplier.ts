@@ -14,6 +14,16 @@ export type UpdateSupplierRequest = {
   pix?: string
 }
 
+export type SupplierResponse = {
+  id: string
+  name: string
+  typePerson: 'FISICA' | 'JURIDICA'
+  document: string
+  pix?: string
+  createdAt: Date
+  updatedAt: Date
+}
+
 export type SupplierListResponse = {
   suppliers: Supplier[]
   total: number

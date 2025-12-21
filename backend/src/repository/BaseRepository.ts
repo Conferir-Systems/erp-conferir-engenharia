@@ -89,9 +89,9 @@ export abstract class BaseRepository<TDomain, TDatabase = TDomain> {
    * Convert domain object to database row
    * Override this method if transformation is needed (e.g., camelCase to snake_case)
    * @param data - The domain object
-   * @returns The database row
+   * @returns The database row (without auto-generated fields like timestamps)
    */
-  protected toDatabase(data: TDomain): TDatabase {
-    return data as unknown as TDatabase
+  protected toDatabase(data: TDomain): Partial<TDatabase> {
+    return data as unknown as Partial<TDatabase>
   }
 }
