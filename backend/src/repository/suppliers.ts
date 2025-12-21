@@ -7,6 +7,10 @@ export interface ISupplierRepository {
   create(supplier: Supplier): Promise<void>
   findById(id: string): Promise<Supplier | null>
   findAll(): Promise<Supplier[] | null>
+  update(
+    id: string,
+    updates: Partial<Omit<SupplierDatabaseRow, 'id'>>
+  ): Promise<void>
 }
 
 class SupplierRepository

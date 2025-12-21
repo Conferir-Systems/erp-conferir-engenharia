@@ -24,3 +24,12 @@ export const getSuppliersHandler = asyncHandler(
     res.status(200).json(suppliers)
   }
 )
+
+export const updateSupplierHandler = asyncHandler(
+  async (req: Request, res: Response) => {
+    const id = req.params.id
+    const updates = req.body
+    const updatedSupplier = await supplierService.updateSupplier(id, updates)
+    res.status(200).json(updatedSupplier)
+  }
+)

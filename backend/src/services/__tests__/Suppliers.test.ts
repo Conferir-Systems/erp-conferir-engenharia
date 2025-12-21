@@ -120,4 +120,73 @@ describe('Supplier - integration crud test', () => {
       expect(emptySuppliersResponse).toEqual([])
     })
   })
+
+  describe('when updating a supplier', () => {
+    it('updates supplier name', async () => {
+      const createSupplierParams: CreateSupplierParams = {
+        name: 'Original Name',
+        typePerson: 'FISICA',
+        document: '12345678901',
+        pix: '47999999999',
+      }
+
+      const createdSupplier =
+        await supplierService.createSupplier(createSupplierParams)
+
+      const updatedSupplier = await supplierService.updateSupplier(
+        createdSupplier.id,
+        {
+          name: 'Updated Name',
+        }
+      )
+
+      expect(updatedSupplier).toEqual({
+        id: createdSupplier.id,
+        name: 'Updated Name',
+        typePerson: 'FISICA',
+        document: '12345678901',
+        pix: '47999999999',
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date),
+      })
+    })
+
+    it('updates supplier document and typePerson', async () => {
+      const createSupplierParams: CreateSupplierParams = {
+        name: 'Test Supplier',
+        typePerson: 'FISICA',
+        document: '98765432109',
+        pix: '51999888777',
+      }
+
+      const createdSupplier =
+        await supplierService.createSupplier(createSupplierParams)
+
+      const updatedSupplier = await supplierService.updateSupplier(
+        createdSupplier.id,
+        {
+          typePerson: 'JURIDICA',
+          document: '12345678901234',
+        }
+      )
+
+      expect(updatedSupplier).toEqual({
+        id: createdSupplier.id,
+        name: 'Test Supplier',
+        typePerson: 'JURIDICA',
+        document: '12345678901234',
+        pix: '51999888777',
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date),
+      })
+    })
+
+    it('throws error when supplier not found', async () => {
+      await expect(
+        supplierService.updateSupplier('00000000-0000-0000-0000-000000000000', {
+          name: 'Test',
+        })
+      ).rejects.toThrow('suppliers not found')
+    })
+  })
 })

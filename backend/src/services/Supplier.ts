@@ -2,6 +2,8 @@ import { randomUUID } from 'node:crypto'
 import { Supplier } from '../types/supplier'
 import { ISupplierRepository } from '../repository/suppliers'
 import { NotFoundError } from '../errors'
+import { UpdateSupplierRequest } from '../types/api/supplier'
+import { mapUpdateSupplierRequestToDb } from '../utils/mappers/supplierMapper'
 
 export type CreateSupplierParams = {
   name: string
@@ -46,5 +48,20 @@ export class SupplierService {
     if (!suppliers) return []
 
     return suppliers
+  }
+
+  async updateSupplier(
+    id: string,
+    updates: UpdateSupplierRequest
+  ): Promise<Supplier | null> {
+    const dbUpdates = mapUpdateSupplierRequestToDb(updates)
+
+    await this.supplierRepo.update(id, dbUpdates)
+
+    const updatedSupplier = await this.supplierRepo.findById(id)
+
+    if (!updatedSupplier) throw new NotFoundError('Supplier not found')
+
+    return updatedSupplier
   }
 }
