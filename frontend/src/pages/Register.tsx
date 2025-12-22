@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button, Input, Card, Select } from '../components/UI'
+import { Button, Input, PasswordInput, Card, Select } from '../components/UI'
 import { UserPlus } from 'lucide-react'
 import axios from 'axios'
 import {
@@ -146,20 +146,22 @@ export const Register = () => {
   }))
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-bgMain px-4">
+    <div className="min-h-screen bg-bgMain flex items-center justify-center py-8 px-4">
       <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-primary rounded-xl flex items-center justify-center text-white font-bold text-3xl mx-auto mb-4">
-            ✓
-          </div>
-          <h1 className="text-3xl font-bold text-textMain tracking-tight">
-            CONFERIR
-          </h1>
-          <p className="text-textSec mt-2">Cadastro de Novo Usuário</p>
-        </div>
-
         <Card className="shadow-lg border-0">
           <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+            <div className="text-center mb-6">
+              <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center text-white font-bold text-xl mx-auto mb-3">
+                ✓
+              </div>
+              <h1 className="text-2xl font-bold text-textMain tracking-tight">
+                CONFERIR
+              </h1>
+              <p className="text-sm text-textSec mt-1">
+                Cadastro de Novo Usuário
+              </p>
+            </div>
+
             <div>
               <Input
                 label="Nome"
@@ -207,9 +209,8 @@ export const Register = () => {
             </div>
 
             <div>
-              <Input
+              <PasswordInput
                 label="Senha"
-                type="password"
                 placeholder="Digite sua senha"
                 value={formData.password}
                 onChange={(e) => handleChange('password', e.target.value)}
@@ -217,18 +218,7 @@ export const Register = () => {
                 disabled={isLoading}
                 maxLength={100}
               />
-              {!errors.password && formData.password.length === 0 && (
-                <div className="text-xs text-textSec mt-1 space-y-0.5">
-                  <div>A senha deve conter:</div>
-                  <ul className="list-disc list-inside ml-2">
-                    <li>Mínimo de 8 caracteres</li>
-                    <li>Letra maiúscula e minúscula</li>
-                    <li>Pelo menos um número</li>
-                    <li>Pelo menos um caractere especial (!@#$%^&*)</li>
-                  </ul>
-                </div>
-              )}
-              {formData.password.length > 0 && (
+              {errors.password && (
                 <div className="text-xs mt-1 space-y-1">
                   <div
                     className={
@@ -283,9 +273,8 @@ export const Register = () => {
               )}
             </div>
 
-            <Input
+            <PasswordInput
               label="Confirmar Senha"
-              type="password"
               placeholder="Digite sua senha novamente"
               value={formData.confirmPassword}
               onChange={(e) => handleChange('confirmPassword', e.target.value)}

@@ -1,5 +1,5 @@
-import React from 'react'
-import { LucideIcon } from 'lucide-react'
+import React, { useState } from 'react'
+import { LucideIcon, Eye, EyeOff } from 'lucide-react'
 
 interface CardProps {
   children?: React.ReactNode
@@ -125,6 +125,55 @@ export const Input = ({
     {error && <span className="text-xs text-statusRejected">{error}</span>}
   </div>
 )
+
+interface PasswordInputProps extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  'type'
+> {
+  label?: string
+  error?: string
+  className?: string
+  placeholder?: string
+  value?: string
+  onChange?: React.ChangeEventHandler<HTMLInputElement>
+}
+
+export const PasswordInput = ({
+  label,
+  error,
+  className = '',
+  ...props
+}: PasswordInputProps) => {
+  const [showPassword, setShowPassword] = useState(false)
+
+  return (
+    <div className="flex flex-col gap-1.5 w-full">
+      {label && (
+        <label className="text-[14px] text-textSec font-medium">{label}</label>
+      )}
+      <div className="relative">
+        <input
+          type={showPassword ? 'text' : 'password'}
+          className={`h-[38px] pl-3 pr-10 rounded-[4px] border border-border bg-white text-textMain text-sm focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary disabled:bg-gray-50 w-full ${error ? 'border-statusRejected' : ''} ${className}`}
+          {...props}
+        />
+        <button
+          type="button"
+          onClick={() => setShowPassword(!showPassword)}
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-textSec hover:text-textMain transition-colors"
+          tabIndex={-1}
+        >
+          {showPassword ? (
+            <EyeOff className="w-4 h-4" />
+          ) : (
+            <Eye className="w-4 h-4" />
+          )}
+        </button>
+      </div>
+      {error && <span className="text-xs text-statusRejected">{error}</span>}
+    </div>
+  )
+}
 
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label?: string
