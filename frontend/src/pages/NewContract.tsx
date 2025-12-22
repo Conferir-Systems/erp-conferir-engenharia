@@ -1,13 +1,19 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppContext } from '../context/AppContext'
 import { Card, Table, Thead, Th, Tr, Td, Button, Input } from '../components/UI'
 import { formatCurrency } from '../utils'
-import { ArrowLeft, Save, Plus, Trash2, X } from 'lucide-react'
+import { ArrowLeft, Save, Plus, Trash2 } from 'lucide-react'
 import { Contract, ContractItem, Supplier } from '../types'
+import { SupplierModal } from '../components/SupplierModal'
+import {
+  suppliersApi,
+  CreateSupplierRequest,
+  UpdateSupplierRequest,
+} from './services/suppliers'
 
 interface NewItemDraft {
-  id: string // temp id for UI
+  id: string
   description: string
   unit: string
   quantityContracted: string
@@ -17,13 +23,13 @@ interface NewItemDraft {
 
 export const NewContract = () => {
   const navigate = useNavigate()
-  const { currentUser, sites, suppliers, addContract, addSupplier } =
-    useAppContext()
+  const { currentUser, sites, addContract } = useAppContext()
+
+  const [suppliers, setSuppliers] = useState<Supplier[]>([])
 
   const isDirector = currentUser?.role === 'DIRETOR'
   const userSiteIds = currentUser?.linkedConstructionSiteIds || []
 
-  // Form State
   const [siteId, setSiteId] = useState('')
   const [supplierId, setSupplierId] = useState('')
   const [object, setObject] = useState('')
@@ -32,13 +38,8 @@ export const NewContract = () => {
   )
   const [endDate, setEndDate] = useState('')
 
-  // New Supplier Modal State
   const [showSupplierModal, setShowSupplierModal] = useState(false)
-  const [newSupplierName, setNewSupplierName] = useState('')
-  const [newSupplierDoc, setNewSupplierDoc] = useState('')
-  const [newSupplierPix, setNewSupplierPix] = useState('')
 
-  // Items State
   const [items, setItems] = useState<NewItemDraft[]>([
     {
       id: '1',
@@ -50,7 +51,19 @@ export const NewContract = () => {
     },
   ])
 
-  // Filter available sites based on permission
+  useEffect(() => {
+    fetchSuppliers()
+  }, [])
+
+  const fetchSuppliers = async () => {
+    try {
+      const data = await suppliersApi.getAll()
+      setSuppliers(data)
+    } catch (err) {
+      console.error('Error fetching suppliers:', err)
+    }
+  }
+
   const availableSites = isDirector
     ? sites
     : sites.filter((s) => userSiteIds.includes(s.id))
@@ -82,7 +95,6 @@ export const NewContract = () => {
     )
   }
 
-  // Calculations
   const calculateTotal = (item: NewItemDraft) => {
     const qty = parseFloat(item.quantityContracted) || 0
     const mat = parseFloat(item.unitPriceMaterial) || 0
@@ -118,7 +130,7 @@ export const NewContract = () => {
       const lab = parseFloat(item.unitPriceLabor) || 0
       return {
         id: `ci-${Date.now()}-${index}`,
-        contractId: '', // assigned later theoretically
+        contractId: '',
         description: item.description,
         unit: item.unit,
         quantityContracted: parseFloat(item.quantityContracted) || 0,
@@ -146,27 +158,13 @@ export const NewContract = () => {
     navigate(isDirector ? '/director' : '/site')
   }
 
-  const handleSaveSupplier = () => {
-    if (!newSupplierName || !newSupplierDoc) {
-      alert('Preencha Nome e CNPJ/CPF.')
-      return
-    }
-
-    const newSup: Supplier = {
-      id: `sup-${Date.now()}`,
-      corporateName: newSupplierName,
-      cnpj: newSupplierDoc,
-      bankInfo: newSupplierPix ? `Pix: ${newSupplierPix}` : 'Não informado',
-    }
-
-    addSupplier(newSup)
-    setSupplierId(newSup.id) // Auto select
+  const handleSaveSupplier = async (
+    data: CreateSupplierRequest | UpdateSupplierRequest
+  ) => {
+    const newSupplier = await suppliersApi.create(data as CreateSupplierRequest)
+    setSuppliers([...suppliers, newSupplier])
+    setSupplierId(newSupplier.id)
     setShowSupplierModal(false)
-
-    // Clear inputs
-    setNewSupplierName('')
-    setNewSupplierDoc('')
-    setNewSupplierPix('')
   }
 
   return (
@@ -183,7 +181,6 @@ export const NewContract = () => {
         </div>
       </header>
 
-      {/* Header Info */}
       <Card title="Dados do Contrato">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
@@ -216,7 +213,7 @@ export const NewContract = () => {
                   <option value="">Selecione o fornecedor...</option>
                   {suppliers.map((s) => (
                     <option key={s.id} value={s.id}>
-                      {s.corporateName}
+                      {s.name}
                     </option>
                   ))}
                 </select>
@@ -226,6 +223,7 @@ export const NewContract = () => {
                   onClick={() => setShowSupplierModal(true)}
                   className="w-[38px] px-0 flex items-center justify-center"
                 >
+                  +
                   <Plus className="w-5 h-5" />
                 </Button>
               </div>
@@ -237,7 +235,7 @@ export const NewContract = () => {
                   Documento Selecionado
                 </span>
                 <span className="font-mono text-sm font-medium text-textMain">
-                  {selectedSupplier.cnpj}
+                  {selectedSupplier.document}
                 </span>
               </div>
             )}
@@ -269,7 +267,6 @@ export const NewContract = () => {
         </div>
       </Card>
 
-      {/* Items Table */}
       <Card title="Itens da Planilha Contratual">
         <Table>
           <Thead>
@@ -370,7 +367,6 @@ export const NewContract = () => {
         </div>
       </Card>
 
-      {/* Footer Actions */}
       <div className="fixed bottom-0 left-64 right-0 bg-white border-t border-border p-4 shadow-lg flex justify-end gap-4 z-20">
         <Button variant="ghost" onClick={() => navigate(-1)}>
           Cancelar
@@ -380,55 +376,11 @@ export const NewContract = () => {
         </Button>
       </div>
 
-      {/* New Supplier Modal */}
-      {showSupplierModal && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6 animate-in fade-in zoom-in duration-200">
-            <div className="flex justify-between items-center mb-4 border-b border-border pb-2">
-              <h3 className="text-lg font-bold text-textMain">
-                Novo Fornecedor
-              </h3>
-              <button
-                onClick={() => setShowSupplierModal(false)}
-                className="text-textSec hover:text-red-500"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="space-y-4">
-              <Input
-                label="Nome / Razão Social"
-                value={newSupplierName}
-                onChange={(e) => setNewSupplierName(e.target.value)}
-                placeholder="Ex: Empreiteira Silva"
-              />
-              <Input
-                label="CNPJ ou CPF"
-                value={newSupplierDoc}
-                onChange={(e) => setNewSupplierDoc(e.target.value)}
-                placeholder="00.000.000/0000-00"
-              />
-              <Input
-                label="Chave Pix (Banco)"
-                value={newSupplierPix}
-                onChange={(e) => setNewSupplierPix(e.target.value)}
-                placeholder="E-mail, CPF ou Aleatória"
-              />
-            </div>
-            <div className="flex justify-end gap-2 mt-6">
-              <Button
-                variant="ghost"
-                onClick={() => setShowSupplierModal(false)}
-              >
-                Cancelar
-              </Button>
-              <Button variant="primary" onClick={handleSaveSupplier}>
-                Cadastrar
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+      <SupplierModal
+        isOpen={showSupplierModal}
+        onClose={() => setShowSupplierModal(false)}
+        onSave={handleSaveSupplier}
+      />
     </div>
   )
 }

@@ -4,7 +4,7 @@ import type { User } from '../types/users'
 import type { IUserRepository } from '../repository/users'
 import type { IUserTypeRepository } from '../repository/userTypes'
 import { hashPassword } from '../utils/passwordHash'
-import { mapUpdateUserRequestToDb } from '../utils/userMapper'
+import { mapUpdateUserRequestToDb } from '../utils/mappers/userMapper'
 import { NotFoundError } from '../errors'
 
 export type CreateUserParams = {

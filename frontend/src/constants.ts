@@ -2,8 +2,8 @@ import {
   ConstructionSite,
   Contract,
   Measurement,
-  Supplier,
   User,
+  Supplier,
 } from './types'
 
 export const USERS: User[] = [
@@ -44,15 +44,17 @@ export const SITES: ConstructionSite[] = [
 export const SUPPLIERS: Supplier[] = [
   {
     id: 'f1',
-    corporateName: 'ConstruTudo Ltda',
-    cnpj: '12.345.678/0001-90',
-    bankInfo: 'Banco A, Ag 001, CC 1234-5',
+    name: 'Construtora Silva Ltda',
+    typePerson: 'JURIDICA',
+    document: '12345678000190',
+    pix: 'construtora@silva.com.br',
   },
   {
     id: 'f2',
-    corporateName: 'Elétrica Rápida SA',
-    cnpj: '98.765.432/0001-10',
-    bankInfo: 'Banco B, Ag 002, CC 9876-0',
+    name: 'Elétrica Santos',
+    typePerson: 'JURIDICA',
+    document: '98765432000110',
+    pix: '11987654321',
   },
 ]
 

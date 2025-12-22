@@ -1,5 +1,5 @@
-import { UpdateUserRequest } from '../types/api/users'
-import { hashPassword } from './passwordHash'
+import { UpdateUserRequest } from '../../types/api/users'
+import { hashPassword } from '../passwordHash'
 
 export async function mapUpdateUserRequestToDb(
   updates: UpdateUserRequest
