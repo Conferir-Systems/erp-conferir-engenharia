@@ -28,12 +28,11 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
 
   return (
     <div className="flex min-h-screen bg-bgMain font-sans">
-      {/* Sidebar */}
       <aside className="w-64 bg-white border-r border-border flex flex-col fixed h-full z-10">
         <div className="h-16 flex items-center px-6 border-b border-border">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white font-bold">
-              M
+              ✓
             </div>
             <span className="text-xl font-bold text-textMain tracking-tight">
               CONFERIR
@@ -143,7 +142,6 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
         </div>
       </aside>
 
-      {/* Main Content */}
       <main className="flex-1 ml-64 p-8">
         <div className="max-w-7xl mx-auto">{children}</div>
       </main>

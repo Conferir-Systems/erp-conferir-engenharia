@@ -44,13 +44,10 @@ export const AppProvider = ({ children }: { children?: ReactNode }) => {
     useState<Measurement[]>(MOCK_MEASUREMENTS)
   const [contracts, setContracts] = useState<Contract[]>(CONTRACTS)
 
-  // Now using state for Sites and Suppliers to allow adding new ones
   const [sites, setSites] = useState<ConstructionSite[]>(SITES)
-  // Initialize with mock data, but can be replaced with API data
   const [suppliers, setSuppliers] = useState<Supplier[]>(SUPPLIERS)
 
   const login = (role: 'DIRETOR' | 'OBRA') => {
-    // Simulate login by finding the first user with that role
     const user = USERS.find((u) => u.role === role)
     if (user) setCurrentUser(user)
   }
@@ -67,8 +64,6 @@ export const AppProvider = ({ children }: { children?: ReactNode }) => {
 
   const addSite = (site: ConstructionSite) => {
     setSites((prev) => [...prev, site])
-    // Optionally auto-link current user to this site if they are OBRA profile
-    // But for this prototype we assume Director creates sites.
   }
 
   const addSupplier = (supplier: Supplier) => {

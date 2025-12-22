@@ -1,7 +1,6 @@
 import React from 'react'
 import { LucideIcon } from 'lucide-react'
 
-// --- Card ---
 interface CardProps {
   children?: React.ReactNode
   className?: string
@@ -30,12 +29,10 @@ export const Card = ({
   </div>
 )
 
-// --- Button ---
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'danger' | 'ghost'
   icon?: LucideIcon
   size?: 'sm' | 'md'
-  // Explicitly adding props to resolve TS errors
   className?: string
   children?: React.ReactNode
   onClick?: React.MouseEventHandler<HTMLButtonElement>
@@ -78,7 +75,6 @@ export const Button = ({
   )
 }
 
-// --- Badge ---
 export const Badge = ({ status }: { status: string }) => {
   const styles: Record<string, string> = {
     APROVADA: 'bg-green-100 text-statusApproved border-green-200',
@@ -102,11 +98,9 @@ export const Badge = ({ status }: { status: string }) => {
   )
 }
 
-// --- Input ---
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string
   error?: string
-  // Explicitly adding props to resolve TS errors
   className?: string
   placeholder?: string
   type?: string
@@ -132,7 +126,6 @@ export const Input = ({
   </div>
 )
 
-// --- Select ---
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label?: string
   error?: string
@@ -174,7 +167,6 @@ export const Select = ({
   </div>
 )
 
-// --- Table Components ---
 export const Table = ({
   children,
   ...props

@@ -59,7 +59,6 @@ export const SupplierModal = ({
     setPixError('')
     setFormError('')
 
-    // Validate name
     if (!name.trim()) {
       setNameError('O nome/razão social é obrigatório')
       isValid = false
@@ -71,7 +70,6 @@ export const SupplierModal = ({
       isValid = false
     }
 
-    // Validate document
     if (!document.trim()) {
       setDocError(
         typePerson === 'JURIDICA'
@@ -91,7 +89,6 @@ export const SupplierModal = ({
       }
     }
 
-    // Validate PIX (optional)
     if (pix.trim()) {
       if (pix.trim().length < 8) {
         setPixError('A chave PIX deve ter no mínimo 8 caracteres')
@@ -132,7 +129,6 @@ export const SupplierModal = ({
         await onSave(data)
       }
 
-      // Reset form
       setName('')
       setTypePerson('JURIDICA')
       setDocument('')
@@ -143,24 +139,20 @@ export const SupplierModal = ({
     } catch (err) {
       console.error('Error saving supplier:', err)
 
-      // Handle backend validation errors
       if (err && typeof err === 'object' && 'response' in err) {
         const axiosError = err as AxiosError<{
           message?: string
           errors?: Array<{ path: string[]; message: string }>
         }>
 
-        // Handle 409 Conflict (duplicate supplier)
         if (axiosError.response?.status === 409) {
           setNameError('Já existe um fornecedor com este nome')
           return
         }
 
-        // Handle 400 Bad Request (validation errors)
         if (axiosError.response?.status === 400) {
           const responseData = axiosError.response.data
 
-          // Check if backend returned field-specific errors
           if (responseData?.errors && Array.isArray(responseData.errors)) {
             responseData.errors.forEach((error) => {
               const fieldPath = error.path[error.path.length - 1]
@@ -178,7 +170,6 @@ export const SupplierModal = ({
             return
           }
 
-          // Fallback to generic message
           setFormError(
             responseData?.message || 'Erro de validação. Verifique os campos.'
           )
@@ -250,7 +241,6 @@ export const SupplierModal = ({
               value={typePerson}
               onChange={(e) => {
                 setTypePerson(e.target.value as 'FISICA' | 'JURIDICA')
-                // Clear document error when type changes
                 if (docError) setDocError('')
               }}
               disabled={submitting}
@@ -271,7 +261,6 @@ export const SupplierModal = ({
                 value={document}
                 onChange={(e) => {
                   const value = e.target.value
-                  // Allow only numbers and common document separators
                   const sanitized = value.replace(/[^\d./-]/g, '')
                   setDocument(sanitized)
                   if (docError) setDocError('')
