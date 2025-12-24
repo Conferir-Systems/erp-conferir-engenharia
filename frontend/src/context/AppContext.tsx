@@ -1,5 +1,4 @@
-/* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState, ReactNode } from 'react'
+import { createContext, useContext, useState, ReactNode, useMemo } from 'react'
 import {
   User,
   Measurement,
@@ -15,11 +14,11 @@ import {
   WORKS,
   SUPPLIERS,
 } from '../constants'
+import { useAuth } from './AuthContext'
+import { convertAuthUserToUser } from '../utils/authAdapter'
 
 interface AppContextType {
   currentUser: User | null
-  login: (role: 'DIRETOR' | 'OBRA') => void
-  logout: () => void
   measurements: Measurement[]
   addMeasurement: (measurement: Measurement) => void
   updateMeasurementStatus: (
@@ -39,20 +38,18 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined)
 
 export const AppProvider = ({ children }: { children?: ReactNode }) => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null)
+  const { user: authUser } = useAuth()
+
+  const currentUser = useMemo(() => {
+    return authUser ? convertAuthUserToUser(authUser) : null
+  }, [authUser])
+
   const [measurements, setMeasurements] =
     useState<Measurement[]>(MOCK_MEASUREMENTS)
   const [contracts, setContracts] = useState<Contract[]>(CONTRACTS)
 
   const [works, setWorks] = useState<ConstructionSite[]>(WORKS)
   const [suppliers, setSuppliers] = useState<Supplier[]>(SUPPLIERS)
-
-  const login = (role: 'DIRETOR' | 'OBRA') => {
-    const user = USERS.find((u) => u.role === role)
-    if (user) setCurrentUser(user)
-  }
-
-  const logout = () => setCurrentUser(null)
 
   const addMeasurement = (measurement: Measurement) => {
     setMeasurements((prev) => [measurement, ...prev])
@@ -117,8 +114,6 @@ export const AppProvider = ({ children }: { children?: ReactNode }) => {
     <AppContext.Provider
       value={{
         currentUser,
-        login,
-        logout,
         measurements,
         addMeasurement,
         updateMeasurementStatus,
@@ -136,6 +131,7 @@ export const AppProvider = ({ children }: { children?: ReactNode }) => {
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAppContext = () => {
   const context = useContext(AppContext)
   if (!context) throw new Error('useAppContext must be used within AppProvider')
