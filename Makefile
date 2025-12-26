@@ -201,10 +201,10 @@ shell-frontend:
 lint:
 	@echo "🔍 Running ESLint on all code..."
 	@echo "Backend:"
-	@docker compose exec conf-api npm run lint
+	@docker compose exec -T conf-api npm run lint
 	@echo ""
 	@echo "Frontend:"
-	@docker compose exec conf-client npm run lint
+	@docker compose exec -T conf-client npm run lint
 	@echo "✅ Linting complete!"
 
 lint-fix:
@@ -219,10 +219,10 @@ lint-fix:
 format:
 	@echo "🎨 Formatting code with Prettier..."
 	@echo "Backend:"
-	@docker compose exec conf-api npm run format
+	@docker compose exec -T conf-api npm run format
 	@echo ""
 	@echo "Frontend:"
-	@docker compose exec conf-client npm run format
+	@docker compose exec -T conf-client npm run format
 	@echo "✅ Formatting complete!"
 
 format-check:
