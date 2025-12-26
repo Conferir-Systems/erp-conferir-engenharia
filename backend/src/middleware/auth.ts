@@ -18,21 +18,6 @@ export const authenticate = async (
   res: Response,
   next: NextFunction
 ) => {
-  const authEnabled = process.env.AUTH_ENABLED !== 'false'
-
-  if (!authEnabled) {
-    req.user = {
-      userId: 'dev-user-id',
-      email: 'dev@localhost',
-      userType: 'admin',
-      userTypeName: 'admin',
-      permissions: {
-        approveMeasurement: true,
-      },
-    }
-    return next()
-  }
-
   try {
     const authHeader = req.headers.authorization
 
