@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { Button, Input, Card } from '../components/UI'
+import { Button, PasswordInput, Input, Card } from '../components/UI'
 
 export const Login = () => {
   const { login, isAuthenticated, isLoading } = useAuth()
@@ -56,10 +56,9 @@ export const Login = () => {
                 disabled={loading || isLoading}
                 required
               />
-              <Input
+              <PasswordInput
                 label="Senha"
-                type="password"
-                placeholder="••••••••"
+                placeholder="Digite sua senha"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading || isLoading}
