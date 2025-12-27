@@ -23,7 +23,7 @@ export async function generateAccessToken(
   const jwt = await new jose.SignJWT({ ...payload })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
-    .setExpirationTime(process.env.JWT_ACCESS_EXPIRY || '30m')
+    .setExpirationTime(process.env.JWT_ACCESS_EXPIRY || '15m')
     .sign(getJwtSecret())
 
   return jwt
