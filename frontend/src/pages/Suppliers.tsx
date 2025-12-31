@@ -9,7 +9,7 @@ import {
   CreateSupplierRequest,
   UpdateSupplierRequest,
 } from './services/suppliers'
-import { AxiosError } from 'axios'
+import { FetchError } from '../lib/fetchClient'
 
 export const Suppliers = () => {
   const navigate = useNavigate()
@@ -106,35 +106,29 @@ export const Suppliers = () => {
     } catch (err) {
       console.error('Error deleting supplier:', err)
 
-      // Handle specific error cases
       if (err && typeof err === 'object' && 'response' in err) {
-        const axiosError = err as AxiosError<{ message?: string }>
+        const fetchError = err as FetchError<{ message?: string }>
 
-        // Handle 409 Conflict (supplier is being used)
-        if (axiosError.response?.status === 409) {
+        if (fetchError.response?.status === 409) {
           setDeleteError(
             'Não é possível excluir este fornecedor pois ele está vinculado a contratos existentes.'
           )
           return
         }
 
-        // Handle 404 Not Found
-        if (axiosError.response?.status === 404) {
+        if (fetchError.response?.status === 404) {
           setDeleteError('Fornecedor não encontrado.')
           return
         }
 
-        // Handle 400 Bad Request
-        if (axiosError.response?.status === 400) {
+        if (fetchError.response?.status === 400) {
           setDeleteError(
-            axiosError.response.data?.message ||
+            fetchError.response.data?.message ||
               'Dados inválidos. Verifique e tente novamente.'
           )
           return
         }
       }
-
-      // Generic error
       setDeleteError(
         'Erro ao excluir fornecedor. Verifique sua conexão e tente novamente.'
       )

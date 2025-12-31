@@ -23,7 +23,7 @@ import {
 } from 'lucide-react'
 import { ConstructionSite } from '../types'
 import { worksApi } from './services/works'
-import { AxiosError } from 'axios'
+import { FetchError } from '../lib/fetchClient'
 
 export const Works = () => {
   const navigate = useNavigate()
@@ -153,16 +153,16 @@ export const Works = () => {
       console.error('Error saving work:', err)
 
       if (err && typeof err === 'object' && 'response' in err) {
-        const axiosError = err as AxiosError<{ message?: string }>
+        const fetchError = err as FetchError<{ message?: string }>
 
-        if (axiosError.response?.status === 409) {
+        if (fetchError.response?.status === 409) {
           setNameError('Erro: Já existe uma obra com este nome')
           return
         }
 
-        if (axiosError.response?.status === 400) {
+        if (fetchError.response?.status === 400) {
           setFormError(
-            axiosError.response?.data?.message ||
+            fetchError.response?.data?.message ||
               'Erro de validação. Verifique os campos.'
           )
           return

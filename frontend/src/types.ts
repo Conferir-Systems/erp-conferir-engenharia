@@ -11,15 +11,15 @@ export interface User {
   name: string
   email: string
   role: UserRole
-  linkedConstructionSiteIds?: string[] // Only for OBRA role
+  linkedConstructionSiteIds?: string[]
 }
 
 export interface ConstructionSite {
   id: string
   name: string
-  code?: string // Optional now, generated or unnecessary
+  code?: string
   address: string
-  contractor?: string // New field: Contratante
+  contractor?: string
   status: 'ATIVA' | 'CONCLUIDA'
   createdAt?: string
   updatedAt?: string
@@ -35,7 +35,6 @@ export interface Supplier {
   updatedAt?: string
 }
 
-// Legacy interface for backward compatibility with old mock data
 export interface LegacySupplier {
   id: string
   corporateName: string

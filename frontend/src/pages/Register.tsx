@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button, Input, PasswordInput, Card, Select } from '../components/UI'
 import { UserPlus } from 'lucide-react'
-import axios from 'axios'
+import { FetchClient, isFetchError } from '../lib/fetchClient'
 import {
   registerSchema,
   type RegisterFormData,
 } from '../validations/userRegisterValidation'
 
-const API_BASE_URL = 'http://localhost:3000/api'
+const API_BASE_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api`
+const client = new FetchClient({ baseURL: API_BASE_URL })
 
 type UserType = {
   id: string
@@ -36,9 +37,7 @@ export const Register = () => {
   useEffect(() => {
     const fetchUserTypes = async () => {
       try {
-        const response = await axios.get<UserType[]>(
-          `${API_BASE_URL}/user-types`
-        )
+        const response = await client.get<UserType[]>('/user-types')
         setUserTypes(response.data)
       } catch (error) {
         console.error('Erro ao carregar tipos de usuário:', error)
@@ -88,7 +87,7 @@ export const Register = () => {
         password: validatedData.password,
         userType: validatedData.userType,
       }
-      await axios.post(`${API_BASE_URL}/users`, submitData)
+      await client.post('/users', submitData)
 
       setSuccessMessage(
         'Usuário cadastrado com sucesso! Redirecionando para o login...'
@@ -107,8 +106,9 @@ export const Register = () => {
         navigate('/')
       }, 2000)
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const errorMessage = error.response?.data?.message || ''
+      if (isFetchError(error)) {
+        const errorMessage =
+          (error.response?.data as { message?: string })?.message || ''
         const errorStatus = error.response?.status
 
         if (

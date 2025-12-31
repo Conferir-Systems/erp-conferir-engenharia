@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { FetchClient } from '../lib/fetchClient'
 import { api } from '../pages/services/api'
 import {
   LoginRequest,
@@ -6,7 +6,7 @@ import {
   RefreshTokenResponse,
 } from '../types/auth'
 
-const API_BASE_URL = 'http://localhost:3000/api'
+const API_BASE_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api`
 
 export const authService = {
   login: async (data: LoginRequest): Promise<LoginResponse> => {
@@ -15,8 +15,9 @@ export const authService = {
   },
 
   refreshToken: async (refreshToken: string): Promise<RefreshTokenResponse> => {
-    const response = await axios.post<RefreshTokenResponse>(
-      `${API_BASE_URL}/auth/refresh`,
+    const client = new FetchClient({ baseURL: API_BASE_URL })
+    const response = await client.post<RefreshTokenResponse>(
+      '/auth/refresh',
       { refreshToken }
     )
     return response.data

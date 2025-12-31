@@ -6,7 +6,7 @@ import {
   UpdateSupplierRequest,
 } from '../pages/services/suppliers'
 import { Supplier } from '../types'
-import { AxiosError } from 'axios'
+import { FetchError } from '../lib/fetchClient'
 
 interface SupplierModalProps {
   isOpen: boolean
@@ -140,33 +140,35 @@ export const SupplierModal = ({
       console.error('Error saving supplier:', err)
 
       if (err && typeof err === 'object' && 'response' in err) {
-        const axiosError = err as AxiosError<{
+        const fetchError = err as FetchError<{
           message?: string
           errors?: Array<{ path: string[]; message: string }>
         }>
 
-        if (axiosError.response?.status === 409) {
+        if (fetchError.response?.status === 409) {
           setNameError('Já existe um fornecedor com este nome')
           return
         }
 
-        if (axiosError.response?.status === 400) {
-          const responseData = axiosError.response.data
+        if (fetchError.response?.status === 400) {
+          const responseData = fetchError.response.data
 
           if (responseData?.errors && Array.isArray(responseData.errors)) {
-            responseData.errors.forEach((error) => {
-              const fieldPath = error.path[error.path.length - 1]
+            responseData.errors.forEach(
+              (error: { path: string[]; message: string }) => {
+                const fieldPath = error.path[error.path.length - 1]
 
-              if (fieldPath === 'name') {
-                setNameError(error.message)
-              } else if (fieldPath === 'document') {
-                setDocError(error.message)
-              } else if (fieldPath === 'pix') {
-                setPixError(error.message)
-              } else if (fieldPath === 'typePerson') {
-                setFormError(error.message)
+                if (fieldPath === 'name') {
+                  setNameError(error.message)
+                } else if (fieldPath === 'document') {
+                  setDocError(error.message)
+                } else if (fieldPath === 'pix') {
+                  setPixError(error.message)
+                } else if (fieldPath === 'typePerson') {
+                  setFormError(error.message)
+                }
               }
-            })
+            )
             return
           }
 
