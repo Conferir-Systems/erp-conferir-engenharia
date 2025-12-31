@@ -16,10 +16,9 @@ export const authService = {
 
   refreshToken: async (refreshToken: string): Promise<RefreshTokenResponse> => {
     const client = new FetchClient({ baseURL: API_BASE_URL })
-    const response = await client.post<RefreshTokenResponse>(
-      '/auth/refresh',
-      { refreshToken }
-    )
+    const response = await client.post<RefreshTokenResponse>('/auth/refresh', {
+      refreshToken,
+    })
     return response.data
   },
 

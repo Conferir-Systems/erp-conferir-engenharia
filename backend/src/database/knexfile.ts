@@ -8,9 +8,6 @@ const __dirname = path.dirname(__filename)
 
 dotenv.config({ path: '../../../.env' })
 
-/**
- * @type { Object.<string, import("knex").Knex.Config> }
- */
 const config: { [key: string]: Knex.Config } = {
   development: {
     client: 'pg',

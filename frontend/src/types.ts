@@ -88,7 +88,6 @@ export interface Measurement {
   items: MeasurementItem[]
 }
 
-// Helper types for UI
 export interface EnrichedMeasurement extends Measurement {
   contract: Contract
   site: ConstructionSite

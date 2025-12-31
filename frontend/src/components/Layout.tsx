@@ -24,7 +24,6 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
     navigate('/')
   }
 
-  // If no currentUser yet, show loading
   if (!currentUser) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-bgMain">
