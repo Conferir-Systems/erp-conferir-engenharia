@@ -33,11 +33,11 @@
   },
   "lint-staged": {
     "*.ts": [
-      "npx eslint --fix",
-      "npx prettier --write"
+      "node_modules/.bin/eslint --fix",
+      "node_modules/.bin/prettier --write"
     ],
     "*.{json,md}": [
-      "npx prettier --write"
+      "node_modules/.bin/prettier --write"
     ]
   },
   "keywords": [
