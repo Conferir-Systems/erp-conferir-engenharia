@@ -32,9 +32,9 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm ci --only=production --ignore-scripts
+RUN npm ci --only=production
 
-COPY --from=build /app/dist ./dist
+COPY . .
 
 EXPOSE 3000
 

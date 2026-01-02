@@ -8,8 +8,7 @@
     "dev": "tsx watch src/index.ts",
     "dev:migrate": "npm run migrate:latest && npm run dev",
     "build": "tsc",
-    "start": "node dist/index.js",
-    "railway:start": "npm run migrate:latest && npm run start",
+    "start": "tsx src/index.ts",
     "prepare": "cd .. && git config core.hooksPath backend/.husky 2>/dev/null || true",
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",
@@ -62,6 +61,7 @@
     "knex": "^3.1.0",
     "morgan": "^1.10.0",
     "pg": "^8.11.3",
+    "tsx": "^4.7.0",
     "zod": "^4.2.1"
   },
   "devDependencies": {
@@ -84,7 +84,6 @@
     "nodemon": "^3.1.11",
     "prettier": "^3.7.4",
     "supertest": "^6.3.3",
-    "tsx": "^4.7.0",
     "typescript": "^5.3.3",
     "vitest": "^4.0.15"
   }
