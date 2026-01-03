@@ -59,6 +59,18 @@ jobs:
           NODE_ENV: test
           PGPASSWORD: postgres
 
+      - name: Build TypeScript
+        run: npm run build
+
+      - name: Create deployment package
+        run: |
+          mkdir -p deploy
+          cp -r dist deploy/
+          cp -r src/database deploy/src/
+          cp package.json package-lock.json deploy/
+          cd deploy
+          zip -r ../deploy.zip .
+
       - name: Generate deployment timestamp
         id: timestamp
         run: echo "time=$(date +%Y%m%d_%H%M%S)" >> $GITHUB_OUTPUT
@@ -72,6 +84,6 @@ jobs:
           environment_name: conferir-backend-prod
           version_label: ${{ github.sha }}-${{ steps.timestamp.outputs.time }}
           region: us-east-1
-          deployment_package: backend
+          deployment_package: backend/deploy.zip
           use_existing_version_if_available: false
           wait_for_environment_recovery: 300
