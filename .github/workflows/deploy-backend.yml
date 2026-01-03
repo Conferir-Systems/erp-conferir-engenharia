@@ -12,6 +12,21 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: conf_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     defaults:
       run:
         working-directory: backend
@@ -35,6 +50,13 @@ jobs:
 
       - name: Run tests
         run: npm test
+        env:
+          DB_TEST_HOST: localhost
+          DB_TEST_PORT: 5432
+          DB_TEST_USER: postgres
+          DB_TEST_PASSWORD: postgres
+          DB_TEST_NAME: conf_test
+          NODE_ENV: test
 
       - name: Generate deployment timestamp
         id: timestamp
