@@ -83,7 +83,7 @@ jobs:
           application_name: conferir-backend
           environment_name: conferir-backend-env
           version_label: ${{ github.sha }}-${{ steps.timestamp.outputs.time }}
-          region: us-east-1
+          region: sa-east-1
           deployment_package: backend/deploy.zip
           use_existing_version_if_available: false
           wait_for_environment_recovery: 300
