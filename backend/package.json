@@ -24,6 +24,7 @@
     "migrate:make": "tsx node_modules/knex/bin/cli.js migrate:make --knexfile src/database/knexfile.ts -x ts",
     "migrate:latest": "tsx node_modules/knex/bin/cli.js migrate:latest --knexfile src/database/knexfile.ts",
     "migrate:production": "NODE_ENV=production node node_modules/knex/bin/cli.js migrate:latest --knexfile dist/database/knexfile.js",
+    "migrate:status:production": "NODE_ENV=production node node_modules/knex/bin/cli.js migrate:status --knexfile dist/database/knexfile.js",
     "migrate:rollback": "tsx node_modules/knex/bin/cli.js migrate:rollback --knexfile src/database/knexfile.ts",
     "migrate:rollback:all": "tsx node_modules/knex/bin/cli.js migrate:rollback --all --knexfile src/database/knexfile.ts",
     "migrate:status": "tsx node_modules/knex/bin/cli.js migrate:status --knexfile src/database/knexfile.ts",
