@@ -1,7 +1,7 @@
-import { defineConfig, loadEnv } from 'vite'
+import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({}) => {
   return {
     server: {
       port: 5173,
@@ -11,6 +11,10 @@ export default defineConfig(({ mode }) => {
     envDir: '../',
     watch: {
       usePolling: true,
+    },
+    build: {
+      outDir: 'dist',
+      sourcemap: false,
     },
   }
 })
