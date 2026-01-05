@@ -44,6 +44,11 @@ app.use(cors(corsOptions))
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+app.get('/', (_req, res) => {
+  res.status(200).json({ status: 'ok', service: 'conferir-backend' })
+})
+
 app.use('/api', routes)
 app.use(notFoundHandler)
 app.use(errorHandler)
