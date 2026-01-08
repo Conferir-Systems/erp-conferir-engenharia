@@ -13,8 +13,14 @@ export const createContractHandler = asyncHandler(
 
 export const getContractsHandler = asyncHandler(
   async (req: Request, res: Response) => {
-    const contracts = await contractService.getContracts()
-    res.status(201).json(contracts)
+    const { workId, supplierId } = req.query
+
+    const contracts = await contractService.getContracts({
+      workId: workId as string | undefined,
+      supplierId: supplierId as string | undefined,
+    })
+
+    res.status(200).json(contracts)
   }
 )
 

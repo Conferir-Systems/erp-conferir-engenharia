@@ -1,5 +1,5 @@
 import { Contract } from '../types/contracts.js'
-import { ContractItem } from '../types/contractItems.js'
+import { ContractItem, ContractListItem } from '../types/contractItems.js'
 import { IContractRepository } from '../repository/contracts.js'
 import { IWorkRepository } from '../repository/works.js'
 import { ISupplierRepository } from '../repository/suppliers.js'
@@ -73,8 +73,11 @@ export class ContractService {
     return contractResponse
   }
 
-  async getContracts(): Promise<Contract[] | null> {
-    const contracts = await this.contractRepo.findAll()
+  async getContracts(filters?: {
+    workId?: string
+    supplierId?: string
+  }): Promise<ContractListItem[]> {
+    const contracts = await this.contractRepo.findAllWithFilters(filters)
 
     if (!contracts) return []
 

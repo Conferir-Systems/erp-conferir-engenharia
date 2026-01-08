@@ -3,7 +3,11 @@ import type {
   CreateContractInputRepository,
 } from '../types/contracts.js'
 import type { ContractDatabaseRow } from '../types/database.js'
-import type { ContractItem } from '../types/contractItems.js'
+import type {
+  ContractItem,
+  ContractListItem,
+  ContractQueryRow,
+} from '../types/contractItems.js'
 import { BaseRepository } from './BaseRepository.js'
 import { contractItemRepository } from './contractItems.js'
 import { ValidationError } from '../errors/ValidationError.js'
@@ -13,6 +17,10 @@ export interface IContractRepository {
   createContractWithItems(
     data: CreateContractInputRepository
   ): Promise<{ contract: Contract; items: ContractItem[] }>
+  findAllWithFilters(filters?: {
+    workId?: string
+    supplierId?: string
+  }): Promise<ContractListItem[]>
   findById(id: string): Promise<Contract | null>
   findAll(): Promise<Contract[] | null>
 }
@@ -54,6 +62,39 @@ class ContractRepository
     })
 
     return { contract, items: contractItems }
+  }
+
+  async findAllWithFilters(filters?: {
+    workId?: string
+    supplierId?: string
+  }): Promise<ContractListItem[]> {
+    let query = this.db('contracts')
+      .select<
+        ContractQueryRow[]
+      >('contracts.id', 'contracts.service', 'contracts.total_value', 'contracts.start_date', 'contracts.delivery_time', 'works.id as work_id', 'works.name as work_name', 'suppliers.id as supplier_id', 'suppliers.name as supplier_name')
+      .leftJoin('works', 'contracts.work', 'works.id')
+      .leftJoin('suppliers', 'contracts.supplier', 'suppliers.id')
+
+    if (filters?.workId) {
+      query = query.where('contracts.work', filters.workId)
+    }
+
+    if (filters?.supplierId) {
+      query = query.where('contracts.supplier', filters.supplierId)
+    }
+
+    const rows = await query
+
+    return rows.map((row: ContractQueryRow) => ({
+      id: row.id,
+      work: { id: row.work_id, name: row.work_name },
+      supplier: { id: row.supplier_id, name: row.supplier_name },
+      service: row.service,
+      totalValue: row.total_value,
+      startDate: row.start_date,
+      deliveryTime: row.delivery_time,
+      percentage: 0,
+    }))
   }
 
   protected toDomain(row: ContractDatabaseRow): Contract {

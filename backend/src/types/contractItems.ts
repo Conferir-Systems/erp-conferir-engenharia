@@ -9,3 +9,26 @@ export type ContractItem = {
   createdAt?: Date
   updatedAt?: Date
 }
+
+export type ContractListItem = {
+  id: string
+  work: { id: string; name: string }
+  supplier: { id: string; name: string }
+  service: string
+  totalValue: number
+  startDate: Date
+  deliveryTime: Date | null
+  percentage: number
+}
+
+export type ContractQueryRow = {
+  id: string
+  service: string
+  total_value: number
+  start_date: Date
+  delivery_time: Date | null
+  work_id: string
+  work_name: string
+  supplier_id: string
+  supplier_name: string
+}
