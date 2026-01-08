@@ -1,3 +1,5 @@
+import { ContractItem } from './contractItems'
+
 export type Contract = {
   id: string
   workId: string
@@ -8,4 +10,13 @@ export type Contract = {
   deliveryTime?: Date | null
   createdAt?: Date
   updatedAt?: Date
+}
+
+export type CreateContractInput = {
+  work: string
+  supplier: string
+  service: string
+  start_date: string
+  delivery_time?: string
+  items: Omit<ContractItem, 'id' | 'contract' | 'created_at' | 'updated_at'>[]
 }
