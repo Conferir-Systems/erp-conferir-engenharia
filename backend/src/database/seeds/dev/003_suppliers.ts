@@ -2,6 +2,10 @@ import type { Knex } from 'knex'
 import { randomUUID } from 'crypto'
 
 export async function seed(knex: Knex): Promise<void> {
+  // Delete dependent tables first to avoid FK constraint violations
+  await knex('contract_items').del()
+  await knex('contracts').del()
+
   await knex('suppliers').del()
 
   await knex('suppliers').insert([
