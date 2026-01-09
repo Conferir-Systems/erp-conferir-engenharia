@@ -44,7 +44,7 @@ class ContractRepository
       totalValue: data.totalValue,
       startDate: new Date(data.start_date),
       deliveryTime: data.delivery_time ? new Date(data.delivery_time) : null,
-      status: 'Ativo',
+      status: data.status,
     }
 
     const contractItems: ContractItem[] = data.items

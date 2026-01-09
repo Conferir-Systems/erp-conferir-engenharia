@@ -52,7 +52,7 @@ describe('Contract - integration crud test', () => {
         totalValue: 100000,
         startDate: expect.any(Date),
         deliveryTime: expect.any(Date),
-        status: 'Ativo'
+        status: 'Ativo',
       })
     })
   })
@@ -100,11 +100,12 @@ describe('Contract - integration crud test', () => {
 
   describe('when getting all contracts', () => {
     it('should return all contracts', async () => {
-      const contract1Params: Omit<CreateContractParams, 'status'> = {
+      const contract1Params: CreateContractParams = {
         workId: testWork.id,
         supplierId: testSupplier.id,
         service: 'Colocação de tijolos refratários',
         startDate: '2024-01-01',
+        status: 'Ativo',
         items: [
           {
             unitMeasure: 'm2',
@@ -115,11 +116,12 @@ describe('Contract - integration crud test', () => {
         ],
       }
 
-      const contract2Params: Omit<CreateContractParams, 'status'> = {
+      const contract2Params: CreateContractParams = {
         workId: testWork.id,
         supplierId: testSupplier.id,
         service: 'Instalação de janelas',
         startDate: '2024-02-01',
+        status: 'Ativo',
         items: [
           {
             unitMeasure: 'm2',
@@ -130,11 +132,12 @@ describe('Contract - integration crud test', () => {
         ],
       }
 
-      const contract3Params: Omit<CreateContractParams, 'status'> = {
+      const contract3Params: CreateContractParams = {
         workId: testWork.id,
         supplierId: testSupplier.id,
         service: 'Pintura externa',
         startDate: '2024-03-01',
+        status: 'Ativo',
         items: [
           {
             unitMeasure: 'm2',

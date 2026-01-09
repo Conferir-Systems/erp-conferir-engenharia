@@ -27,5 +27,6 @@ export type CreateContractInput = {
 export type CreateContractInputRepository = CreateContractInput & {
   id: string
   totalValue: number
+  status: 'Ativo'
   items: ContractItem[]
 }
