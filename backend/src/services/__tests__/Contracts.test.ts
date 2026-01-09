@@ -28,7 +28,7 @@ describe('Contract - integration crud test', () => {
         supplierId: testSupplier.id,
         service: 'Colocação de tijolos refratários em churrasqueiras',
         startDate: '2024-01-01',
-        deliveryDate: '2024-12-31',
+        deliveryTime: '2024-12-31',
         items: [
           {
             unitMeasure: 'm2',
@@ -53,6 +53,12 @@ describe('Contract - integration crud test', () => {
         startDate: expect.any(Date),
         deliveryTime: expect.any(Date),
         status: 'Ativo',
+        items: createContractParams.items.map((item) => ({
+          ...item,
+          id: expect.any(String),
+          contractId: expect.any(String),
+          totalValue: item.quantity * item.unitLaborValue,
+        })),
       })
     })
   })
@@ -64,7 +70,6 @@ describe('Contract - integration crud test', () => {
         supplierId: testSupplier.id,
         service: 'Test Service',
         startDate: '2024-01-01',
-        status: 'Ativo',
         items: [
           {
             unitMeasure: 'm2',
@@ -105,7 +110,6 @@ describe('Contract - integration crud test', () => {
         supplierId: testSupplier.id,
         service: 'Colocação de tijolos refratários',
         startDate: '2024-01-01',
-        status: 'Ativo',
         items: [
           {
             unitMeasure: 'm2',
@@ -121,7 +125,6 @@ describe('Contract - integration crud test', () => {
         supplierId: testSupplier.id,
         service: 'Instalação de janelas',
         startDate: '2024-02-01',
-        status: 'Ativo',
         items: [
           {
             unitMeasure: 'm2',
@@ -137,7 +140,6 @@ describe('Contract - integration crud test', () => {
         supplierId: testSupplier.id,
         service: 'Pintura externa',
         startDate: '2024-03-01',
-        status: 'Ativo',
         items: [
           {
             unitMeasure: 'm2',
