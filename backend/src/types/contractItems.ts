@@ -1,10 +1,10 @@
 export type ContractItem = {
   id: string
-  contract: string
+  contractId: string
   unitMeasure: string
   quantity: number
   unitLaborValue: number
-  totalItemValue: number
+  totalValue: number
   description: string
   createdAt?: Date
   updatedAt?: Date

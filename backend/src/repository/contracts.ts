@@ -38,8 +38,8 @@ class ContractRepository
   ): Promise<{ contract: Contract; items: ContractItem[] }> {
     const contract: Contract = {
       id: data.id,
-      workId: data.work,
-      supplierId: data.supplier,
+      workId: data.work_id,
+      supplierId: data.supplier_id,
       service: data.service,
       totalValue: data.totalValue,
       startDate: new Date(data.start_date),
@@ -73,15 +73,15 @@ class ContractRepository
       .select<
         ContractQueryRow[]
       >('contracts.id', 'contracts.service', 'contracts.total_value', 'contracts.start_date', 'contracts.delivery_time', 'contracts.status', 'works.id as work_id', 'works.name as work_name', 'suppliers.id as supplier_id', 'suppliers.name as supplier_name')
-      .leftJoin('works', 'contracts.work', 'works.id')
-      .leftJoin('suppliers', 'contracts.supplier', 'suppliers.id')
+      .leftJoin('works', 'contracts.work_id', 'works.id')
+      .leftJoin('suppliers', 'contracts.supplier_id', 'suppliers.id')
 
     if (filters?.workId) {
-      query = query.where('contracts.work', filters.workId)
+      query = query.where('contracts.work_id', filters.workId)
     }
 
     if (filters?.supplierId) {
-      query = query.where('contracts.supplier', filters.supplierId)
+      query = query.where('contracts.supplier_id', filters.supplierId)
     }
 
     const rows = await query
@@ -102,8 +102,8 @@ class ContractRepository
   protected toDomain(row: ContractDatabaseRow): Contract {
     return {
       id: row.id,
-      workId: row.work,
-      supplierId: row.supplier,
+      workId: row.work_id,
+      supplierId: row.supplier_id,
       service: row.service,
       totalValue: row.total_value,
       startDate: row.start_date,
@@ -115,8 +115,8 @@ class ContractRepository
   protected toDatabase(data: Contract): ContractDatabaseRow {
     return {
       id: data.id,
-      work: data.workId,
-      supplier: data.supplierId,
+      work_id: data.workId,
+      supplier_id: data.supplierId,
       service: data.service,
       total_value: data.totalValue,
       start_date: data.startDate,

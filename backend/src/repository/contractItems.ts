@@ -25,7 +25,7 @@ class ContractItemRepository
 
   async findByContractId(contractId: string): Promise<ContractItem[]> {
     const rows = (await this.db(this.tableName)
-      .where({ contract: contractId })
+      .where({ contract_id: contractId })
       .select('*')) as ContractItemDatabaseRow[]
 
     return rows.map((row) => this.toDomain(row))
@@ -34,11 +34,11 @@ class ContractItemRepository
   protected toDomain(row: ContractItemDatabaseRow): ContractItem {
     return {
       id: row.id,
-      contract: row.contract,
+      contractId: row.contract_id,
       unitMeasure: row.unit_measure,
       quantity: row.quantity,
       unitLaborValue: row.unit_labor_value,
-      totalItemValue: row.total_item_value,
+      totalValue: row.total_value,
       description: row.description,
       createdAt: row.created_at,
       updatedAt: row.updated_at,
@@ -48,11 +48,11 @@ class ContractItemRepository
   protected toDatabase(data: ContractItem): ContractItemDatabaseRow {
     return {
       id: data.id,
-      contract: data.contract,
+      contract_id: data.contractId,
       unit_measure: data.unitMeasure,
       quantity: data.quantity,
       unit_labor_value: data.unitLaborValue,
-      total_item_value: data.totalItemValue,
+      total_value: data.totalValue,
       description: data.description,
       created_at: data.createdAt ?? new Date(),
       updated_at: data.updatedAt ?? new Date(),

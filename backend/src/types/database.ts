@@ -38,8 +38,8 @@ export type SupplierDatabaseRow = {
 
 export type ContractDatabaseRow = {
   id: string
-  work: string
-  supplier: string
+  work_id: string
+  supplier_id: string
   service: string
   total_value: number
   start_date: Date
@@ -51,11 +51,11 @@ export type ContractDatabaseRow = {
 
 export type ContractItemDatabaseRow = {
   id: string
-  contract: string
+  contract_id: string
   unit_measure: string
   quantity: number
   unit_labor_value: number
-  total_item_value: number
+  total_value: number
   description: string
   created_at: Date
   updated_at: Date

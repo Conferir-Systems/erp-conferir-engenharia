@@ -1,6 +1,7 @@
 // import { Contract } from '../contracts.js'
 import { Work } from '../works'
 import { Supplier } from '../supplier'
+import { ContractItem } from '../contractItems'
 
 export type CreateContractRequest = {
   service: string
@@ -17,4 +18,5 @@ export type ContractResponse = {
   startDate: Date
   deliveryTime: Date | null
   status: 'Ativo' | 'Encerrado'
+  items: ContractItem[]
 }

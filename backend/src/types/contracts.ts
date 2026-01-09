@@ -16,8 +16,8 @@ export type Contract = {
 }
 
 export type CreateContractInput = {
-  work: string
-  supplier: string
+  work_id: string
+  supplier_id: string
   service: string
   start_date: string
   delivery_time?: string

@@ -11,11 +11,10 @@ export type CreateContractParams = {
   supplierId: string
   service: string
   startDate: string
-  deliveryDate?: string
-  status: 'Ativo'
+  deliveryTime?: string
   items: Omit<
     ContractItem,
-    'id' | 'contract' | 'createdAt' | 'updatedAt' | 'totalItemValue'
+    'id' | 'contractId' | 'createdAt' | 'updatedAt' | 'totalValue'
   >[]
 }
 
@@ -33,28 +32,28 @@ export class ContractService {
 
     const contractItems: ContractItem[] = params.items.map((item) => ({
       id: randomUUID(),
-      contract: contractId,
+      contractId: contractId,
       unitMeasure: item.unitMeasure,
       quantity: item.quantity,
       unitLaborValue: item.unitLaborValue,
-      totalItemValue: item.quantity * item.unitLaborValue,
+      totalValue: item.quantity * item.unitLaborValue,
       description: item.description,
     }))
 
     const totalValue = contractItems.reduce(
-      (sum, item) => sum + item.totalItemValue,
+      (sum, item) => sum + item.totalValue,
       0
     )
 
-    const { contract: createdContract } =
+    const { contract: createdContract, items } =
       await this.contractRepo.createContractWithItems({
         id: contractId,
-        work: params.workId,
-        supplier: params.supplierId,
+        work_id: params.workId,
+        supplier_id: params.supplierId,
         service: params.service.trim(),
         totalValue: totalValue,
         start_date: params.startDate,
-        delivery_time: params.deliveryDate,
+        delivery_time: params.deliveryTime,
         status: 'Ativo',
         items: contractItems,
       })
@@ -71,6 +70,7 @@ export class ContractService {
       startDate: createdContract.startDate,
       deliveryTime: createdContract.deliveryTime || null,
       status: createdContract.status,
+      items: items,
     }
 
     return contractResponse

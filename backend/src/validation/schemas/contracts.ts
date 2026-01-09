@@ -18,8 +18,20 @@ const deliveryTime = z.coerce
   })
   .optional()
   .nullable()
-const status = z.enum(['Ativo', 'Encerrado'], {
-  message: "Status must be 'Ativo' or 'Encerrado'",
+
+const contractItemSchema = z.object({
+  description: z
+    .string()
+    .trim()
+    .min(1, 'Description is required')
+    .max(500, 'Description must be max 500 characters'),
+  unitMeasure: z
+    .string()
+    .trim()
+    .min(1, 'Unit measure is required')
+    .max(20, 'Unit measure must be max 20 characters'),
+  quantity: z.number().positive('Quantity must be positive'),
+  unitLaborValue: z.number().nonnegative('Unit labor value cannot be negative'),
 })
 
 export const createContractSchema = z.object({
@@ -29,7 +41,7 @@ export const createContractSchema = z.object({
     service: service,
     startDate: startDate,
     deliveryTime: deliveryTime,
-    status,
+    items: z.array(contractItemSchema).min(1, 'At least one item is required'),
   }),
 })
 
