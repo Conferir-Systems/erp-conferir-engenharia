@@ -100,8 +100,10 @@ export const Contracts = () => {
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div>
-            <h1 className="text-2xl font-bold text-textMain">Contratos</h1>
-            <p className="text-textSec">Gestão de contratos</p>
+            <h1 className="text-2xl font-bold text-textMain">
+              Gestão de Contratos
+            </h1>
+            <p className="text-textSec">Contratos cadastrados</p>
           </div>
         </div>
       </header>
@@ -165,7 +167,9 @@ export const Contracts = () => {
                       <div className="flex-1 bg-gray-200 rounded-full h-2 min-w-[80px]">
                         <div
                           className="bg-primary h-2 rounded-full transition-all"
-                          style={{ width: `${contract.percentage}%` }}
+                          style={{
+                            width: `${Math.min(contract.percentage, 100)}%`,
+                          }}
                         />
                       </div>
                       <span className="text-xs text-textSec font-medium min-w-[40px] text-right">
@@ -178,7 +182,9 @@ export const Contracts = () => {
               {contracts.length === 0 && (
                 <Tr>
                   <Td colSpan={5} className="text-center py-8 text-textSec">
-                    Nenhum contrato encontrado.
+                    {selectedWorkId || selectedSupplierId
+                      ? 'Nenhum contrato encontrado com os filtros selecionados.'
+                      : 'Nenhum contrato cadastrado.'}
                   </Td>
                 </Tr>
               )}
