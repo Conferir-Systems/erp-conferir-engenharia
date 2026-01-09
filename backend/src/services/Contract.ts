@@ -12,6 +12,7 @@ export type CreateContractParams = {
   service: string
   startDate: string
   deliveryDate?: string
+  status: 'Ativa' | 'Encerrado'
   items: Omit<
     ContractItem,
     'id' | 'contract' | 'createdAt' | 'updatedAt' | 'totalItemValue'
@@ -26,7 +27,7 @@ export class ContractService {
   ) {}
 
   async createContractWithItems(
-    params: CreateContractParams
+    params: Omit<CreateContractParams, 'status'>
   ): Promise<ContractResponse> {
     const contractId = randomUUID()
 
@@ -68,6 +69,7 @@ export class ContractService {
       totalValue: createdContract.totalValue,
       startDate: createdContract.startDate,
       deliveryTime: createdContract.deliveryTime || null,
+      status: createdContract.status
     }
 
     return contractResponse

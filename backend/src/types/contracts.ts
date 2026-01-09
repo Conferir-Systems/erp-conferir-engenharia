@@ -1,5 +1,7 @@
 import { ContractItem } from './contractItems'
 
+export type ContractStatus = 'Ativo' | 'Encerrado'
+
 export type Contract = {
   id: string
   workId: string
@@ -8,6 +10,7 @@ export type Contract = {
   totalValue: number
   startDate: Date
   deliveryTime?: Date | null
+  status: ContractStatus
   createdAt?: Date
   updatedAt?: Date
 }

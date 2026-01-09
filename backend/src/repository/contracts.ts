@@ -44,6 +44,7 @@ class ContractRepository
       totalValue: data.totalValue,
       startDate: new Date(data.start_date),
       deliveryTime: data.delivery_time ? new Date(data.delivery_time) : null,
+      status: 'Ativo',
     }
 
     const contractItems: ContractItem[] = data.items
@@ -71,7 +72,7 @@ class ContractRepository
     let query = this.db('contracts')
       .select<
         ContractQueryRow[]
-      >('contracts.id', 'contracts.service', 'contracts.total_value', 'contracts.start_date', 'contracts.delivery_time', 'works.id as work_id', 'works.name as work_name', 'suppliers.id as supplier_id', 'suppliers.name as supplier_name')
+      >('contracts.id', 'contracts.service', 'contracts.total_value', 'contracts.start_date', 'contracts.delivery_time', 'contracts.status', 'works.id as work_id', 'works.name as work_name', 'suppliers.id as supplier_id', 'suppliers.name as supplier_name')
       .leftJoin('works', 'contracts.work', 'works.id')
       .leftJoin('suppliers', 'contracts.supplier', 'suppliers.id')
 
@@ -93,6 +94,7 @@ class ContractRepository
       totalValue: row.total_value,
       startDate: row.start_date,
       deliveryTime: row.delivery_time,
+      status: row.status,
       percentage: 0,
     }))
   }
@@ -106,6 +108,7 @@ class ContractRepository
       totalValue: row.total_value,
       startDate: row.start_date,
       deliveryTime: row.delivery_time,
+      status: row.status,
     }
   }
 
@@ -118,6 +121,7 @@ class ContractRepository
       total_value: data.totalValue,
       start_date: data.startDate,
       delivery_time: data.deliveryTime ?? null,
+      status: data.status,
       created_at: data.createdAt ?? new Date(),
       updated_at: data.updatedAt ?? new Date(),
     }

@@ -18,6 +18,9 @@ const deliveryTime = z.coerce
   })
   .optional()
   .nullable()
+const status = z.enum(['Ativo', 'Encerrado'], {
+  message: "Status must be 'Ativo' or 'Encerrado'",
+})
 
 export const createContractSchema = z.object({
   body: z.object({
@@ -26,6 +29,7 @@ export const createContractSchema = z.object({
     service: service,
     startDate: startDate,
     deliveryTime: deliveryTime,
+    status,
   }),
 })
 

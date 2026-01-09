@@ -16,4 +16,5 @@ export type ContractResponse = {
   totalValue: number
   startDate: Date
   deliveryTime: Date | null
+  status: 'Ativo' | 'Encerrado'
 }
