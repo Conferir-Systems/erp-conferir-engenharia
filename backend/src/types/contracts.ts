@@ -9,7 +9,7 @@ export type Contract = {
   service: string
   totalValue: number
   startDate: Date
-  deliveryTime?: Date | null
+  deliveryTime: Date
   status: ContractStatus
   createdAt?: Date
   updatedAt?: Date
@@ -20,7 +20,7 @@ export type CreateContractInput = {
   supplier_id: string
   service: string
   start_date: string
-  delivery_time?: string
+  delivery_time: string
   items: Omit<ContractItem, 'id' | 'contract' | 'created_at' | 'updated_at'>[]
 }
 

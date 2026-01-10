@@ -43,7 +43,7 @@ class ContractRepository
       service: data.service,
       totalValue: data.totalValue,
       startDate: new Date(data.start_date),
-      deliveryTime: data.delivery_time ? new Date(data.delivery_time) : null,
+      deliveryTime: new Date(data.delivery_time),
       status: data.status,
     }
 
@@ -120,7 +120,7 @@ class ContractRepository
       service: data.service,
       total_value: data.totalValue,
       start_date: data.startDate,
-      delivery_time: data.deliveryTime ?? null,
+      delivery_time: data.deliveryTime,
       status: data.status,
       created_at: data.createdAt ?? new Date(),
       updated_at: data.updatedAt ?? new Date(),
