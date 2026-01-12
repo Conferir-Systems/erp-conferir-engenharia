@@ -57,7 +57,7 @@ export const NewContract = () => {
   const [startDate, setStartDate] = useState(
     new Date().toISOString().split('T')[0]
   )
-  const [endDate, setEndDate] = useState('')
+  const [deliveryTime, setDeliveryTime] = useState('')
 
   const [showSupplierModal, setShowSupplierModal] = useState(false)
   const [showSuccessModal, setShowSuccessModal] = useState(false)
@@ -159,15 +159,15 @@ export const NewContract = () => {
   }
 
   const handleDeliveryDateChange = (value: string) => {
-    setEndDate(value)
+    setDeliveryTime(value)
     const error = validateDeliveryDate(value, startDate)
     setDeliveryDateError(error)
   }
 
   const handleStartDateChange = (value: string) => {
     setStartDate(value)
-    if (endDate) {
-      const error = validateDeliveryDate(endDate, value)
+    if (deliveryTime) {
+      const error = validateDeliveryDate(deliveryTime, value)
       setDeliveryDateError(error)
     }
   }
@@ -176,9 +176,16 @@ export const NewContract = () => {
     setSaveError(null)
     setDeliveryDateError('')
 
-    if (!workId || !supplierId || !service || !items) {
+    if (
+      !workId ||
+      !supplierId ||
+      !service ||
+      !items ||
+      !startDate ||
+      !deliveryTime
+    ) {
       setSaveError(
-        'Preencha os campos obrigatórios: Obra, Fornecedor, Serviço e Item.'
+        'Preencha os campos obrigatórios: Obra, Fornecedor, Serviço, Item, Data de inicio e Prazo de entrega.'
       )
       return
     }
@@ -188,8 +195,8 @@ export const NewContract = () => {
       return
     }
 
-    if (endDate) {
-      const dateError = validateDeliveryDate(endDate, startDate)
+    if (deliveryTime) {
+      const dateError = validateDeliveryDate(deliveryTime, startDate)
       if (dateError) {
         setDeliveryDateError(dateError)
         setSaveError('Corrija os erros nos campos antes de salvar.')
@@ -204,7 +211,7 @@ export const NewContract = () => {
         supplierId,
         service: service,
         startDate,
-        deliveryTime: endDate,
+        deliveryTime,
         items: items.map((item) => ({
           description: item.description,
           unitMeasure: item.unit,
@@ -348,8 +355,8 @@ export const NewContract = () => {
                 onChange={handleStartDateChange}
               />
               <DateInput
-                label="Prazo de entrega"
-                value={endDate}
+                label="Prazo de entrega *"
+                value={deliveryTime}
                 onChange={handleDeliveryDateChange}
                 error={deliveryDateError}
               />

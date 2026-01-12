@@ -86,7 +86,7 @@ export const ContractDetails = () => {
         </div>
         <PDFDownloadLink
           document={<ContractDocument data={prepareContractData(contract)} />}
-          fileName={`contrato-${contract.service}-${contract.id}.pdf`}
+          fileName={`contrato ${contract.service.toLowerCase()}.pdf`}
         >
           {({ loading }: { loading: boolean }) => (
             <Button

@@ -49,7 +49,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#000',
     minHeight: 18,
-    alignItems: 'center',
   },
   tableHeader: { backgroundColor: '#f0f0f0', fontWeight: 'bold' },
   tableCell: {
@@ -57,6 +56,11 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
     borderRightColor: '#000',
     fontSize: 8,
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
+  tableCellText: {
+    width: '100%',
   },
   colItem: { width: '8%' },
   colDesc: { width: '52%' },
@@ -95,10 +99,9 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({
         {data.contractor.representative}, CPF nº{' '}
         {data.contractor.cpfRepresentative}, doravante denominado CONTRATANTE, e{' '}
         {data.supplier.typePerson === 'JURIDICA'
-          ? `a empresa ${data.supplier.name}, inscrita no CNPJ nº ${data.supplier.document}`
-          : `${data.supplier.name}, inscrito(a) no CPF nº ${data.supplier.document}`}
-        , doravante denominada CONTRATADA, ajustam o presente contrato mediante
-        as seguintes cláusulas:
+          ? `a empresa ${data.supplier.name}, inscrita no CNPJ nº ${data.supplier.document}, doravante denomidada CONTRATADA, `
+          : `${data.supplier.name}, CPF nº ${data.supplier.document}, doravante denomidado CONTRATADO, `}
+        ajustam o presente contrato mediante as seguintes cláusulas:
       </Text>
 
       <Text style={styles.clauseTitle}>CLÁUSULA PRIMEIRA – OBJETO</Text>
@@ -128,30 +131,44 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({
 
       <View style={styles.table}>
         <View style={[styles.tableRow, styles.tableHeader]}>
-          <Text style={[styles.tableCell, styles.colItem]}>Item</Text>
-          <Text style={[styles.tableCell, styles.colDesc]}>Descrição</Text>
-          <Text style={[styles.tableCell, styles.colUnid]}>Unid</Text>
-          <Text style={[styles.tableCell, styles.colQtde]}>Qtde</Text>
-          <Text style={[styles.tableCell, styles.colUnit]}>
-            Unitário (R$) M.O.
-          </Text>
+          <View style={[styles.tableCell, styles.colItem]}>
+            <Text style={styles.tableCellText}>Item</Text>
+          </View>
+          <View style={[styles.tableCell, styles.colDesc]}>
+            <Text style={styles.tableCellText}>Descrição</Text>
+          </View>
+          <View style={[styles.tableCell, styles.colUnid]}>
+            <Text style={styles.tableCellText}>Unid</Text>
+          </View>
+          <View style={[styles.tableCell, styles.colQtde]}>
+            <Text style={styles.tableCellText}>Qtde</Text>
+          </View>
+          <View style={[styles.tableCell, styles.colUnit]}>
+            <Text style={styles.tableCellText}>Unitário (R$) M.O.</Text>
+          </View>
         </View>
 
         {data.items.map((item, index) => (
           <View key={item.id} style={styles.tableRow}>
-            <Text style={[styles.tableCell, styles.colItem]}>{index + 1}</Text>
-            <Text style={[styles.tableCell, styles.colDesc]}>
-              {item.description}
-            </Text>
-            <Text style={[styles.tableCell, styles.colUnid]}>
-              {item.unitMeasure}
-            </Text>
-            <Text style={[styles.tableCell, styles.colQtde]}>
-              {item.quantity.toLocaleString('pt-BR')}
-            </Text>
-            <Text style={[styles.tableCell, styles.colUnit]}>
-              {formatCurrency(item.unitLaborValue)}
-            </Text>
+            <View style={[styles.tableCell, styles.colItem]}>
+              <Text style={styles.tableCellText}>{index + 1}</Text>
+            </View>
+            <View style={[styles.tableCell, styles.colDesc]}>
+              <Text style={styles.tableCellText}>{item.description}</Text>
+            </View>
+            <View style={[styles.tableCell, styles.colUnid]}>
+              <Text style={styles.tableCellText}>{item.unitMeasure}</Text>
+            </View>
+            <View style={[styles.tableCell, styles.colQtde]}>
+              <Text style={styles.tableCellText}>
+                {item.quantity.toLocaleString('pt-BR')}
+              </Text>
+            </View>
+            <View style={[styles.tableCell, styles.colUnit]}>
+              <Text style={styles.tableCellText}>
+                {formatCurrency(item.unitLaborValue)}
+              </Text>
+            </View>
           </View>
         ))}
       </View>
@@ -366,7 +383,7 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({
         os jurídicos e legais efeitos
       </Text>
 
-      <Text style={{ marginTop: 30, marginBottom: 30, textAlign: 'right' }}>
+      <Text style={{ marginTop: 30, marginBottom: 60, textAlign: 'right' }}>
         Porto Alegre, {data.issueDate}.
       </Text>
 
