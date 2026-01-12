@@ -1,12 +1,12 @@
 import { AuthUser } from '../types/auth'
-import { User, UserRole } from '../types'
+import { User, UserPermission } from '../types'
 
-export const mapUserTypeToRole = (authUser: AuthUser): UserRole => {
+export const mapUserTypeToRole = (authUser: AuthUser): UserPermission => {
   if (authUser.permissions?.approveMeasurement) {
-    return 'DIRETOR'
+    return 'AUTHORIZED'
   }
 
-  return 'OBRA'
+  return 'UNAUTHORIZED'
 }
 
 export const convertAuthUserToUser = (authUser: AuthUser): User => {

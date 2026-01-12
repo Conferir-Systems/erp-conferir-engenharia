@@ -1,0 +1,45 @@
+{
+  "name": "Conferir Frontend",
+
+  "dockerComposeFile": "../../docker-compose.yml",
+  "service": "conf-client",
+  "workspaceFolder": "/app",
+
+  "runServices": ["conf-client"],
+
+  "shutdownAction": "none",
+
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "sh",
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit"
+        },
+        "typescript.tsdk": "node_modules/typescript/lib"
+      },
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "ms-vscode.vscode-typescript-next",
+        "github.vscode-github-actions",
+        "GitHub.vsccode-pull-request-github"
+      ]
+    }
+  },
+
+  "forwardPorts": [5173, 3000],
+  "portsAttributes": {
+    "5173": {
+      "label": "Frontend Dev Server",
+      "onAutoForward": "notify"
+    },
+    "3000": {
+      "label": "Backend API",
+      "onAutoForward": "silent"
+    }
+  }
+}

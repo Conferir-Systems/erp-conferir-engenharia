@@ -1,0 +1,51 @@
+{
+  "name": "Conferir Backend",
+
+  "dockerComposeFile": "../../docker-compose.yml",
+  "service": "conf-api",
+  "workspaceFolder": "/app",
+
+  "runServices": ["conf-api"],
+
+  "shutdownAction": "none",
+
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "sh",
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit"
+        },
+        "typescript.tsdk": "node_modules/typescript/lib"
+      },
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "ms-vscode.vscode-typescript-next",
+        "github.vscode-github-actions",
+        "GitHub.vscode-pull-request-github",
+        "ckolkman.vscode-postgres",
+        "ms-azuretools.vscode-docker",
+        "christian-kohler.path-intellisense",
+        "vitest.explorer",
+        "eamodio.gitlens",
+        "yzhang.markdown-all-in-one"
+      ]
+    }
+  },
+
+  "forwardPorts": [3000, 5432],
+  "portsAttributes": {
+    "3000": {
+      "label": "Backend API Server",
+      "onAutoForward": "notify"
+    },
+    "5432": {
+      "label": "PostgreSQL Database",
+      "onAutoForward": "silent"
+    }
+  }
+}

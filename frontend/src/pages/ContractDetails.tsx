@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Card, Table, Thead, Th, Tr, Td, Button, Badge } from '../components/UI'
-import { formatCurrency, prepareContractData } from '../utils'
 import { ArrowLeft, Loader2, FileText, Download } from 'lucide-react'
 import { PDFDownloadLink } from '@react-pdf/renderer'
 import { contractsApi, ContractResponse } from './services/contracts'
+import { Card, Table, Thead, Th, Tr, Td, Button, Badge } from '../components/UI'
 import { ContractDocument } from '../components/pdf/ContractDocument'
+import { formatCurrency } from '../utils/formatters'
+import { prepareContractData } from '../helpers/contractHelpers'
 
 export const ContractDetails = () => {
   const { id } = useParams<{ id: string }>()

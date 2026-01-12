@@ -13,7 +13,7 @@ import {
   Button,
   Input,
 } from '../components/UI'
-import { formatCurrency } from '../utils'
+import { formatCurrency } from '../utils/formatters'
 import { ArrowLeft, CheckCircle, XCircle, Download, Send } from 'lucide-react'
 
 export const MeasurementDetail = () => {

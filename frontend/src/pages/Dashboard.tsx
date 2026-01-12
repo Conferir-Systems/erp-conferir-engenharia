@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useAppContext } from '../context/AppContext'
 import { Card, Table, Thead, Th, Tr, Td, Badge, Button } from '../components/UI'
-import { formatCurrency } from '../utils'
+import { formatCurrency } from '../utils/formatters'
 import { Plus } from 'lucide-react'
 
 export const Dashboard = () => {

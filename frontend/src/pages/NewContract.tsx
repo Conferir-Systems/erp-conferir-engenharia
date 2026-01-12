@@ -11,7 +11,8 @@ import {
   Input,
   DateInput,
 } from '../components/UI'
-import { formatCurrency, formatDocument, prepareContractData } from '../utils'
+import { formatCurrency, formatDocument } from '../utils/formatters'
+import { prepareContractData } from '../helpers/contractHelpers'
 import {
   ArrowLeft,
   Save,

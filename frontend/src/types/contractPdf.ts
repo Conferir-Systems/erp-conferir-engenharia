@@ -12,10 +12,11 @@ export interface ContractData {
 
   contractor: {
     name: string
-    cnpj: string
+    cnpj?: string
+    cpf?: string
     address: string
-    representative: string
-    cpfRepresentative: string
+    representative?: string
+    cpfRepresentative?: string
   }
 
   supplier: {

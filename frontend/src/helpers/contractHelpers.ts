@@ -1,7 +1,6 @@
 import { ContractResponse } from '../pages/services/contracts'
 import { ContractData } from '../types/contractPdf'
-import { obtainDeliveryTime } from '../helpers/deliveryTimeContract'
-import { formatDocument } from './formatters'
+import { formatDocument } from '../utils/formatters'
 
 export const prepareContractData = (
   contract: ContractResponse
@@ -42,4 +41,16 @@ export const prepareContractData = (
       total: item.totalValue,
     })),
   }
+}
+
+export function obtainDeliveryTime(start: Date, expiration: Date): number {
+  const startDateMs = start.getTime()
+  const endDateMs = expiration.getTime()
+
+  const differenceMs = Math.abs(endDateMs - startDateMs)
+
+  const millisecondsPerDay = 1000 * 60 * 60 * 24
+  const daysDifference = Math.floor(differenceMs / millisecondsPerDay)
+
+  return daysDifference
 }

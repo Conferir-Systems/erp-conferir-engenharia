@@ -1,4 +1,4 @@
-export type UserRole = 'DIRETOR' | 'OBRA'
+export type UserPermission = 'AUTHORIZED' | 'UNAUTHORIZED'
 
 export type MeasurementStatus =
   | 'RASCUNHO'
@@ -10,7 +10,7 @@ export interface User {
   id: string
   name: string
   email: string
-  role: UserRole
+  role: UserPermission
 }
 
 export interface Work {

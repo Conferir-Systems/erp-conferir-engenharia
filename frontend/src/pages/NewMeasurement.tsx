@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useAppContext } from '../context/AppContext'
 import { Card, Table, Thead, Th, Tr, Td, Button } from '../components/UI'
-import { formatCurrency } from '../utils'
+import { formatCurrency } from '../utils/formatters'
 import { ArrowLeft, Save, Send } from 'lucide-react'
 import { Measurement, MeasurementItem } from '../types'
 
