@@ -11,8 +11,16 @@ import {
   Input,
   DateInput,
 } from '../components/UI'
-import { formatCurrency, formatDocument } from '../utils'
-import { ArrowLeft, Save, Plus, Trash2, CheckCircle } from 'lucide-react'
+import { formatCurrency, formatDocument } from '../utils/formatters'
+import { prepareContractData } from '../helpers/contractHelpers'
+import {
+  ArrowLeft,
+  Save,
+  Plus,
+  Trash2,
+  CheckCircle,
+  Download,
+} from 'lucide-react'
 import { Supplier, Work } from '../types'
 import { SupplierModal } from '../components/SupplierModal'
 import {
@@ -20,9 +28,15 @@ import {
   CreateSupplierRequest,
   UpdateSupplierRequest,
 } from './services/suppliers'
-import { CreateContractRequest, contractsApi } from './services/contracts'
+import {
+  CreateContractRequest,
+  contractsApi,
+  ContractResponse,
+} from './services/contracts'
 import { worksApi } from './services/works'
 import { FetchError } from '../lib/fetchClient'
+import { PDFDownloadLink } from '@react-pdf/renderer'
+import { ContractDocument } from '../components/pdf/ContractDocument'
 
 type NewItemDraft = {
   id: string
@@ -43,13 +57,15 @@ export const NewContract = () => {
   const [startDate, setStartDate] = useState(
     new Date().toISOString().split('T')[0]
   )
-  const [endDate, setEndDate] = useState('')
+  const [deliveryTime, setDeliveryTime] = useState('')
 
   const [showSupplierModal, setShowSupplierModal] = useState(false)
   const [showSuccessModal, setShowSuccessModal] = useState(false)
   const [createdContractId, setCreatedContractId] = useState<string | null>(
     null
   )
+  const [createdContract, setCreatedContract] =
+    useState<ContractResponse | null>(null)
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
   const [deliveryDateError, setDeliveryDateError] = useState<string>('')
@@ -143,15 +159,15 @@ export const NewContract = () => {
   }
 
   const handleDeliveryDateChange = (value: string) => {
-    setEndDate(value)
+    setDeliveryTime(value)
     const error = validateDeliveryDate(value, startDate)
     setDeliveryDateError(error)
   }
 
   const handleStartDateChange = (value: string) => {
     setStartDate(value)
-    if (endDate) {
-      const error = validateDeliveryDate(endDate, value)
+    if (deliveryTime) {
+      const error = validateDeliveryDate(deliveryTime, value)
       setDeliveryDateError(error)
     }
   }
@@ -160,9 +176,16 @@ export const NewContract = () => {
     setSaveError(null)
     setDeliveryDateError('')
 
-    if (!workId || !supplierId || !service || !items) {
+    if (
+      !workId ||
+      !supplierId ||
+      !service ||
+      !items ||
+      !startDate ||
+      !deliveryTime
+    ) {
       setSaveError(
-        'Preencha os campos obrigatórios: Obra, Fornecedor, Serviço e Item.'
+        'Preencha os campos obrigatórios: Obra, Fornecedor, Serviço, Item, Data de inicio e Prazo de entrega.'
       )
       return
     }
@@ -172,9 +195,8 @@ export const NewContract = () => {
       return
     }
 
-    // Validate delivery date
-    if (endDate) {
-      const dateError = validateDeliveryDate(endDate, startDate)
+    if (deliveryTime) {
+      const dateError = validateDeliveryDate(deliveryTime, startDate)
       if (dateError) {
         setDeliveryDateError(dateError)
         setSaveError('Corrija os erros nos campos antes de salvar.')
@@ -189,7 +211,7 @@ export const NewContract = () => {
         supplierId,
         service: service,
         startDate,
-        deliveryTime: endDate || undefined,
+        deliveryTime,
         items: items.map((item) => ({
           description: item.description,
           unitMeasure: item.unit,
@@ -200,6 +222,7 @@ export const NewContract = () => {
 
       const createdContract = await contractsApi.create(contractData)
       setCreatedContractId(createdContract.id)
+      setCreatedContract(createdContract)
       setShowSuccessModal(true)
     } catch (err) {
       console.error('Error creating contract:', err)
@@ -332,8 +355,8 @@ export const NewContract = () => {
                 onChange={handleStartDateChange}
               />
               <DateInput
-                label="Prazo de entrega"
-                value={endDate}
+                label="Prazo de entrega *"
+                value={deliveryTime}
                 onChange={handleDeliveryDateChange}
                 error={deliveryDateError}
               />
@@ -472,7 +495,7 @@ export const NewContract = () => {
         onSave={handleSaveSupplier}
       />
 
-      {showSuccessModal && createdContractId && (
+      {showSuccessModal && createdContractId && createdContract && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6 animate-in fade-in zoom-in duration-200">
             <div className="flex flex-col items-center text-center mb-6">
@@ -496,9 +519,25 @@ export const NewContract = () => {
               >
                 Ver Detalhes do Contrato
               </Button>
-              <Button variant="secondary" onClick={() => {}} className="w-full">
-                Gerar PDF do Contrato
-              </Button>
+              <PDFDownloadLink
+                document={
+                  <ContractDocument
+                    data={prepareContractData(createdContract)}
+                  />
+                }
+                fileName={`contrato-${createdContract.service}-${createdContract.id}.pdf`}
+              >
+                {({ loading }: { loading: boolean }) => (
+                  <Button
+                    variant="secondary"
+                    className="w-full flex items-center justify-center gap-2"
+                    disabled={loading}
+                  >
+                    <Download className="w-5 h-5" />
+                    {loading ? 'Gerando PDF...' : 'Gerar PDF do Contrato'}
+                  </Button>
+                )}
+              </PDFDownloadLink>
               <Button
                 variant="secondary"
                 onClick={() => navigate('/dashboard')}

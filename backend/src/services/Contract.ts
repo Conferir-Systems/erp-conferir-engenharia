@@ -12,7 +12,7 @@ export type CreateContractParams = {
   supplierId: string
   service: string
   startDate: string
-  deliveryTime?: string
+  deliveryTime: string
   items: Omit<
     ContractItem,
     'id' | 'contractId' | 'createdAt' | 'updatedAt' | 'totalValue'
@@ -70,7 +70,7 @@ export class ContractService {
       service: createdContract.service,
       totalValue: createdContract.totalValue,
       startDate: createdContract.startDate,
-      deliveryTime: createdContract.deliveryTime || null,
+      deliveryTime: createdContract.deliveryTime,
       status: createdContract.status,
       items: items,
     }
@@ -110,7 +110,7 @@ export class ContractService {
       service: contract.service,
       totalValue: contract.totalValue,
       startDate: contract.startDate,
-      deliveryTime: contract.deliveryTime || null,
+      deliveryTime: contract.deliveryTime,
       status: contract.status,
       items: items,
     }

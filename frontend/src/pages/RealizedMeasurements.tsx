@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppContext } from '../context/AppContext'
 import { Card, Table, Thead, Th, Tr, Td, Button } from '../components/UI'
-import { formatCurrency } from '../utils'
+import { formatCurrency } from '../utils/formatters'
 import { Search, Eye } from 'lucide-react'
 
 export const RealizedMeasurements = () => {

@@ -70,6 +70,7 @@ describe('Contract - integration crud test', () => {
         supplierId: testSupplier.id,
         service: 'Test Service',
         startDate: '2024-01-01',
+        deliveryTime: '2025-01-01',
         items: [
           {
             unitMeasure: 'm2',
@@ -92,7 +93,7 @@ describe('Contract - integration crud test', () => {
         totalValue: '10000.0000',
         startDate: expect.any(Date),
         status: 'Ativo',
-        deliveryTime: null,
+        deliveryTime: expect.any(Date),
         items: createContractParams.items.map((item) => ({
           id: expect.any(String),
           contractId: createdContract.id,
@@ -121,6 +122,7 @@ describe('Contract - integration crud test', () => {
         supplierId: testSupplier.id,
         service: 'Colocação de tijolos refratários',
         startDate: '2024-01-01',
+        deliveryTime: '2025-10-10',
         items: [
           {
             unitMeasure: 'm2',
@@ -136,6 +138,7 @@ describe('Contract - integration crud test', () => {
         supplierId: testSupplier.id,
         service: 'Instalação de janelas',
         startDate: '2024-02-01',
+        deliveryTime: '2024-02-02',
         items: [
           {
             unitMeasure: 'm2',
@@ -151,6 +154,7 @@ describe('Contract - integration crud test', () => {
         supplierId: testSupplier.id,
         service: 'Pintura externa',
         startDate: '2024-03-01',
+        deliveryTime: '2025-03-01',
         items: [
           {
             unitMeasure: 'm2',

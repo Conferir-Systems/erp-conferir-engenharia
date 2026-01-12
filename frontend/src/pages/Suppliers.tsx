@@ -10,7 +10,7 @@ import {
   UpdateSupplierRequest,
 } from './services/suppliers'
 import { FetchError } from '../lib/fetchClient'
-import { formatDocument } from '../utils'
+import { formatDocument } from '../utils/formatters'
 
 export const Suppliers = () => {
   const navigate = useNavigate()

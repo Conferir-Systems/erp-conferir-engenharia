@@ -5,13 +5,13 @@ export const USERS: User[] = [
     id: 'u1',
     name: 'Carlos Diretor',
     email: 'carlos@medcheck.com',
-    role: 'DIRETOR',
+    role: 'AUTHORIZED',
   },
   {
     id: 'u2',
     name: 'João Engenheiro',
     email: 'joao@medcheck.com',
-    role: 'OBRA',
+    role: 'UNAUTHORIZED',
   },
 ]
 

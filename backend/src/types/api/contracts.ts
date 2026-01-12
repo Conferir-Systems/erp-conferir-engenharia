@@ -1,4 +1,3 @@
-// import { Contract } from '../contracts.js'
 import { Work } from '../works'
 import { Supplier } from '../supplier'
 import { ContractItem } from '../contractItems'
@@ -6,7 +5,7 @@ import { ContractItem } from '../contractItems'
 export type CreateContractRequest = {
   service: string
   startDate: Date
-  deliveryDate?: Date
+  deliveryDate: Date
 }
 
 export type ContractResponse = {
@@ -16,7 +15,7 @@ export type ContractResponse = {
   service: string
   totalValue: number
   startDate: Date
-  deliveryTime: Date | null
+  deliveryTime: Date
   status: 'Ativo' | 'Encerrado'
   items: ContractItem[]
 }

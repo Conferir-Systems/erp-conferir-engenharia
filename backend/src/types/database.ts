@@ -43,7 +43,7 @@ export type ContractDatabaseRow = {
   service: string
   total_value: number
   start_date: Date
-  delivery_time: Date | null
+  delivery_time: Date
   status: 'Ativo' | 'Encerrado'
   created_at: Date
   updated_at: Date
