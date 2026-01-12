@@ -16,6 +16,11 @@ const corsOptions = {
     origin: string | undefined,
     callback: (err: Error | null, allow?: boolean) => void
   ) => {
+    if (process.env.NODE_ENV === 'development') {
+      callback(null, true)
+      return
+    }
+
     const frontendUrl = process.env.FRONTEND_URL
     const frontendUrlTest = process.env.FRONTEND_URL_TEST
 
@@ -29,17 +34,10 @@ const corsOptions = {
       allowedOrigins.push(frontendUrlTest)
     }
 
-    if (process.env.NODE_ENV === 'development') {
-      allowedOrigins.push('http://localhost:5173')
-      allowedOrigins.push('http://localhost:3000')
-      allowedOrigins.push('http://127.0.0.1:5173')
-      allowedOrigins.push('http://127.0.0.1:3000')
-    }
-
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true)
     } else {
-      callback(new Error('Not allowed by CORS'))
+      callback(null, false)
     }
   },
   credentials: true,
