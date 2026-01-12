@@ -17,10 +17,16 @@ const corsOptions = {
     callback: (err: Error | null, allow?: boolean) => void
   ) => {
     const frontendUrl = process.env.FRONTEND_URL
-    const allowedOrigins = []
+    const frontendUrlTest = process.env.FRONTEND_URL_TEST
+
+    const allowedOrigins: string[] = []
 
     if (frontendUrl) {
       allowedOrigins.push(frontendUrl)
+    }
+
+    if (frontendUrlTest) {
+      allowedOrigins.push(frontendUrlTest)
     }
 
     if (process.env.NODE_ENV === 'development') {
