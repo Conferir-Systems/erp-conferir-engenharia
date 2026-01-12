@@ -117,7 +117,7 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({
 			<Text style={styles.clauseTitle}>CLÁUSULA SEGUNDA – DO VALOR</Text>
 			<Text style={styles.paragraph}>
 				2.1 O valor total da contratação é de {formatCurrency(data.totalValue)}{' '}
-				- VALOR POR EXTENSO.
+				.
 			</Text>
 
 			<Text style={styles.clauseTitle}>CLÁUSULA TERCEIRA – DO PAGAMENTO</Text>
