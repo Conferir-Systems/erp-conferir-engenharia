@@ -16,125 +16,125 @@ import { Contracts } from './pages/Contracts'
 import { ContractDetails } from './pages/ContractDetails'
 
 const ProtectedRoute = ({ children }: { children?: React.ReactNode }) => {
-  const { isAuthenticated } = useAuth()
+	const { isAuthenticated } = useAuth()
 
-  if (!isAuthenticated) {
-    return <Navigate to="/" replace />
-  }
+	if (!isAuthenticated) {
+		return <Navigate to="/" replace />
+	}
 
-  return <Layout>{children}</Layout>
+	return <Layout>{children}</Layout>
 }
 
 const AppRoutes = () => {
-  const { isLoading } = useAuth()
+	const { isLoading } = useAuth()
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-bgMain">
-        <div className="text-textMain">Carregando...</div>
-      </div>
-    )
-  }
+	if (isLoading) {
+		return (
+			<div className="flex items-center justify-center min-h-screen bg-bgMain">
+				<div className="text-textMain">Carregando...</div>
+			</div>
+		)
+	}
 
-  return (
-    <Routes>
-      <Route path="/" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+	return (
+		<Routes>
+			<Route path="/" element={<Login />} />
+			<Route path="/register" element={<Register />} />
 
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
+			<Route
+				path="/dashboard"
+				element={
+					<ProtectedRoute>
+						<Dashboard />
+					</ProtectedRoute>
+				}
+			/>
 
-      <Route
-        path="/new-contract"
-        element={
-          <ProtectedRoute>
-            <NewContract />
-          </ProtectedRoute>
-        }
-      />
+			<Route
+				path="/new-contract"
+				element={
+					<ProtectedRoute>
+						<NewContract />
+					</ProtectedRoute>
+				}
+			/>
 
-      <Route
-        path="/works"
-        element={
-          <ProtectedRoute>
-            <Works />
-          </ProtectedRoute>
-        }
-      />
+			<Route
+				path="/works"
+				element={
+					<ProtectedRoute>
+						<Works />
+					</ProtectedRoute>
+				}
+			/>
 
-      <Route
-        path="/suppliers"
-        element={
-          <ProtectedRoute>
-            <Suppliers />
-          </ProtectedRoute>
-        }
-      />
+			<Route
+				path="/suppliers"
+				element={
+					<ProtectedRoute>
+						<Suppliers />
+					</ProtectedRoute>
+				}
+			/>
 
-      <Route
-        path="/contracts"
-        element={
-          <ProtectedRoute>
-            <Contracts />
-          </ProtectedRoute>
-        }
-      />
+			<Route
+				path="/contracts"
+				element={
+					<ProtectedRoute>
+						<Contracts />
+					</ProtectedRoute>
+				}
+			/>
 
-      <Route
-        path="/contracts/:id"
-        element={
-          <ProtectedRoute>
-            <ContractDetails />
-          </ProtectedRoute>
-        }
-      />
+			<Route
+				path="/contracts/:id"
+				element={
+					<ProtectedRoute>
+						<ContractDetails />
+					</ProtectedRoute>
+				}
+			/>
 
-      <Route
-        path="/new-measurement"
-        element={
-          <ProtectedRoute>
-            <NewMeasurement />
-          </ProtectedRoute>
-        }
-      />
+			<Route
+				path="/new-measurement"
+				element={
+					<ProtectedRoute>
+						<NewMeasurement />
+					</ProtectedRoute>
+				}
+			/>
 
-      <Route
-        path="/realized-measurements"
-        element={
-          <ProtectedRoute>
-            <RealizedMeasurements />
-          </ProtectedRoute>
-        }
-      />
+			<Route
+				path="/realized-measurements"
+				element={
+					<ProtectedRoute>
+						<RealizedMeasurements />
+					</ProtectedRoute>
+				}
+			/>
 
-      <Route
-        path="/measurement/:id"
-        element={
-          <ProtectedRoute>
-            <MeasurementDetail />
-          </ProtectedRoute>
-        }
-      />
-    </Routes>
-  )
+			<Route
+				path="/measurement/:id"
+				element={
+					<ProtectedRoute>
+						<MeasurementDetail />
+					</ProtectedRoute>
+				}
+			/>
+		</Routes>
+	)
 }
 
 const App = () => {
-  return (
-    <AuthProvider>
-      <AppProvider>
-        <HashRouter>
-          <AppRoutes />
-        </HashRouter>
-      </AppProvider>
-    </AuthProvider>
-  )
+	return (
+		<AuthProvider>
+			<AppProvider>
+				<HashRouter>
+					<AppRoutes />
+				</HashRouter>
+			</AppProvider>
+		</AuthProvider>
+	)
 }
 
 export default App

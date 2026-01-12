@@ -1,17 +1,17 @@
 import express from 'express'
 import {
-  createWorkHandler,
-  getWorkHandler,
-  getAllWorksHandler,
-  updateWorkHandler,
-  deleteWorkHandler,
+	createWorkHandler,
+	getWorkHandler,
+	getAllWorksHandler,
+	updateWorkHandler,
+	deleteWorkHandler,
 } from '../controllers/works.js'
 import { validate } from '../validation/middleware.js'
 import {
-  createWorkSchema,
-  getWorkSchema,
-  updateWorkSchema,
-  deleteWorkSchema,
+	createWorkSchema,
+	getWorkSchema,
+	updateWorkSchema,
+	deleteWorkSchema,
 } from '../validation/schemas/works.js'
 
 const router = express.Router()

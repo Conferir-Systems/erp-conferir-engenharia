@@ -1,16 +1,16 @@
 import express from 'express'
 import {
-  createUserHandler,
-  getUserHandler,
-  updateUserHandler,
-  deleteUserHandler,
+	createUserHandler,
+	getUserHandler,
+	updateUserHandler,
+	deleteUserHandler,
 } from '../controllers/users.js'
 import { validate } from '../validation/middleware.js'
 import {
-  createUserSchema,
-  getUserSchema,
-  updateUserSchema,
-  deleteUserSchema,
+	createUserSchema,
+	getUserSchema,
+	updateUserSchema,
+	deleteUserSchema,
 } from '../validation/schemas/users.js'
 
 const router = express.Router()

@@ -5,43 +5,43 @@ import morgan from 'morgan'
 import health from './routes/health.js'
 import routes from './routes/index.js'
 import {
-  errorHandler,
-  notFoundHandler,
+	errorHandler,
+	notFoundHandler,
 } from './errors/middleware/errorHandler.js'
 
 const app = express()
 
 const corsOptions = {
-  origin: (
-    origin: string | undefined,
-    callback: (err: Error | null, allow?: boolean) => void
-  ) => {
-    if (process.env.NODE_ENV === 'development') {
-      callback(null, true)
-      return
-    }
+	origin: (
+		origin: string | undefined,
+		callback: (err: Error | null, allow?: boolean) => void
+	) => {
+		if (process.env.NODE_ENV === 'development') {
+			callback(null, true)
+			return
+		}
 
-    const frontendUrl = process.env.FRONTEND_URL
-    const frontendUrlTest = process.env.FRONTEND_URL_TEST
+		const frontendUrl = process.env.FRONTEND_URL
+		const frontendUrlTest = process.env.FRONTEND_URL_TEST
 
-    const allowedOrigins: string[] = []
+		const allowedOrigins: string[] = []
 
-    if (frontendUrl) {
-      allowedOrigins.push(frontendUrl)
-    }
+		if (frontendUrl) {
+			allowedOrigins.push(frontendUrl)
+		}
 
-    if (frontendUrlTest) {
-      allowedOrigins.push(frontendUrlTest)
-    }
+		if (frontendUrlTest) {
+			allowedOrigins.push(frontendUrlTest)
+		}
 
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true)
-    } else {
-      callback(null, false)
-    }
-  },
-  credentials: true,
-  optionsSuccessStatus: 200,
+		if (!origin || allowedOrigins.includes(origin)) {
+			callback(null, true)
+		} else {
+			callback(null, false)
+		}
+	},
+	credentials: true,
+	optionsSuccessStatus: 200,
 }
 
 app.use(helmet())

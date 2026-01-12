@@ -2,17 +2,17 @@ import type { Knex } from 'knex'
 import { randomUUID } from 'crypto'
 
 export async function seed(knex: Knex): Promise<void> {
-  const existingUserType = await knex('user_types')
-    .where({ name: 'Administrator' })
-    .first()
+	const existingUserType = await knex('user_types')
+		.where({ name: 'Administrator' })
+		.first()
 
-  if (!existingUserType) {
-    await knex('user_types').insert({
-      id: randomUUID(),
-      name: 'Administrator',
-      approve_measurement: true,
-    })
-  } else {
-    console.log('OK: Administrator user type already exists (skipping)')
-  }
+	if (!existingUserType) {
+		await knex('user_types').insert({
+			id: randomUUID(),
+			name: 'Administrator',
+			approve_measurement: true,
+		})
+	} else {
+		console.log('OK: Administrator user type already exists (skipping)')
+	}
 }

@@ -2,18 +2,18 @@ import { AuthUser } from '../types/auth'
 import { User, UserPermission } from '../types'
 
 export const mapUserTypeToRole = (authUser: AuthUser): UserPermission => {
-  if (authUser.permissions?.approveMeasurement) {
-    return 'AUTHORIZED'
-  }
+	if (authUser.permissions?.approveMeasurement) {
+		return 'AUTHORIZED'
+	}
 
-  return 'UNAUTHORIZED'
+	return 'UNAUTHORIZED'
 }
 
 export const convertAuthUserToUser = (authUser: AuthUser): User => {
-  return {
-    id: authUser.id,
-    name: `${authUser.firstName} ${authUser.lastName}`.trim(),
-    email: authUser.email,
-    role: mapUserTypeToRole(authUser),
-  }
+	return {
+		id: authUser.id,
+		name: `${authUser.firstName} ${authUser.lastName}`.trim(),
+		email: authUser.email,
+		role: mapUserTypeToRole(authUser),
+	}
 }

@@ -1,8 +1,8 @@
 export type User = {
-  id: string
-  firstName: string
-  lastName: string
-  email: string
-  passwordHash: string
-  userType: string
+	id: string
+	firstName: string
+	lastName: string
+	email: string
+	passwordHash: string
+	userType: string
 }

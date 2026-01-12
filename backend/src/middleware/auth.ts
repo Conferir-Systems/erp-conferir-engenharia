@@ -5,55 +5,55 @@ import { UnauthorizedError } from '../errors/index.js'
 import * as jose from 'jose'
 
 declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace Express {
-    interface Request {
-      user?: JwtPayload
-    }
-  }
+	// eslint-disable-next-line @typescript-eslint/no-namespace
+	namespace Express {
+		interface Request {
+			user?: JwtPayload
+		}
+	}
 }
 
 export const authenticate = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
+	req: Request,
+	res: Response,
+	next: NextFunction
 ) => {
-  try {
-    const authHeader = req.headers.authorization
+	try {
+		const authHeader = req.headers.authorization
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      throw new UnauthorizedError('No token provided')
-    }
+		if (!authHeader || !authHeader.startsWith('Bearer ')) {
+			throw new UnauthorizedError('No token provided')
+		}
 
-    const token = authHeader.substring(7)
-    const decoded = await verifyAccessToken(token)
+		const token = authHeader.substring(7)
+		const decoded = await verifyAccessToken(token)
 
-    req.user = decoded
-    next()
-  } catch (err) {
-    if (err instanceof jose.errors.JWTExpired) {
-      next(new UnauthorizedError('Token expired'))
-    } else if (
-      err instanceof jose.errors.JWTInvalid ||
-      err instanceof jose.errors.JWSSignatureVerificationFailed
-    ) {
-      next(new UnauthorizedError('Invalid token'))
-    } else {
-      next(err)
-    }
-  }
+		req.user = decoded
+		next()
+	} catch (err) {
+		if (err instanceof jose.errors.JWTExpired) {
+			next(new UnauthorizedError('Token expired'))
+		} else if (
+			err instanceof jose.errors.JWTInvalid ||
+			err instanceof jose.errors.JWSSignatureVerificationFailed
+		) {
+			next(new UnauthorizedError('Invalid token'))
+		} else {
+			next(err)
+		}
+	}
 }
 
 export const authorizeRole = (allowedUserTypes: string[]) => {
-  return (req: Request, res: Response, next: NextFunction) => {
-    if (!req.user) {
-      return next(new UnauthorizedError('Not authenticated'))
-    }
+	return (req: Request, res: Response, next: NextFunction) => {
+		if (!req.user) {
+			return next(new UnauthorizedError('Not authenticated'))
+		}
 
-    if (!allowedUserTypes.includes(req.user.userTypeName)) {
-      return next(new UnauthorizedError('Insufficient permissions'))
-    }
+		if (!allowedUserTypes.includes(req.user.userTypeName)) {
+			return next(new UnauthorizedError('Insufficient permissions'))
+		}
 
-    next()
-  }
+		next()
+	}
 }

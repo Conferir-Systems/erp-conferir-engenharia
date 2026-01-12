@@ -1,9 +1,9 @@
 export type Supplier = {
-  id: string
-  name: string
-  typePerson: 'FISICA' | 'JURIDICA'
-  document: string
-  pix?: string
-  createdAt?: Date
-  updatedAt?: Date
+	id: string
+	name: string
+	typePerson: 'FISICA' | 'JURIDICA'
+	document: string
+	pix?: string
+	createdAt?: Date
+	updatedAt?: Date
 }

@@ -1,14 +1,14 @@
 import express from 'express'
 import {
-  loginHandler,
-  refreshTokenHandler,
-  logoutHandler,
+	loginHandler,
+	refreshTokenHandler,
+	logoutHandler,
 } from '../controllers/auth.js'
 import { validate } from '../validation/middleware.js'
 import {
-  loginSchema,
-  refreshTokenSchema,
-  logoutSchema,
+	loginSchema,
+	refreshTokenSchema,
+	logoutSchema,
 } from '../validation/schemas/auth.js'
 
 const router = express.Router()

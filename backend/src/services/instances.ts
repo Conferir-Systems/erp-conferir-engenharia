@@ -17,13 +17,13 @@ export const userTypeService = new UserTypeService(userTypeRepository)
 export const workService = new WorkService(workRepository)
 export const supplierService = new SupplierService(supplierRepository)
 export const contractService = new ContractService(
-  contractRepository,
-  workRepository,
-  supplierRepository,
-  contractItemRepository
+	contractRepository,
+	workRepository,
+	supplierRepository,
+	contractItemRepository
 )
 export const authService = new AuthService(
-  userRepository,
-  userTypeRepository,
-  refreshTokenRepository
+	userRepository,
+	userTypeRepository,
+	refreshTokenRepository
 )
