@@ -25,3 +25,8 @@ export const formatDocument = (document: string): string => {
 
   return document
 }
+
+export const formatDate = (date: Date | null) => {
+  if (!date) return '-'
+  return new Date(date).toLocaleDateString('pt-BR')
+}

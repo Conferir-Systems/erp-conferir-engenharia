@@ -27,8 +27,8 @@ export type Supplier = {
 
 export type ContractResponse = {
   id: string
-  work: { id: string; name: string } | null
-  supplier: Supplier | null
+  work: { id: string; name: string }
+  supplier: Supplier
   service: string
   totalValue: number
   startDate: Date

@@ -22,10 +22,11 @@ export interface ContractData {
   supplier: {
     name: string
     document: string
+    typePerson: 'FISICA' | 'JURIDICA'
   }
 
   serviceDescription: string
-  workAddress: string
+  workName: string
 
   totalValue: number
   startDate: string

@@ -5,7 +5,7 @@ import { PDFDownloadLink } from '@react-pdf/renderer'
 import { contractsApi, ContractResponse } from './services/contracts'
 import { Card, Table, Thead, Th, Tr, Td, Button, Badge } from '../components/UI'
 import { ContractDocument } from '../components/pdf/ContractDocument'
-import { formatCurrency } from '../utils/formatters'
+import { formatCurrency, formatDate } from '../utils/formatters'
 import { prepareContractData } from '../helpers/contractHelpers'
 
 export const ContractDetails = () => {
@@ -34,11 +34,6 @@ export const ContractDetails = () => {
     } finally {
       setLoading(false)
     }
-  }
-
-  const formatDate = (date: Date | null) => {
-    if (!date) return '-'
-    return new Date(date).toLocaleDateString('pt-BR')
   }
 
   if (loading) {

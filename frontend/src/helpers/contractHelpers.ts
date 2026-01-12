@@ -23,9 +23,10 @@ export const prepareContractData = (
       document: contract.supplier?.document
         ? formatDocument(contract.supplier.document)
         : '',
+      typePerson: contract.supplier.typePerson,
     },
     serviceDescription: contract.service,
-    workAddress: contract.work?.name || '',
+    workName: contract.work?.name || '',
     totalValue: contract.totalValue,
     startDate: new Date(contract.startDate).toLocaleDateString('pt-BR'),
     deliveryTime: obtainDeliveryTime(
