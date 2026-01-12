@@ -1,34 +1,45 @@
 import React from 'react'
 import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer'
 import { ContractData } from '../../types/contractPdf'
-import { formatCurrency } from '../../utils'
+import { formatCurrency } from '../../utils/formatters'
 
 const styles = StyleSheet.create({
-  page: { padding: 40, fontSize: 10, fontFamily: 'Helvetica', lineHeight: 1.5 },
+  page: {
+    padding: '60px 80px 80px 60px',
+    fontSize: 9,
+    fontFamily: 'Helvetica',
+    lineHeight: 1.3,
+  },
   header: {
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: 12,
     fontWeight: 'bold',
     textTransform: 'uppercase',
   },
   title: {
-    fontSize: 12,
-    marginBottom: 10,
+    fontSize: 9,
+    marginBottom: 20,
     textAlign: 'center',
     fontWeight: 'bold',
+    textDecoration: 'underline',
   },
-  paragraph: { marginBottom: 10, textAlign: 'justify', textIndent: 20 },
+  paragraph: {
+    marginBottom: 6,
+    textAlign: 'justify',
+    textIndent: 0,
+  },
   clauseTitle: {
-    marginTop: 15,
-    marginBottom: 5,
+    marginTop: 8,
+    marginBottom: 4,
     fontWeight: 'bold',
     textTransform: 'uppercase',
+    fontSize: 9,
   },
 
   table: {
     width: '100%',
-    marginTop: 10,
-    marginBottom: 10,
+    marginTop: 6,
+    marginBottom: 6,
     borderStyle: 'solid',
     borderWidth: 1,
     borderColor: '#000',
@@ -37,24 +48,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderBottomWidth: 1,
     borderBottomColor: '#000',
-    minHeight: 20,
+    minHeight: 18,
     alignItems: 'center',
   },
   tableHeader: { backgroundColor: '#f0f0f0', fontWeight: 'bold' },
   tableCell: {
-    padding: 4,
+    padding: 3,
     borderRightWidth: 1,
     borderRightColor: '#000',
-    fontSize: 9,
+    fontSize: 8,
   },
-  colItem: { width: '10%' },
-  colDesc: { width: '50%' },
+  colItem: { width: '8%' },
+  colDesc: { width: '52%' },
   colUnid: { width: '10%' },
   colQtde: { width: '15%' },
   colUnit: { width: '15%', borderRightWidth: 0 },
 
   signatureBlock: {
-    marginTop: 50,
+    marginTop: 40,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -62,9 +73,9 @@ const styles = StyleSheet.create({
     width: '45%',
     borderTopWidth: 1,
     borderColor: '#000',
-    paddingTop: 5,
+    paddingTop: 4,
     textAlign: 'center',
-    fontSize: 9,
+    fontSize: 8,
   },
 })
 
@@ -83,10 +94,9 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({
         sediada na {data.contractor.address}, neste ato representada pelo Sr.{' '}
         {data.contractor.representative}, CPF nº{' '}
         {data.contractor.cpfRepresentative}, doravante denominado CONTRATANTE, e
-        a empresa
-        {data.supplier.name}, inscrita no CNPJ nº {data.supplier.document},
-        doravante denominada CONTRATADA, ajustam o presente contrato mediante as
-        seguintes cláusulas:
+        a empresa {data.supplier.name}, inscrita no CNPJ nº{' '}
+        {data.supplier.document}, doravante denominada CONTRATADA, ajustam o
+        presente contrato mediante as seguintes cláusulas:
       </Text>
 
       <Text style={styles.clauseTitle}>CLÁUSULA PRIMEIRA – OBJETO</Text>
@@ -157,7 +167,14 @@ export const ContractDocument: React.FC<{ data: ContractData }> = ({
 
       <Text style={styles.clauseTitle}>CLÁUSULA NONA – DO FORO</Text>
       <Text style={styles.paragraph}>
-        9.1 As partes elegem o Foro da Comarca de Porto Alegre/RS.
+        9.1 As partes elegem o Foro da Comarca de Porto Alegre/RS, foro do local
+        da obra, para dirimir as dúvidas ou questões oriundas deste Contrato,
+        renunciando-se a qualquer outro por mais privilegiado que seja.
+      </Text>
+      <Text style={styles.paragraph}>
+        E assim, estando justas e contratadas, firmam as partes o presente
+        instrumento, em 02 (duas) vias de igual teor e forma, para que produza
+        os jurídicos e legais efeitos
       </Text>
 
       <Text style={{ marginTop: 30, textAlign: 'right' }}>
