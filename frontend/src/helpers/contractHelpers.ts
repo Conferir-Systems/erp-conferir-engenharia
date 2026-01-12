@@ -5,6 +5,10 @@ import { formatDocument } from '../utils/formatters'
 export const prepareContractData = (
   contract: ContractResponse
 ): ContractData => {
+  if (!contract.supplier) {
+    throw new Error('Supplier data is missing')
+  }
+
   return {
     issueDate: new Date().toLocaleDateString('pt-BR', {
       day: 'numeric',
@@ -19,8 +23,8 @@ export const prepareContractData = (
       cpfRepresentative: '022.454.700-36',
     },
     supplier: {
-      name: contract.supplier?.name || '',
-      document: contract.supplier?.document
+      name: contract.supplier.name || '',
+      document: contract.supplier.document
         ? formatDocument(contract.supplier.document)
         : '',
       typePerson: contract.supplier.typePerson,
