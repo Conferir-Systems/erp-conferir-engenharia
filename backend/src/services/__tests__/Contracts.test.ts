@@ -28,6 +28,7 @@ describe('Contract - integration crud test', () => {
 				supplierId: testSupplier.id,
 				service: 'Colocação de tijolos refratários em churrasqueiras',
 				startDate: '2024-01-01',
+				retentionPercentage: 5,
 				deliveryTime: '2024-12-31',
 				items: [
 					{
@@ -53,6 +54,7 @@ describe('Contract - integration crud test', () => {
 				startDate: expect.any(Date),
 				deliveryTime: expect.any(Date),
 				status: 'Ativo',
+				retentionPercentage: 5.0,
 				items: createContractParams.items.map((item) => ({
 					...item,
 					id: expect.any(String),
@@ -71,6 +73,7 @@ describe('Contract - integration crud test', () => {
 				service: 'Test Service',
 				startDate: '2024-01-01',
 				deliveryTime: '2025-01-01',
+				retentionPercentage: 5,
 				items: [
 					{
 						unitMeasure: 'm2',
@@ -91,6 +94,7 @@ describe('Contract - integration crud test', () => {
 				supplier: await supplierService.getSupplierById(testSupplier.id),
 				service: 'Test Service',
 				totalValue: '10000.0000',
+				retentionPercentage: '5.00',
 				startDate: expect.any(Date),
 				status: 'Ativo',
 				deliveryTime: expect.any(Date),
@@ -123,6 +127,7 @@ describe('Contract - integration crud test', () => {
 				service: 'Colocação de tijolos refratários',
 				startDate: '2024-01-01',
 				deliveryTime: '2025-10-10',
+				retentionPercentage: 10,
 				items: [
 					{
 						unitMeasure: 'm2',
@@ -139,6 +144,7 @@ describe('Contract - integration crud test', () => {
 				service: 'Instalação de janelas',
 				startDate: '2024-02-01',
 				deliveryTime: '2024-02-02',
+				retentionPercentage: 15,
 				items: [
 					{
 						unitMeasure: 'm2',
@@ -155,6 +161,7 @@ describe('Contract - integration crud test', () => {
 				service: 'Pintura externa',
 				startDate: '2024-03-01',
 				deliveryTime: '2025-03-01',
+				retentionPercentage: 8,
 				items: [
 					{
 						unitMeasure: 'm2',
@@ -181,16 +188,19 @@ describe('Contract - integration crud test', () => {
 						id: contract1.id,
 						service: 'Colocação de tijolos refratários',
 						totalValue: '100000.0000',
+						retentionPercentage: '10.00',
 					}),
 					expect.objectContaining({
 						id: contract2.id,
 						service: 'Instalação de janelas',
 						totalValue: '50000.0000',
+						retentionPercentage: '15.00',
 					}),
 					expect.objectContaining({
 						id: contract3.id,
 						service: 'Pintura externa',
 						totalValue: '25000.0000',
+						retentionPercentage: '8.00',
 					}),
 				])
 			)

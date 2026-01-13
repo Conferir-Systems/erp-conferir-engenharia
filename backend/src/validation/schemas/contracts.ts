@@ -19,6 +19,13 @@ const deliveryTime = z.coerce
 	.optional()
 	.nullable()
 
+const retentionPercentage = z
+	.number({
+		message: 'Retention percentage must be a number',
+	})
+	.min(0, 'Retention percentage must be at least 0')
+	.max(99.9, 'Retention percentage must be at most 99.9')
+
 const contractItemSchema = z.object({
 	description: z
 		.string()
@@ -39,6 +46,7 @@ export const createContractSchema = z.object({
 		workId: workId,
 		supplierId: supplierId,
 		service: service,
+		retentionPercentage: retentionPercentage,
 		startDate: startDate,
 		deliveryTime: deliveryTime,
 		items: z.array(contractItemSchema).min(1, 'At least one item is required'),
