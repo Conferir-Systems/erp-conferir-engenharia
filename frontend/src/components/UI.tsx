@@ -80,11 +80,11 @@ export const Badge = ({ status }: { status: string }) => {
 		APROVADA: 'bg-green-100 text-statusApproved border-green-200',
 		PENDENTE: 'bg-orange-100 text-statusPending border-orange-200',
 		REPROVADA: 'bg-red-100 text-statusRejected border-red-200',
-		RASCUNHO: 'bg-gray-100 text-textSec border-gray-200',
 		ATIVO: 'bg-green-100 text-statusApproved border-green-200',
 		ATIVA: 'bg-green-100 text-statusApproved border-green-200',
 		ENCERRADO: 'bg-gray-100 text-gray-500 border-gray-200',
 		CONCLUIDA: 'bg-gray-100 text-gray-500 border-gray-200',
+		CONCLUIDO: 'bg-gray-100 text-gray-500 border-gray-200',
 	}
 
 	const label = status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()
