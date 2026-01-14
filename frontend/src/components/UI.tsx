@@ -4,7 +4,7 @@ import { LucideIcon, Eye, EyeOff } from 'lucide-react'
 interface CardProps {
 	children?: React.ReactNode
 	className?: string
-	title?: string
+	title?: React.ReactNode
 	action?: React.ReactNode
 }
 
@@ -81,8 +81,8 @@ export const Badge = ({ status }: { status: string }) => {
 		PENDENTE: 'bg-orange-100 text-statusPending border-orange-200',
 		REPROVADA: 'bg-red-100 text-statusRejected border-red-200',
 		RASCUNHO: 'bg-gray-100 text-textSec border-gray-200',
-		ATIVO: 'bg-blue-100 text-blue-700 border-blue-200',
-		ATIVA: 'bg-blue-100 text-blue-700 border-blue-200',
+		ATIVO: 'bg-green-100 text-statusApproved border-green-200',
+		ATIVA: 'bg-green-100 text-statusApproved border-green-200',
 		ENCERRADO: 'bg-gray-100 text-gray-500 border-gray-200',
 		CONCLUIDA: 'bg-gray-100 text-gray-500 border-gray-200',
 	}
