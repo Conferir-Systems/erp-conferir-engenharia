@@ -4,12 +4,15 @@ import { workRepository } from '../repository/works.js'
 import { supplierRepository } from '../repository/suppliers.js'
 import { contractRepository } from '../repository/contracts.js'
 import { contractItemRepository } from '../repository/contractItems.js'
+import { measurementRepository } from '../repository/measurements.js'
+import { measurementItemRepository } from '../repository/measurementItems.js'
 import { refreshTokenRepository } from '../repository/refreshTokens.js'
 import { UserService } from './User.js'
 import { UserTypeService } from './UserType.js'
 import { WorkService } from './Work.js'
 import { SupplierService } from './Supplier.js'
 import { ContractService } from './Contract.js'
+import { MeasurementService } from './Measurement.js'
 import { AuthService } from './Auth.js'
 
 export const userService = new UserService(userRepository, userTypeRepository)
@@ -20,6 +23,12 @@ export const contractService = new ContractService(
 	contractRepository,
 	workRepository,
 	supplierRepository,
+	contractItemRepository
+)
+export const measurementService = new MeasurementService(
+	measurementRepository,
+	measurementItemRepository,
+	contractRepository,
 	contractItemRepository
 )
 export const authService = new AuthService(
