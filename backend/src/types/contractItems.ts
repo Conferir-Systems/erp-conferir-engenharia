@@ -19,5 +19,4 @@ export type ContractListItem = {
 	startDate: Date
 	deliveryTime: Date | null
 	status: 'Ativo' | 'Encerrado'
-	percentage: number
 }
