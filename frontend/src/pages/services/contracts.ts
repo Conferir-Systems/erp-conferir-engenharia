@@ -22,6 +22,7 @@ export type ContractResponse = {
 	supplier: Supplier | null
 	service: string
 	totalValue: number
+	retentionPercentage: number
 	startDate: Date
 	deliveryTime: Date
 	status: string
