@@ -12,7 +12,6 @@ import { contractItemRepository } from './contractItems.js'
 import { ValidationError } from '../errors/ValidationError.js'
 
 export interface IContractRepository {
-	create(contract: Contract): Promise<void>
 	createContractWithItems(
 		data: CreateContractInputRepository
 	): Promise<{ contract: Contract; items: ContractItem[] }>
@@ -110,6 +109,8 @@ class ContractRepository
 			startDate: row.start_date,
 			deliveryTime: row.delivery_time,
 			status: row.status,
+			createdAt: row.created_at,
+			updatedAt: row.updated_at,
 		}
 	}
 

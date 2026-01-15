@@ -5,7 +5,6 @@ import { supplierRepository } from '../repository/suppliers.js'
 import { contractRepository } from '../repository/contracts.js'
 import { contractItemRepository } from '../repository/contractItems.js'
 import { measurementRepository } from '../repository/measurements.js'
-import { measurementItemRepository } from '../repository/measurementItems.js'
 import { refreshTokenRepository } from '../repository/refreshTokens.js'
 import { UserService } from './User.js'
 import { UserTypeService } from './UserType.js'
@@ -27,9 +26,7 @@ export const contractService = new ContractService(
 )
 export const measurementService = new MeasurementService(
 	measurementRepository,
-	measurementItemRepository,
-	contractRepository,
-	contractItemRepository
+	contractRepository
 )
 export const authService = new AuthService(
 	userRepository,

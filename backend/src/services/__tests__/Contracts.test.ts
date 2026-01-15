@@ -98,6 +98,8 @@ describe('Contract - integration crud test', () => {
 				startDate: expect.any(Date),
 				status: 'Ativo',
 				deliveryTime: expect.any(Date),
+				createdAt: expect.any(Date),
+				updatedAt: expect.any(Date),
 				items: createContractParams.items.map((item) => ({
 					id: expect.any(String),
 					contractId: createdContract.id,

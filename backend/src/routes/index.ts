@@ -10,6 +10,7 @@ import { getAllUserTypesHandler } from '../controllers/userTypes.js'
 import worksRoutes from './works.js'
 import suppliersRoutes from './suppliers.js'
 import contractsRoutes from './contracts.js'
+import measurementRoutes from './measurements.js'
 
 const router = express.Router()
 
@@ -25,5 +26,6 @@ router.use(userTypesRoutes)
 router.use(worksRoutes)
 router.use(suppliersRoutes)
 router.use(contractsRoutes)
+router.use(measurementRoutes)
 
 export default router

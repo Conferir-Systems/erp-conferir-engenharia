@@ -1,3 +1,5 @@
+import { ApprovalStatus } from './measurements'
+
 export type UserDatabaseRow = {
 	id: string
 	first_name: string
@@ -72,6 +74,31 @@ export type ContractItemDatabaseRow = {
 	unit_labor_value: number
 	total_value: number
 	description: string
+	created_at: Date
+	updated_at: Date
+}
+
+export type MeasurementDatabaseRow = {
+	id: string
+	contract_id: string
+	issue_date: Date
+	approval_date?: Date | null
+	approval_status: ApprovalStatus
+	total_gross_value: number
+	retention_value: number
+	total_net_value: number
+	notes: string
+	created_at: Date
+	updated_at: Date
+}
+
+export type MeasurementItemDatabaseRow = {
+	id: string
+	measurement_id: string
+	contract_item_id: string
+	quantity: number
+	unit_labor_value: number
+	total_gross_value: number
 	created_at: Date
 	updated_at: Date
 }

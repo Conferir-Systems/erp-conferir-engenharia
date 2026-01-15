@@ -12,5 +12,7 @@ export type ContractResponse = {
 	startDate: Date
 	deliveryTime: Date
 	status: 'Ativo' | 'Encerrado'
+	createdAt?: Date
+	updatedAt?: Date
 	items: ContractItem[]
 }

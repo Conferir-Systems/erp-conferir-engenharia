@@ -1,4 +1,9 @@
-import { MeasurementItem } from './measurementItem'
+import {
+	MeasurementItemInputRepository,
+	MeasurementItemParams,
+} from './measurementItems'
+
+export type ApprovalStatus = 'PENDENTE' | 'APROVADO' | 'REJEITADO'
 
 export type Measurement = {
 	id: string
@@ -8,18 +13,27 @@ export type Measurement = {
 	retentionValue: number
 	totalNetValue: number
 	approvalDate?: Date | null
-	status: 'PENDING' | 'APPROVED' | 'REJECT'
+	approvalStatus: ApprovalStatus
 	notes?: string
 	createdAt?: Date
 	updatedAt?: Date
 }
 
-export type CreateMeasurementParams = {
+export type MeasurementParams = {
 	contractId: string
-	issueDate: string
+	issueDate: Date
 	notes: string
-	items: Omit<
-		MeasurementItem,
-		'id' | 'measurementId' | 'createdAt' | 'updatedAt'
-	>[]
+	items: MeasurementItemParams[]
+}
+
+export type CreateMeasurementInputRepository = {
+	id: string
+	contractId: string
+	issueDate: Date
+	totalGrossValue: number
+	retentionValue: number
+	totalNetValue: number
+	approvalStatus: ApprovalStatus
+	notes?: string
+	items: MeasurementItemInputRepository[]
 }

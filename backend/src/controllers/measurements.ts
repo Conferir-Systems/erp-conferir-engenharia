@@ -1,19 +1,20 @@
 import { Request, Response } from 'express'
 import { asyncHandler } from '../utils/asyncHandler.js'
-import { measurementService } from '../services/Measurement.js'
+import { measurementService } from '../services/instances.js'
 
 export const createMeasurementHandler = asyncHandler(
-    async (req: Request, res: Response) => {
-        const measurementParams = req.body
+	async (req: Request, res: Response) => {
+		const measurementParams = req.body
 
-        const measurement =
-            await measurementService.createMeasurementWithItems(measurementParams)
+		const measurement =
+			await measurementService.createMeasurementWithItems(measurementParams)
 
-        res.status(201).json(measurement)
-    }
+		res.status(201).json(measurement)
+	}
 )
 
-export const getMeasurement = asyncHandler(
+/*
+export const getMeasurementHandler = asyncHandler(
     async (req: Request, res: Response) => {
         const id = req.params.id
 
@@ -24,10 +25,11 @@ export const getMeasurement = asyncHandler(
     }
 )
 
-export const getMeasurementHandler = asyncHandler(
+export const getMeasurementsHandler = asyncHandler(
     async (req: Request, res: Response) => {
         const measurements = await measurementService.getMeasurements()
 
         res.status(200).json(measurements)
     }
 )
+*/

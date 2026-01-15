@@ -116,6 +116,8 @@ export class ContractService {
 			startDate: contract.startDate,
 			deliveryTime: contract.deliveryTime,
 			status: contract.status,
+			createdAt: contract.createdAt,
+			updatedAt: contract.updatedAt,
 			items: items,
 		}
 

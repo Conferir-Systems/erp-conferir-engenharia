@@ -1,36 +1,36 @@
 import { randomUUID } from 'crypto'
-import { Measurement } from '../types/measurements.js'
-import { MeasurementItem } from '../types/measurementItem.js'
+import { Measurement, MeasurementParams } from '../types/measurements.js'
+import {
+	MeasurementItem,
+	MeasurementItemInputRepository,
+} from '../types/measurementItems.js'
 import { IMeasurementRepository } from '../repository/measurements.js'
-import { IMeasurementItemRepository } from '../repository/measurementItems.js'
-import { CreateMeasurementParams } from '../types/measurements.js'
 import { IContractRepository } from '../repository/contracts.js'
-import { IContractItemRepository } from '../repository/contractItems.js'
 
 export class MeasurementService {
 	constructor(
 		private measurementRepo: IMeasurementRepository,
-		private measurementItemRepo: IMeasurementItemRepository,
-		private contractRepo: IContractRepository,
-		private contractItemRepo: IContractItemRepository
+		private contractRepo: IContractRepository
 	) {}
 
 	async createMeasurementWithItems(
-		params: CreateMeasurementParams
-	): Promise<Measurement> {
+		params: MeasurementParams
+	): Promise<{ measurement: Measurement; items: MeasurementItem[] }> {
 		const measurementId = randomUUID()
 
 		const contract = await this.contractRepo.findById(params.contractId)
 		const retentionPercentage = contract?.retentionPercentage || 0
 
-		const measurementItems: MeasurementItem[] = params.items.map((item) => ({
-			id: randomUUID(),
-			measurementId,
-			contractItemId: item.contractItemId,
-			quantity: item.quantity,
-			unitLaborValue: item.unitLaborValue,
-			totalGrossValue: item.quantity * item.unitLaborValue,
-		}))
+		const measurementItems: MeasurementItemInputRepository[] = params.items.map(
+			(item) => ({
+				id: randomUUID(),
+				measurementId,
+				contractItemId: item.contractItemId,
+				quantity: item.quantity,
+				unitLaborValue: item.unitLaborValue,
+				totalGrossValue: item.quantity * item.unitLaborValue,
+			})
+		)
 
 		const totalGrossValue = measurementItems.reduce(
 			(sum, item) => sum + item.totalGrossValue,
@@ -44,12 +44,12 @@ export class MeasurementService {
 		const createdMeasurement =
 			await this.measurementRepo.createMeasurementWithItems({
 				id: measurementId,
-				contract_id: params.contractId,
-				issue_date: params.issueDate,
-				total_gross_value: totalGrossValue,
-				retention_percentage: retentionPercentage,
-				total_net_value: totalNetValue,
-				status: 'PENDING',
+				contractId: params.contractId,
+				issueDate: params.issueDate,
+				totalGrossValue,
+				retentionValue,
+				totalNetValue,
+				approvalStatus: 'PENDENTE',
 				notes: params.notes,
 				items: measurementItems,
 			})
