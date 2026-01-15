@@ -18,22 +18,23 @@ export const supplierFormSchema = z
 			.optional()
 			.or(z.literal('')),
 	})
-	.refine(
-		(data) => {
-			const digitsOnly = data.document.replace(/\D/g, '')
-			if (data.typePerson === 'JURIDICA') {
-				return digitsOnly.length === 14
-			} else {
-				return digitsOnly.length === 11
-			}
-		},
-		(data) => ({
-			message:
-				data.typePerson === 'JURIDICA'
-					? 'O CNPJ deve ter exatamente 14 dígitos'
-					: 'O CPF deve ter exatamente 11 dígitos',
-			path: ['document'],
-		})
-	)
+	.superRefine((data, ctx) => {
+		const digitsOnly = data.document.replace(/\D/g, '')
+		const isValid =
+			data.typePerson === 'JURIDICA'
+				? digitsOnly.length === 14
+				: digitsOnly.length === 11
+
+		if (!isValid) {
+			ctx.addIssue({
+				code: 'custom',
+				message:
+					data.typePerson === 'JURIDICA'
+						? 'O CNPJ deve ter exatamente 14 dígitos'
+						: 'O CPF deve ter exatamente 11 dígitos',
+				path: ['document'],
+			})
+		}
+	})
 
 export type SupplierFormData = z.infer<typeof supplierFormSchema>
