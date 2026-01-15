@@ -42,7 +42,7 @@ export const getContractsDetailsHandler = asyncHandler(
 	async (req: Request, res: Response) => {
 		const { workId, supplierId } = req.query
 
-		const contracts = await contractService.getContracts({
+		const contracts = await contractService.getContractsDetails({
 			workId: workId as string | undefined,
 			supplierId: supplierId as string | undefined,
 		})

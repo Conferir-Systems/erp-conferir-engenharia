@@ -89,6 +89,26 @@ export class ContractService {
 		return contracts
 	}
 
+	async getContractsDetails(filters?: {
+		workId?: string
+		supplierId?: string
+	}): Promise<ContractResponse[]> {
+		const contracts = await this.contractRepo.findAllWithFilters(filters)
+
+		if (!contracts) return []
+
+		const contractsDetails = await Promise.all(
+			contracts.map(async (contract) => {
+				const fullContract = await this.getContract(contract.id)
+				return fullContract
+			})
+		)
+
+		return contractsDetails.filter(
+			(contract): contract is ContractResponse => contract !== null
+		)
+	}
+
 	async getContractInfo(id: string): Promise<Contract | null> {
 		const contract = await this.contractRepo.findById(id)
 		return contract
