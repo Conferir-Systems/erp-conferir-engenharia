@@ -42,11 +42,26 @@ export type ContractDatabaseRow = {
 	supplier_id: string
 	service: string
 	total_value: number
+	retention_percentage: number
 	start_date: Date
 	delivery_time: Date
 	status: 'Ativo' | 'Encerrado'
 	created_at: Date
 	updated_at: Date
+}
+
+export type ContractQueryRow = {
+	id: string
+	service: string
+	total_value: number
+	retention_percentage: number
+	start_date: Date
+	delivery_time: Date | null
+	status: 'Ativo' | 'Encerrado'
+	work_id: string
+	work_name: string
+	supplier_id: string
+	supplier_name: string
 }
 
 export type ContractItemDatabaseRow = {

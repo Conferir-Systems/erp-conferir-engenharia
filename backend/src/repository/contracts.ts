@@ -2,12 +2,11 @@ import type {
 	Contract,
 	CreateContractInputRepository,
 } from '../types/contracts.js'
-import type { ContractDatabaseRow } from '../types/database.js'
 import type {
-	ContractItem,
-	ContractListItem,
+	ContractDatabaseRow,
 	ContractQueryRow,
-} from '../types/contractItems.js'
+} from '../types/database.js'
+import type { ContractItem, ContractListItem } from '../types/contractItems.js'
 import { BaseRepository } from './BaseRepository.js'
 import { contractItemRepository } from './contractItems.js'
 import { ValidationError } from '../errors/ValidationError.js'
@@ -42,6 +41,7 @@ class ContractRepository
 			supplierId: data.supplier_id,
 			service: data.service,
 			totalValue: data.totalValue,
+			retentionPercentage: data.retention_percentage,
 			startDate: new Date(data.start_date),
 			deliveryTime: new Date(data.delivery_time),
 			status: data.status,
@@ -72,7 +72,7 @@ class ContractRepository
 		let query = this.db('contracts')
 			.select<
 				ContractQueryRow[]
-			>('contracts.id', 'contracts.service', 'contracts.total_value', 'contracts.start_date', 'contracts.delivery_time', 'contracts.status', 'works.id as work_id', 'works.name as work_name', 'suppliers.id as supplier_id', 'suppliers.name as supplier_name')
+			>('contracts.id', 'contracts.service', 'contracts.total_value', 'contracts.retention_percentage', 'contracts.start_date', 'contracts.delivery_time', 'contracts.status', 'works.id as work_id', 'works.name as work_name', 'suppliers.id as supplier_id', 'suppliers.name as supplier_name')
 			.leftJoin('works', 'contracts.work_id', 'works.id')
 			.leftJoin('suppliers', 'contracts.supplier_id', 'suppliers.id')
 
@@ -95,7 +95,7 @@ class ContractRepository
 			startDate: row.start_date,
 			deliveryTime: row.delivery_time,
 			status: row.status,
-			percentage: 0,
+			retentionPercentage: row.retention_percentage,
 		}))
 	}
 
@@ -106,6 +106,7 @@ class ContractRepository
 			supplierId: row.supplier_id,
 			service: row.service,
 			totalValue: row.total_value,
+			retentionPercentage: row.retention_percentage,
 			startDate: row.start_date,
 			deliveryTime: row.delivery_time,
 			status: row.status,
@@ -119,6 +120,7 @@ class ContractRepository
 			supplier_id: data.supplierId,
 			service: data.service,
 			total_value: data.totalValue,
+			retention_percentage: data.retentionPercentage,
 			start_date: data.startDate,
 			delivery_time: data.deliveryTime,
 			status: data.status,

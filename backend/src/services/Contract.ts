@@ -11,6 +11,7 @@ export type CreateContractParams = {
 	workId: string
 	supplierId: string
 	service: string
+	retentionPercentage: number
 	startDate: string
 	deliveryTime: string
 	items: Omit<
@@ -54,6 +55,7 @@ export class ContractService {
 				supplier_id: params.supplierId,
 				service: params.service.trim(),
 				totalValue: totalValue,
+				retention_percentage: params.retentionPercentage,
 				start_date: params.startDate,
 				delivery_time: params.deliveryTime,
 				status: 'Ativo',
@@ -69,6 +71,7 @@ export class ContractService {
 			supplier: await this.supplierRepo.findById(supplierId),
 			service: createdContract.service,
 			totalValue: createdContract.totalValue,
+			retentionPercentage: createdContract.retentionPercentage,
 			startDate: createdContract.startDate,
 			deliveryTime: createdContract.deliveryTime,
 			status: createdContract.status,
@@ -129,6 +132,7 @@ export class ContractService {
 			supplier: supplier,
 			service: contract.service,
 			totalValue: contract.totalValue,
+			retentionPercentage: contract.retentionPercentage,
 			startDate: contract.startDate,
 			deliveryTime: contract.deliveryTime,
 			status: contract.status,
