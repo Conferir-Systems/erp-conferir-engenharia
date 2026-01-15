@@ -8,6 +8,7 @@ export type Contract = {
 	supplierId: string
 	service: string
 	totalValue: number
+	retentionPercentage: number
 	startDate: Date
 	deliveryTime: Date
 	status: ContractStatus
@@ -18,6 +19,7 @@ export type Contract = {
 export type CreateContractInput = {
 	work_id: string
 	supplier_id: string
+	retention_percentage: number
 	service: string
 	start_date: string
 	delivery_time: string

@@ -5,6 +5,7 @@ export type CreateContractRequest = {
 	workId: string
 	supplierId: string
 	service: string
+	retentionPercentage: number
 	startDate: string
 	deliveryTime: string
 	items: {
@@ -21,6 +22,7 @@ export type ContractResponse = {
 	supplier: Supplier | null
 	service: string
 	totalValue: number
+	retentionPercentage: number
 	startDate: Date
 	deliveryTime: Date
 	status: string

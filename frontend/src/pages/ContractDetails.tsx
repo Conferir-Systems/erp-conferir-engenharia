@@ -175,7 +175,16 @@ export const ContractDetails = () => {
 				</PDFDownloadLink>
 			</header>
 
-			<Card title="Informações do Contrato">
+			<Card
+				title={
+					<span className="flex items-center gap-3">
+						Informações do Contrato
+						<Badge
+							status={contract.status === 'Ativo' ? 'ATIVO' : 'CONCLUIDO'}
+						/>
+					</span>
+				}
+			>
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 					<div className="space-y-4">
 						<div className="flex flex-col gap-1">
@@ -219,15 +228,6 @@ export const ContractDetails = () => {
 					</div>
 
 					<div className="space-y-4">
-						<div className="flex flex-col gap-1">
-							<label className="text-sm font-medium text-textSec">Status</label>
-							<div>
-								<Badge
-									status={contract.status === 'Ativo' ? 'ATIVA' : 'CONCLUIDA'}
-								/>
-							</div>
-						</div>
-
 						<div className="grid grid-cols-2 gap-4">
 							<div className="flex flex-col gap-1">
 								<label className="text-sm font-medium text-textSec">
@@ -247,15 +247,30 @@ export const ContractDetails = () => {
 							</div>
 						</div>
 
-						<div className="flex flex-col gap-1">
-							<label className="text-sm font-medium text-textSec">
-								Valor Total
-							</label>
-							<p className="text-2xl font-bold text-primary">
-								{formatCurrency(contract.totalValue)}
-							</p>
+						<div className="grid grid-cols-2 gap-4">
+							<div className="flex flex-col gap-1">
+								<label className="text-sm font-medium text-textSec">
+									Valor Total
+								</label>
+								<p className="text-2xl font-bold text-primary">
+									{formatCurrency(contract.totalValue)}
+								</p>
+							</div>
+
+							<div className="flex flex-col gap-1">
+								<label className="text-sm font-medium text-textSec">
+									Porcentagem de retenção
+								</label>
+								<p className="text-base text-textMain">
+									{Number(contract.retentionPercentage ?? 0).toFixed(2)}%
+								</p>
+							</div>
 						</div>
 					</div>
+
+					<div className="space-y-4"></div>
+
+					<div className="space-y-4"></div>
 				</div>
 			</Card>
 

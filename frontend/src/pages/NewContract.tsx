@@ -54,6 +54,7 @@ export const NewContract = () => {
 	const [workId, setWorkId] = useState('')
 	const [supplierId, setSupplierId] = useState('')
 	const [service, setService] = useState('')
+	const [retentionPercentage, setRetentionPercentage] = useState('0')
 	const [startDate, setStartDate] = useState(
 		new Date().toISOString().split('T')[0]
 	)
@@ -210,6 +211,8 @@ export const NewContract = () => {
 				workId,
 				supplierId,
 				service: service,
+				retentionPercentage:
+					parseFloat(retentionPercentage.replace(',', '.')) || 0,
 				startDate,
 				deliveryTime,
 				items: items.map((item) => ({
@@ -451,13 +454,67 @@ export const NewContract = () => {
 					<Button variant="secondary" size="sm" onClick={addItemRow}>
 						<Plus className="w-4 h-4 mr-2" /> Adicionar Item
 					</Button>
-					<div className="text-right">
-						<span className="text-sm text-textSec mr-2">
-							Valor Total do Contrato:
-						</span>
-						<span className="text-xl font-bold text-primary">
-							{formatCurrency(totalContractValue)}
-						</span>
+					<div className="flex items-center gap-6">
+						<div className="flex items-center gap-2">
+							<label className="text-sm font-medium text-textSec">
+								Retenção (%):
+							</label>
+							<input
+								type="text"
+								inputMode="decimal"
+								className="w-20 h-[38px] px-3 rounded-[4px] border border-border bg-white text-textMain text-sm text-right focus:ring-2 focus:ring-secondary outline-none"
+								placeholder="0"
+								value={retentionPercentage}
+								onFocus={(e) => {
+									// Clear '0' when user focuses on the field
+									if (e.target.value === '0') {
+										setRetentionPercentage('')
+									}
+								}}
+								onChange={(e) => {
+									const val = e.target.value
+
+									// Allow empty string
+									if (val === '') {
+										setRetentionPercentage('')
+										return
+									}
+
+									// Allow only numbers and single comma with max 2 decimal places
+									if (!/^\d*,?\d{0,2}$/.test(val)) {
+										return
+									}
+
+									// Parse and validate range (replace comma with period for parsing)
+									const num = parseFloat(val.replace(',', '.'))
+									if (!isNaN(num) && num > 99.9) {
+										return
+									}
+
+									setRetentionPercentage(val)
+								}}
+								onBlur={(e) => {
+									const val = e.target.value
+									if (val === '' || val === ',') {
+										setRetentionPercentage('0')
+										return
+									}
+									// Keep the value as typed by user, don't auto-format
+									const num = parseFloat(val.replace(',', '.'))
+									if (!isNaN(num)) {
+										setRetentionPercentage(num.toString().replace('.', ','))
+									}
+								}}
+							/>
+						</div>
+						<div className="text-right">
+							<span className="text-sm text-textSec mr-2">
+								Valor Total do Contrato:
+							</span>
+							<span className="text-xl font-bold text-primary">
+								{formatCurrency(totalContractValue)}
+							</span>
+						</div>
 					</div>
 				</div>
 			</Card>

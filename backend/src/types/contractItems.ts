@@ -19,18 +19,4 @@ export type ContractListItem = {
 	startDate: Date
 	deliveryTime: Date | null
 	status: 'Ativo' | 'Encerrado'
-	percentage: number
-}
-
-export type ContractQueryRow = {
-	id: string
-	service: string
-	total_value: number
-	start_date: Date
-	delivery_time: Date | null
-	status: 'Ativo' | 'Encerrado'
-	work_id: string
-	work_name: string
-	supplier_id: string
-	supplier_name: string
 }
