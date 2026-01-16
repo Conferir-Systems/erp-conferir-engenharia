@@ -54,6 +54,7 @@ describe('Contract - integration crud test', () => {
 				startDate: expect.any(Date),
 				deliveryTime: expect.any(Date),
 				status: 'Ativo',
+				approvalStatus: 'Pendente',
 				retentionPercentage: 5.0,
 				items: createContractParams.items.map((item) => ({
 					...item,
@@ -97,6 +98,7 @@ describe('Contract - integration crud test', () => {
 				retentionPercentage: '5.00',
 				startDate: expect.any(Date),
 				status: 'Ativo',
+				approvalStatus: 'Pendente',
 				deliveryTime: expect.any(Date),
 				items: createContractParams.items.map((item) => ({
 					id: expect.any(String),
