@@ -1,7 +1,7 @@
-import { Work } from '../works'
-import { Supplier } from '../supplier'
-import { ContractItem } from '../contractItems'
-import { Status, ApprovalStatus } from '../contracts'
+import { Work } from '../works.js'
+import { Supplier } from '../supplier.js'
+import { ContractItem } from '../contractItems.js'
+import { Status, ApprovalStatus } from '../contracts.js'
 
 export type ContractItemWithAccumulated = ContractItem & {
 	accumulatedQuantity: number

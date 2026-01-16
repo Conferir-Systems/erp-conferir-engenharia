@@ -1,7 +1,9 @@
+export type TypePerson = 'FISICA' | 'JURIDICA'
+
 export type Supplier = {
 	id: string
 	name: string
-	typePerson: 'FISICA' | 'JURIDICA'
+	typePerson: TypePerson
 	document: string
 	pix?: string
 	createdAt?: Date

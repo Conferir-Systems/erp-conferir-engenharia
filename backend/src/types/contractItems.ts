@@ -1,4 +1,4 @@
-import { Status } from './contracts'
+import { Status } from './contracts.js'
 
 export type ContractItem = {
 	id: string

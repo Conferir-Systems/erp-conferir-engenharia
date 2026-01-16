@@ -1,5 +1,10 @@
-import { Status, ApprovalStatus as ContractApprovalStatus } from './contracts'
-import { ApprovalStatus as MeasurementApprovalStatus } from './measurements'
+import {
+	Status,
+	ApprovalStatus as ContractApprovalStatus,
+} from './contracts.js'
+import { ApprovalStatus as MeasurementApprovalStatus } from './measurements.js'
+import { TypePerson } from './supplier.js'
+import { WorkStatus } from './works.js'
 
 export type UserDatabaseRow = {
 	id: string
@@ -24,7 +29,7 @@ export type WorkDatabaseRow = {
 	code: number
 	address: string
 	contractor: string | null
-	status: 'ATIVA' | 'CONCLUIDA'
+	status: WorkStatus
 	created_at?: Date
 	updated_at?: Date
 }
@@ -32,7 +37,7 @@ export type WorkDatabaseRow = {
 export type SupplierDatabaseRow = {
 	id: string
 	name: string
-	type_person: 'FISICA' | 'JURIDICA'
+	type_person: TypePerson
 	document: string
 	pix?: string
 	created_at: Date

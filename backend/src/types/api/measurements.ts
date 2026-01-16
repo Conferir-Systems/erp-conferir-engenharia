@@ -1,5 +1,5 @@
-import { MeasurementItem } from '../measurementItems'
-import { ApprovalStatus } from '../measurements'
+import { MeasurementItem } from '../measurementItems.js'
+import { ApprovalStatus } from '../measurements.js'
 
 export type MeasurementResponse = {
 	id: string

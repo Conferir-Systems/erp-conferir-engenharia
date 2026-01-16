@@ -1,7 +1,7 @@
 import {
 	MeasurementItemInputRepository,
 	MeasurementItemParams,
-} from './measurementItems'
+} from './measurementItems.js'
 
 export type ApprovalStatus = 'PENDENTE' | 'APROVADO' | 'REJEITADO'
 

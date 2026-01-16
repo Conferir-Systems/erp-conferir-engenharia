@@ -1,4 +1,4 @@
-import { ContractItem } from './contractItems'
+import { ContractItem } from './contractItems.js'
 
 export type Status = 'Ativo' | 'Concluído'
 export type ApprovalStatus = 'Pendente' | 'Aprovado'

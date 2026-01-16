@@ -1,16 +1,18 @@
+import { WorkStatus } from '../works.js'
+
 export type CreateWorkRequest = {
 	name: string
 	code: number
 	address: string
 	contractor?: string
-	status?: 'ATIVA' | 'CONCLUIDA'
+	status?: WorkStatus
 }
 
 export type UpdateWorkRequest = {
 	name?: string
 	address?: string
 	contractor?: string | null
-	status?: 'ATIVA' | 'CONCLUIDA'
+	status?: WorkStatus
 }
 
 export type WorkResponse = {
@@ -19,7 +21,7 @@ export type WorkResponse = {
 	code: number
 	address: string
 	contractor: string | null
-	status: 'ATIVA' | 'CONCLUIDA'
+	status: WorkStatus
 	createdAt?: Date
 	updatedAt?: Date
 }
@@ -33,7 +35,7 @@ export type ListWorksQuery = {
 	page?: number
 	limit?: number
 	search?: string
-	status?: 'ATIVA' | 'CONCLUIDA'
+	status?: WorkStatus
 	contractor?: string
 	sortBy?: 'name' | 'code' | 'status' | 'createdAt'
 	order?: 'asc' | 'desc'

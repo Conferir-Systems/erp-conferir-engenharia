@@ -288,8 +288,8 @@ export const NewMeasurement = () => {
 									<Th className="text-right">Qtd. Contratada</Th>
 									<Th className="text-right">Acumulado</Th>
 									<Th className="text-right">Saldo a Medir</Th>
-									<Th className="text-right w-32 bg-green-50">Qtd. Atual</Th>
-									<Th className="text-right">Vlr. Unit.</Th>
+									<Th className="text-right w-32 bg-green-50">Qtd. Medida</Th>
+									<Th className="text-right">Valor Unit.</Th>
 									<Th className="text-right font-bold">Total Item</Th>
 								</Tr>
 							</Thead>
@@ -335,7 +335,7 @@ export const NewMeasurement = () => {
 											)}
 										</Td>
 										<Td className="text-right text-textSec">
-											{formatCurrency(item.totalValue)}
+											{formatCurrency(item.unitLaborValue)}
 										</Td>
 										<Td className="text-right font-bold text-textMain">
 											{formatCurrency(item.currentTotal)}
