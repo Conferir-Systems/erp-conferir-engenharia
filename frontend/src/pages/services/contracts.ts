@@ -64,4 +64,20 @@ export const contractsApi = {
 		const response = await api.get<ContractResponse>(`/contracts/${id}`)
 		return response.data
 	},
+
+	getActive: async (filters?: {
+		workId?: string
+		supplierId?: string
+	}): Promise<ContractResponse[]> => {
+		const params = new URLSearchParams()
+		if (filters?.workId) params.append('workId', filters.workId)
+		if (filters?.supplierId) params.append('supplierId', filters.supplierId)
+
+		const queryString = params.toString()
+		const url = queryString
+			? `/contracts/active?${queryString}`
+			: '/contracts/active'
+		const response = await api.get<ContractResponse[]>(url)
+		return response.data
+	},
 }

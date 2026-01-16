@@ -9,11 +9,13 @@ import {
 	getContractsHandler,
 	getContractHandler,
 	getContractsDetailsHandler,
+	getActiveContractsHandler,
 } from '../controllers/contracts.js'
 
 const router = express.Router()
 
 router.post('/contracts', validate(createContractSchema), createContractHandler)
+router.get('/contracts/active', getActiveContractsHandler)
 router.get('/contracts/details', getContractsDetailsHandler)
 router.get('/contracts', getContractsHandler)
 router.get('/contracts/:id', validate(getContractSchema), getContractHandler)
