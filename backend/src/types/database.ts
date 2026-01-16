@@ -1,5 +1,5 @@
-import { Status, ApprovalStatus as ContractApprovalStatus } from "./contracts"
-import { ApprovalStatus as MeasurementApprovalStatus } from "./measurements"
+import { Status, ApprovalStatus as ContractApprovalStatus } from './contracts'
+import { ApprovalStatus as MeasurementApprovalStatus } from './measurements'
 
 export type UserDatabaseRow = {
 	id: string

@@ -49,10 +49,8 @@ export class MeasurementService {
 		const measurements = await this.measurementRepo.findAll()
 		if (!measurements || measurements.length === 0) return []
 
-		// Get unique contract IDs
 		const contractIds = [...new Set(measurements.map((m) => m.contractId))]
 
-		// Fetch all contracts
 		const contracts = await Promise.all(
 			contractIds.map((id) => this.contractRepo.findById(id))
 		)
@@ -60,7 +58,6 @@ export class MeasurementService {
 			contracts.filter(Boolean).map((c) => [c!.id, c!])
 		)
 
-		// Get unique work and supplier IDs
 		const workIds = [
 			...new Set(contracts.filter(Boolean).map((c) => c!.workId)),
 		]
@@ -68,7 +65,6 @@ export class MeasurementService {
 			...new Set(contracts.filter(Boolean).map((c) => c!.supplierId)),
 		]
 
-		// Fetch all works and suppliers
 		const works = await Promise.all(
 			workIds.map((id) => this.workRepo.findById(id))
 		)
@@ -81,7 +77,6 @@ export class MeasurementService {
 			suppliers.filter(Boolean).map((s) => [s!.id, s!])
 		)
 
-		// Build enriched measurements
 		return measurements
 			.map((measurement) => {
 				const contract = contractsMap.get(measurement.contractId)

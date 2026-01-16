@@ -87,7 +87,7 @@ export const NewMeasurement = () => {
 		if (!selectedContractDetails) return []
 
 		return selectedContractDetails.items.map((item) => {
-			const accumulatedQty = item.accumulatedQuantity ?? 0
+			const accumulatedQty = item.accumulatedQuantity
 			const balanceQty = item.quantity - accumulatedQty
 			const currentQty = inputQuantities[item.id] || 0
 			const currentTotal = currentQty * item.unitLaborValue

@@ -1,11 +1,12 @@
 import type {
 	Contract,
 	CreateContractInputRepository,
+	Status,
 } from '../types/contracts.js'
 import type {
 	ContractDatabaseRow,
 	ContractQueryRow,
-	ContractItemDatabaseRow
+	ContractItemDatabaseRow,
 } from '../types/database.js'
 import type { ContractItem, ContractListItem } from '../types/contractItems.js'
 import { BaseRepository } from './BaseRepository.js'
@@ -21,6 +22,7 @@ export interface IContractRepository {
 	}): Promise<ContractListItem[]>
 	findById(id: string): Promise<Contract | null>
 	findAll(): Promise<Contract[] | null>
+	updateStatus(id: string, status: Status): Promise<void>
 }
 
 class ContractRepository
@@ -62,7 +64,18 @@ class ContractRepository
 			await trx('contract_items').insert(itemsToInsert)
 		})
 
-		return { contract, items: contractItems }
+		const createdContract = await this.findById(data.id)
+		if (!createdContract) {
+			throw new Error('Failed to retrieve created contract')
+		}
+
+		return { contract: createdContract, items: contractItems }
+	}
+
+	async updateStatus(id: string, status: Status): Promise<void> {
+		await this.db(this.tableName)
+			.where('id', id)
+			.update({ status, updated_at: new Date() })
 	}
 
 	async findAllWithFilters(filters?: {
@@ -143,7 +156,7 @@ class ContractRepository
 			quantity: data.quantity,
 			unit_labor_value: data.unitLaborValue,
 			total_value: data.totalValue,
-			description: data.description,	
+			description: data.description,
 		}
 	}
 }

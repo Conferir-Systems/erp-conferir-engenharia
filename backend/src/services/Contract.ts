@@ -84,7 +84,9 @@ export class ContractService {
 			deliveryTime: createdContract.deliveryTime,
 			status: createdContract.status,
 			approvalStatus: createdContract.approvalStatus,
-			items: items,
+			createdAt: createdContract.createdAt,
+			updatedAt: createdContract.updatedAt,
+			items: itemsWithAccumulated,
 		}
 
 		return contractResponse
@@ -141,7 +143,7 @@ export class ContractService {
 			const current = accumulatedByItem.get(measurementItem.contractItemId) || 0
 			accumulatedByItem.set(
 				measurementItem.contractItemId,
-				current + measurementItem.quantity
+				current + Number(measurementItem.quantity)
 			)
 		}
 
@@ -161,7 +163,9 @@ export class ContractService {
 			deliveryTime: contract.deliveryTime,
 			status: contract.status,
 			approvalStatus: contract.approvalStatus,
-			items: items,
+			createdAt: contract.createdAt,
+			updatedAt: contract.updatedAt,
+			items: itemsWithAccumulated,
 		}
 
 		return contractResponse

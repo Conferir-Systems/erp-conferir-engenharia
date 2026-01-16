@@ -18,5 +18,7 @@ export type ContractResponse = {
 	deliveryTime: Date
 	status: Status
 	approvalStatus: ApprovalStatus
-	items: ContractItem[]
+	createdAt?: Date
+	updatedAt?: Date
+	items: ContractItemWithAccumulated[]
 }

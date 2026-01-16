@@ -23,7 +23,11 @@ class MeasurementItemRepository
 
 	async findByContractId(contractId: string): Promise<MeasurementItem[]> {
 		const rows = (await this.db(this.tableName)
-			.join('measurements', 'measurement_items.measurement_id', 'measurements.id')
+			.join(
+				'measurements',
+				'measurement_items.measurement_id',
+				'measurements.id'
+			)
 			.where('measurements.contract_id', contractId)
 			.select('measurement_items.*')) as MeasurementItemDatabaseRow[]
 

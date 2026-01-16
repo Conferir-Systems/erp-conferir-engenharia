@@ -50,17 +50,20 @@ describe('Contract - integration crud test', () => {
 					createContractParams.supplierId
 				),
 				service: 'Colocação de tijolos refratários em churrasqueiras',
-				totalValue: 100000,
+				totalValue: '100000.0000',
 				startDate: expect.any(Date),
 				deliveryTime: expect.any(Date),
 				status: 'Ativo',
 				approvalStatus: 'Pendente',
-				retentionPercentage: 5.0,
+				retentionPercentage: '5.00',
+				createdAt: expect.any(Date),
+				updatedAt: expect.any(Date),
 				items: createContractParams.items.map((item) => ({
 					...item,
 					id: expect.any(String),
 					contractId: expect.any(String),
 					totalValue: item.quantity * item.unitLaborValue,
+					accumulatedQuantity: expect.any(Number),
 				})),
 			})
 		})
@@ -110,6 +113,7 @@ describe('Contract - integration crud test', () => {
 					unitLaborValue: String(item.unitLaborValue.toFixed(4)),
 					totalValue: String((item.quantity * item.unitLaborValue).toFixed(2)),
 					description: item.description,
+					accumulatedQuantity: expect.any(Number),
 					createdAt: expect.any(Date),
 					updatedAt: expect.any(Date),
 				})),
