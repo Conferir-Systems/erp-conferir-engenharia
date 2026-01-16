@@ -12,20 +12,20 @@ Payment Measurement System is an ERP solution designed for construction companie
 ## Technology Stack
 
 ### Backend
-- **Language:** TypeScript 5.3
+- **Language:** TypeScript
 - **Runtime:** Node.js 20
-- **Framework:** Express.js 4.18
+- **Framework:** Express.js
 - **Database:** PostgreSQL 16
-- **Query Builder:** Knex.js 3.1
-- **Authentication:** JWT (jsonwebtoken, jose)
-- **Validation:** Zod 4.2
-- **Testing:** Vitest 4.0 with coverage support
+- **Query Builder:** Knex.js
+- **Authentication:** JWT 
+- **Validation:** Zod
+- **Testing:** Vitest with coverage support
 
 ### Frontend
-- **Language:** TypeScript 5.2
-- **Library:** React 18.2
-- **Build Tool:** Vite 7.2
-- **Styling:** Tailwind CSS 3.4
+- **Language:** TypeScript
+- **Library:** React 18
+- **Build Tool:** Vite
+- **Styling:** Tailwind CSS
 
 ### Infrastructure
 - **Containerization:** Docker with multi-stage builds

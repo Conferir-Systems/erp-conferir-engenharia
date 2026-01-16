@@ -53,14 +53,15 @@ export class ContractService {
 		const { contract: createdContract, items } =
 			await this.contractRepo.createContractWithItems({
 				id: contractId,
-				work_id: params.workId,
-				supplier_id: params.supplierId,
+				workId: params.workId,
+				supplierId: params.supplierId,
 				service: params.service.trim(),
 				totalValue: totalValue,
-				retention_percentage: params.retentionPercentage,
-				start_date: params.startDate,
-				delivery_time: params.deliveryTime,
+				retentionPercentage: params.retentionPercentage,
+				startDate: params.startDate,
+				deliveryTime: params.deliveryTime,
 				status: 'Ativo',
+				approvalStatus: 'Pendente',
 				items: contractItems,
 			})
 
@@ -82,7 +83,8 @@ export class ContractService {
 			startDate: createdContract.startDate,
 			deliveryTime: createdContract.deliveryTime,
 			status: createdContract.status,
-			items: itemsWithAccumulated,
+			approvalStatus: createdContract.approvalStatus,
+			items: items,
 		}
 
 		return contractResponse
@@ -99,6 +101,26 @@ export class ContractService {
 		return contracts
 	}
 
+	async getContractsDetails(filters?: {
+		workId?: string
+		supplierId?: string
+	}): Promise<ContractResponse[]> {
+		const contracts = await this.contractRepo.findAllWithFilters(filters)
+
+		if (!contracts) return []
+
+		const contractsDetails = await Promise.all(
+			contracts.map(async (contract) => {
+				const fullContract = await this.getContract(contract.id)
+				return fullContract
+			})
+		)
+
+		return contractsDetails.filter(
+			(contract): contract is ContractResponse => contract !== null
+		)
+	}
+
 	async getContractInfo(id: string): Promise<Contract | null> {
 		const contract = await this.contractRepo.findById(id)
 		return contract
@@ -113,7 +135,6 @@ export class ContractService {
 		const supplier = await this.supplierRepo.findById(contract.supplierId)
 		const items = await this.contractItemRepo.findByContractId(contract.id)
 
-		// Calculate accumulated quantities from existing measurements
 		const measurementItems = await this.measurementItemRepo.findByContractId(id)
 		const accumulatedByItem = new Map<string, number>()
 		for (const measurementItem of measurementItems) {
@@ -139,9 +160,8 @@ export class ContractService {
 			startDate: contract.startDate,
 			deliveryTime: contract.deliveryTime,
 			status: contract.status,
-			createdAt: contract.createdAt,
-			updatedAt: contract.updatedAt,
-			items: itemsWithAccumulated,
+			approvalStatus: contract.approvalStatus,
+			items: items,
 		}
 
 		return contractResponse

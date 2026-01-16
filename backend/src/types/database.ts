@@ -1,4 +1,5 @@
-import { ApprovalStatus } from './measurements'
+import { Status, ApprovalStatus as ContractApprovalStatus } from "./contracts"
+import { ApprovalStatus as MeasurementApprovalStatus } from "./measurements"
 
 export type UserDatabaseRow = {
 	id: string
@@ -47,7 +48,8 @@ export type ContractDatabaseRow = {
 	retention_percentage: number
 	start_date: Date
 	delivery_time: Date
-	status: 'Ativo' | 'Encerrado'
+	status: Status
+	approval_status: ContractApprovalStatus
 	created_at: Date
 	updated_at: Date
 }
@@ -59,7 +61,7 @@ export type ContractQueryRow = {
 	retention_percentage: number
 	start_date: Date
 	delivery_time: Date | null
-	status: 'Ativo' | 'Encerrado'
+	status: Status
 	work_id: string
 	work_name: string
 	supplier_id: string
@@ -83,7 +85,7 @@ export type MeasurementDatabaseRow = {
 	contract_id: string
 	issue_date: Date
 	approval_date?: Date | null
-	approval_status: ApprovalStatus
+	approval_status: MeasurementApprovalStatus
 	total_gross_value: number
 	retention_value: number
 	total_net_value: number

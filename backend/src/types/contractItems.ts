@@ -1,3 +1,5 @@
+import { Status } from "./contracts"
+
 export type ContractItem = {
 	id: string
 	contractId: string
@@ -18,5 +20,5 @@ export type ContractListItem = {
 	totalValue: number
 	startDate: Date
 	deliveryTime: Date | null
-	status: 'Ativo' | 'Encerrado'
+	status: Status
 }

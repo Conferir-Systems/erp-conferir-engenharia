@@ -1,6 +1,7 @@
 import { Work } from '../works'
 import { Supplier } from '../supplier'
 import { ContractItem } from '../contractItems'
+import { Status, ApprovalStatus } from '../contracts'
 
 export type ContractItemWithAccumulated = ContractItem & {
 	accumulatedQuantity: number
@@ -15,8 +16,7 @@ export type ContractResponse = {
 	retentionPercentage: number
 	startDate: Date
 	deliveryTime: Date
-	status: 'Ativo' | 'Encerrado'
-	createdAt?: Date
-	updatedAt?: Date
-	items: ContractItemWithAccumulated[]
+	status: Status
+	approvalStatus: ApprovalStatus
+	items: ContractItem[]
 }
