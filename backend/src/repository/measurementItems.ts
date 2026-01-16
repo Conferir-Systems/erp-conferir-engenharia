@@ -5,6 +5,7 @@ import { BaseRepository } from './BaseRepository'
 export interface IMeasurementItemRepository {
 	create(measurementItem: MeasurementItem): Promise<void>
 	createMany(measurementItems: MeasurementItem[]): Promise<void>
+	findByContractId(contractId: string): Promise<MeasurementItem[]>
 }
 
 class MeasurementItemRepository
@@ -18,6 +19,15 @@ class MeasurementItemRepository
 	async createMany(measurementItems: MeasurementItem[]): Promise<void> {
 		const databaseRows = measurementItems.map((item) => this.toDatabase(item))
 		await this.db(this.tableName).insert(databaseRows)
+	}
+
+	async findByContractId(contractId: string): Promise<MeasurementItem[]> {
+		const rows = (await this.db(this.tableName)
+			.join('measurements', 'measurement_items.measurement_id', 'measurements.id')
+			.where('measurements.contract_id', contractId)
+			.select('measurement_items.*')) as MeasurementItemDatabaseRow[]
+
+		return rows.map((row) => this.toDomain(row))
 	}
 
 	protected toDomain(row: MeasurementItemDatabaseRow): MeasurementItem {

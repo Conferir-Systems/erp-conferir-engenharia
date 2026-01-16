@@ -92,4 +92,38 @@ export class MeasurementService {
 
 		return createdMeasurement
 	}
+
+	private async validateAvailableQuantities(
+		contractId: string,
+		items: { contractItemId: string; quantity: number }[],
+		contractItemsMap: Map<string, { quantity: number; description: string }>
+	): Promise<void> {
+		const existingMeasurementItems =
+			await this.measurementItemRepo.findByContractId(contractId)
+
+		const measuredQuantitiesByItem = new Map<string, number>()
+		for (const item of existingMeasurementItems) {
+			const currentQuantity = measuredQuantitiesByItem.get(item.contractItemId) || 0
+			measuredQuantitiesByItem.set(
+				item.contractItemId,
+				currentQuantity + item.quantity
+			)
+		}
+
+		for (const item of items) {
+			const contractItem = contractItemsMap.get(item.contractItemId)
+			if (!contractItem) {
+				continue
+			}
+
+			const alreadyMeasured = measuredQuantitiesByItem.get(item.contractItemId) || 0
+			const availableQuantity = contractItem.quantity - alreadyMeasured
+
+			if (item.quantity > availableQuantity) {
+				throw new ValidationError(
+					`Quantity ${item.quantity} exceeds available quantity ${availableQuantity} for contract item "${contractItem.description}"`
+				)
+			}
+		}
+	}
 }

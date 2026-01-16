@@ -6,6 +6,7 @@ export interface IContractItemRepository {
 	create(contractItem: ContractItem): Promise<void>
 	createMany(contractItems: ContractItem[]): Promise<void>
 	findById(id: string): Promise<ContractItem | null>
+	findByIds(ids: string[]): Promise<ContractItem[]>
 	findByContractId(contractId: string): Promise<ContractItem[]>
 	findAll(): Promise<ContractItem[]>
 }
@@ -21,6 +22,17 @@ class ContractItemRepository
 	async createMany(contractItems: ContractItem[]): Promise<void> {
 		const databaseRows = contractItems.map((item) => this.toDatabase(item))
 		await this.db(this.tableName).insert(databaseRows)
+	}
+
+	async findByIds(ids: string[]): Promise<ContractItem[]> {
+		if (ids.length === 0) {
+			return []
+		}
+		const rows = (await this.db(this.tableName)
+			.whereIn('id', ids)
+			.select('*')) as ContractItemDatabaseRow[]
+
+		return rows.map((row) => this.toDomain(row))
 	}
 
 	async findByContractId(contractId: string): Promise<ContractItem[]> {

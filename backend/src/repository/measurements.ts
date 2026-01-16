@@ -2,10 +2,12 @@ import type {
 	Measurement,
 	CreateMeasurementInputRepository,
 } from '../types/measurements'
-import type { MeasurementDatabaseRow } from '../types/database.ts'
+import type {
+	MeasurementDatabaseRow,
+	MeasurementItemDatabaseRow,
+} from '../types/database.ts'
 import type { MeasurementItem } from '../types/measurementItems.ts'
 import { BaseRepository } from './BaseRepository.js'
-import { measurementItemRepository } from './measurementItems.js'
 import { ValidationError } from '../errors/ValidationError.js'
 
 export interface IMeasurementRepository {
@@ -49,7 +51,7 @@ class MeasurementRepository
 			await trx(this.tableName).insert(this.toDatabase(measurement))
 
 			const itemsToInsert = measurementItems.map((item) =>
-				measurementItemRepository['toDatabase'](item)
+				this.measurementItemToDatabase(item)
 			)
 			await trx('measurement_items').insert(itemsToInsert)
 		})
