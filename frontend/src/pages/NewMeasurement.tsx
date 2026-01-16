@@ -1,10 +1,12 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { useAppContext } from '../context/AppContext'
 import { Card, Table, Thead, Th, Tr, Td, Button } from '../components/UI'
 import { formatCurrency } from '../utils/formatters'
 import { ArrowLeft, Send } from 'lucide-react'
+import { Work, ContractListItem } from '../types'
+import { worksApi } from './services/works'
+import { contractsApi, ContractResponse } from './services/contracts'
 import {
 	measurementsApi,
 	CreateMeasurementRequest,
@@ -13,7 +15,12 @@ import {
 export const NewMeasurement = () => {
 	const navigate = useNavigate()
 	const { user: authUser } = useAuth()
-	const { contracts, suppliers, works, measurements } = useAppContext()
+
+	const [works, setWorks] = useState<Work[]>([])
+	const [contracts, setContracts] = useState<ContractListItem[]>([])
+	const [selectedContractDetails, setSelectedContractDetails] =
+		useState<ContractResponse | null>(null)
+	const [isLoadingData, setIsLoadingData] = useState(true)
 
 	const [selectedWorkId, setSelectedWorkId] = useState<string>('')
 	const [selectedContractId, setSelectedContractId] = useState<string>('')
@@ -26,30 +33,60 @@ export const NewMeasurement = () => {
 	const [submitError, setSubmitError] = useState<string | null>(null)
 
 	const canApprove = authUser?.permissions?.approveMeasurement ?? false
-	const availableWorks = works
 
-	const availableContracts = useMemo(() => {
-		if (!selectedWorkId) return []
-		return contracts.filter(
-			(c) => c.workId === selectedWorkId && c.status === 'Ativo'
-		)
-	}, [selectedWorkId, contracts])
+	useEffect(() => {
+		const fetchWorks = async () => {
+			try {
+				const data = await worksApi.getAll()
+				setWorks(data)
+			} catch (error) {
+				console.error('Error fetching works:', error)
+			} finally {
+				setIsLoadingData(false)
+			}
+		}
+		fetchWorks()
+	}, [])
 
-	const selectedContract = contracts.find((c) => c.id === selectedContractId)
+	useEffect(() => {
+		if (!selectedWorkId) {
+			setContracts([])
+			return
+		}
+
+		const fetchContracts = async () => {
+			try {
+				const data = await contractsApi.getAll({ workId: selectedWorkId })
+				setContracts(data.filter((c) => c.status === 'Ativo'))
+			} catch (error) {
+				console.error('Error fetching contracts:', error)
+			}
+		}
+		fetchContracts()
+	}, [selectedWorkId])
+
+	useEffect(() => {
+		if (!selectedContractId) {
+			setSelectedContractDetails(null)
+			return
+		}
+
+		const fetchContractDetails = async () => {
+			try {
+				const data = await contractsApi.getById(selectedContractId)
+				setSelectedContractDetails(data)
+			} catch (error) {
+				console.error('Error fetching contract details:', error)
+			}
+		}
+		fetchContractDetails()
+	}, [selectedContractId])
 
 	const contractMath = useMemo(() => {
-		if (!selectedContract) return []
+		if (!selectedContractDetails) return []
 
-		const approvedMeasurements = measurements.filter(
-			(m) => m.contractId === selectedContract.id && m.status === 'APROVADA'
-		)
-
-		return selectedContract.items.map((item) => {
-			const accumulatedQty = approvedMeasurements.reduce((acc, m) => {
-				const mItem = m.items.find((mi) => mi.contractItemId === item.id)
-				return acc + (mItem?.currentQuantity || 0)
-			}, 0)
-
+		return selectedContractDetails.items.map((item) => {
+			const accumulatedQty = 0
 			const balanceQty = item.quantity - accumulatedQty
 			const currentQty = inputQuantities[item.id] || 0
 			const currentTotal = currentQty * item.unitLaborValue
@@ -63,22 +100,15 @@ export const NewMeasurement = () => {
 				isValid: currentQty <= balanceQty,
 			}
 		})
-	}, [selectedContract, measurements, inputQuantities])
+	}, [selectedContractDetails, inputQuantities])
 
 	const totalMeasurementValue = contractMath.reduce(
 		(acc, item) => acc + item.currentTotal,
 		0
 	)
-	const totalContractedValue = selectedContract?.totalValue || 0
+	const totalContractedValue = selectedContractDetails?.totalValue || 0
 
-	const previousAccumulatedValue = useMemo(() => {
-		if (!selectedContract) return 0
-		return measurements
-			.filter(
-				(m) => m.contractId === selectedContract.id && m.status === 'APROVADA'
-			)
-			.reduce((acc, m) => acc + m.totalValue, 0)
-	}, [selectedContract, measurements])
+	const previousAccumulatedValue = 0
 
 	const handleQuantityChange = (itemId: string, val: string) => {
 		const num = parseFloat(val) || 0
@@ -90,12 +120,10 @@ export const NewMeasurement = () => {
 	}
 
 	const handleSave = async () => {
-		if (!selectedContract) return
+		if (!selectedContractDetails) return
 
-		// Reset error state
 		setSubmitError(null)
 
-		// Build items array from input quantities
 		const items = Object.entries(inputQuantities)
 			.filter(([_, qty]) => qty > 0)
 			.map(([contractItemId, quantity]) => ({
@@ -103,13 +131,11 @@ export const NewMeasurement = () => {
 				quantity,
 			}))
 
-		// Validate at least one item has quantity
 		if (items.length === 0) {
 			setSubmitError('Informe a quantidade de pelo menos um item.')
 			return
 		}
 
-		// Validate quantities don't exceed balance (using contractMath which has calculated balances)
 		for (const item of items) {
 			const mathItem = contractMath.find((ci) => ci.id === item.contractItemId)
 			if (mathItem && item.quantity > mathItem.balanceQty) {
@@ -120,9 +146,8 @@ export const NewMeasurement = () => {
 			}
 		}
 
-		// Build request payload
 		const request: CreateMeasurementRequest = {
-			contractId: selectedContract.id,
+			contractId: selectedContractDetails.id,
 			notes: observation || undefined,
 			items,
 		}
@@ -131,7 +156,7 @@ export const NewMeasurement = () => {
 
 		try {
 			await measurementsApi.create(request)
-			navigate('/measurements')
+			navigate('/dashboard')
 		} catch (error) {
 			console.error('Error creating measurement:', error)
 			if (error instanceof Error) {
@@ -172,10 +197,12 @@ export const NewMeasurement = () => {
 									setInputQuantities({})
 								}}
 							>
-								<option value="">Selecione a obra...</option>
-								{availableWorks.map((s) => (
-									<option key={s.id} value={s.id}>
-										{s.name}
+								<option value="">
+									{isLoadingData ? 'Carregando...' : 'Selecione a obra...'}
+								</option>
+								{works.map((w) => (
+									<option key={w.id} value={w.id}>
+										{w.name}
 									</option>
 								))}
 							</select>
@@ -199,19 +226,16 @@ export const NewMeasurement = () => {
 										? 'Selecione uma obra primeiro...'
 										: 'Selecione o contrato...'}
 								</option>
-								{availableContracts.map((c) => {
-									const sup = suppliers.find((sup) => sup.id === c.supplierId)
-									return (
-										<option key={c.id} value={c.id}>
-											{sup?.name} - {c.service}
-										</option>
-									)
-								})}
+								{contracts.map((c) => (
+									<option key={c.id} value={c.id}>
+										{c.supplier.name} - {c.service}
+									</option>
+								))}
 							</select>
 						</div>
 					</div>
 
-					{selectedContract && (
+					{selectedContractDetails && (
 						<div className="bg-gray-50 p-4 rounded-lg border border-border flex flex-col justify-center">
 							<h3 className="font-semibold text-textMain mb-3 border-b border-gray-200 pb-2">
 								Resumo Financeiro do Contrato
@@ -249,7 +273,7 @@ export const NewMeasurement = () => {
 				</div>
 			</Card>
 
-			{selectedContract && (
+			{selectedContractDetails && (
 				<>
 					<Card title="Itens do Contrato">
 						<Table>
@@ -351,7 +375,7 @@ export const NewMeasurement = () => {
 						<Button
 							variant="primary"
 							onClick={handleSave}
-							disabled={isSubmitting || !selectedContract}
+							disabled={isSubmitting || !selectedContractDetails}
 						>
 							<Send className="w-4 h-4 mr-2" />
 							{isSubmitting ? 'Enviando...' : 'Enviar para Aprovação'}

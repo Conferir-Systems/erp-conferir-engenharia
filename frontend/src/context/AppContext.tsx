@@ -7,13 +7,7 @@ import {
 	Supplier,
 	EnrichedMeasurement,
 } from '../types'
-import {
-	USERS,
-	MOCK_MEASUREMENTS,
-	CONTRACTS,
-	WORKS,
-	SUPPLIERS,
-} from '../constants'
+import { CONTRACTS, WORKS, SUPPLIERS } from '../constants'
 import { useAuth } from './AuthContext'
 import { convertAuthUserToUser } from '../utils/authAdapter'
 
@@ -44,8 +38,7 @@ export const AppProvider = ({ children }: { children?: ReactNode }) => {
 		return authUser ? convertAuthUserToUser(authUser) : null
 	}, [authUser])
 
-	const [measurements, setMeasurements] =
-		useState<Measurement[]>(MOCK_MEASUREMENTS)
+	const [measurements, setMeasurements] = useState<Measurement[]>([])
 	const [contracts, setContracts] = useState<Contract[]>(CONTRACTS)
 
 	const [works, setWorks] = useState<Work[]>(WORKS)
@@ -103,13 +96,12 @@ export const AppProvider = ({ children }: { children?: ReactNode }) => {
 				const supplier = suppliers.find(
 					(sup) => sup.id === contract.supplierId
 				)!
-				const creator = USERS.find((u) => u.id === m.createdByUserId)
 				return {
 					...m,
 					contract,
 					work,
 					supplier,
-					creatorName: creator ? creator.name : 'Desconhecido',
+					creatorName: 'Desconhecido',
 				}
 			})
 			.sort(

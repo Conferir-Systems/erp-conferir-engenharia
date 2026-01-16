@@ -1,19 +1,4 @@
-import { Work, Contract, Measurement, User, Supplier } from './types'
-
-export const USERS: User[] = [
-	{
-		id: 'u1',
-		name: 'Carlos Diretor',
-		email: 'carlos@medcheck.com',
-		role: 'AUTHORIZED',
-	},
-	{
-		id: 'u2',
-		name: 'João Engenheiro',
-		email: 'joao@medcheck.com',
-		role: 'UNAUTHORIZED',
-	},
-]
+import { Work, Contract, Supplier } from './types'
 
 export const WORKS: Work[] = [
 	{
@@ -109,66 +94,6 @@ export const CONTRACTS: Contract[] = [
 				quantity: 10,
 				unitLaborValue: 2000,
 				totalValue: 30000,
-			},
-		],
-	},
-]
-
-export const MOCK_MEASUREMENTS: Measurement[] = [
-	{
-		id: 'm1',
-		contractId: 'c1',
-		number: 1,
-		createdAt: '2023-02-15T10:00:00Z',
-		createdByUserId: 'u2',
-		status: 'APROVADA',
-		totalValue: 25000,
-		siteObservation: 'Primeira medição conforme cronograma.',
-		directorObservation: 'Aprovado sem ressalvas.',
-		items: [
-			{
-				id: 'mi1',
-				measurementId: 'm1',
-				contractItemId: 'ci1',
-				currentQuantity: 200,
-				unitPrice: 100,
-				totalValue: 20000,
-			},
-			{
-				id: 'mi2',
-				measurementId: 'm1',
-				contractItemId: 'ci2',
-				currentQuantity: 50,
-				unitPrice: 100,
-				totalValue: 5000,
-			},
-		],
-	},
-	{
-		id: 'm2',
-		contractId: 'c1',
-		number: 2,
-		createdAt: '2023-03-15T14:30:00Z',
-		createdByUserId: 'u2',
-		status: 'PENDENTE',
-		totalValue: 25000,
-		siteObservation: 'Avanço regular.',
-		items: [
-			{
-				id: 'mi3',
-				measurementId: 'm2',
-				contractItemId: 'ci1',
-				currentQuantity: 200,
-				unitPrice: 100,
-				totalValue: 20000,
-			},
-			{
-				id: 'mi4',
-				measurementId: 'm2',
-				contractItemId: 'ci2',
-				currentQuantity: 50,
-				unitPrice: 100,
-				totalValue: 5000,
 			},
 		],
 	},
