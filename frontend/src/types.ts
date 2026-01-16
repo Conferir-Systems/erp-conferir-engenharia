@@ -1,4 +1,5 @@
 export type UserPermission = 'AUTHORIZED' | 'UNAUTHORIZED'
+export type ContractStatus = 'Ativo' | 'Concluído'
 
 export type MeasurementStatus =
 	| 'RASCUNHO'
@@ -52,7 +53,7 @@ export interface Contract {
 	totalValue: number
 	startDate: Date
 	deliveryTime: Date | null
-	status: 'Ativo' | 'Encerrado'
+	status: ContractStatus
 	items: ContractItem[]
 }
 
@@ -93,6 +94,6 @@ export interface ContractListItem {
 	totalValue: number
 	startDate: string
 	deliveryTime: string | null
-	status: 'Ativo' | 'Encerrado'
+	status: ContractStatus
 	percentage: number
 }

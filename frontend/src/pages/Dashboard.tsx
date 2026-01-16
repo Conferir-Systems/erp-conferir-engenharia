@@ -1,16 +1,33 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useAppContext } from '../context/AppContext'
 import { Card, Table, Thead, Th, Tr, Td, Badge, Button } from '../components/UI'
 import { formatCurrency } from '../utils/formatters'
 import { Plus } from 'lucide-react'
+import {
+	measurementsApi,
+	EnrichedMeasurementResponse,
+} from './services/measurements'
+import { formatDate } from '../utils/formatters'
+
+const mapApprovalStatusToBadge = (status: string): string => {
+	const mapping: Record<string, string> = {
+		APROVADO: 'APROVADA',
+		PENDENTE: 'PENDENTE',
+		REJEITADO: 'REPROVADA',
+	}
+	return mapping[status] || status
+}
 
 export const Dashboard = () => {
 	const { user: authUser } = useAuth()
-	const { works, contracts, suppliers, getEnrichedMeasurements } =
-		useAppContext()
+	const { works, contracts, suppliers } = useAppContext()
 	const navigate = useNavigate()
+
+	const [measurements, setMeasurements] = useState<
+		EnrichedMeasurementResponse[]
+	>([])
 
 	const canApprove = authUser?.permissions?.approveMeasurement ?? false
 
@@ -18,26 +35,37 @@ export const Dashboard = () => {
 		works[0]?.id || ''
 	)
 
+	useEffect(() => {
+		const fetchMeasurements = async () => {
+			try {
+				const data = await measurementsApi.getAll()
+				setMeasurements(data)
+			} catch (error) {
+				console.error('Error fetching measurements:', error)
+			}
+		}
+		fetchMeasurements()
+	}, [])
+
 	const filteredContracts = contracts.filter(
 		(c) => c.workId === selectedWorkId && c.status === 'Ativo'
 	)
-	const allMeasurements = getEnrichedMeasurements()
-	const workMeasurements = allMeasurements.filter(
+	const workMeasurements = measurements.filter(
 		(m) => m.contract.workId === selectedWorkId
 	)
 
 	const contractsWithData = filteredContracts.map((c) => {
 		const sup = suppliers.find((s) => s.id === c.supplierId)
-		const ms = allMeasurements.filter(
-			(m) => m.contractId === c.id && m.status === 'APROVADA'
+		const ms = measurements.filter(
+			(m) => m.contractId === c.id && m.approvalStatus === 'APROVADO'
 		)
-		const measured = ms.reduce((acc, curr) => acc + curr.totalValue, 0)
+		const measured = ms.reduce((acc, curr) => acc + curr.totalNetValue, 0)
 		const pct = (measured / c.totalValue) * 100
 		return { ...c, supplierName: sup?.name, measured, pct }
 	})
 
-	const pendingMeasurements = allMeasurements.filter(
-		(m) => m.status === 'PENDENTE'
+	const pendingMeasurements = measurements.filter(
+		(m) => m.approvalStatus === 'PENDENTE'
 	)
 
 	const activeContracts = contracts
@@ -46,11 +74,11 @@ export const Dashboard = () => {
 			const work = works.find((s) => s.id === c.workId)
 			const supplier = suppliers.find((s) => s.id === c.supplierId)
 
-			const measurementsForContract = allMeasurements.filter(
-				(m) => m.contractId === c.id && m.status === 'APROVADA'
+			const measurementsForContract = measurements.filter(
+				(m) => m.contractId === c.id && m.approvalStatus === 'APROVADO'
 			)
 			const totalMeasured = measurementsForContract.reduce(
-				(acc, m) => acc + m.totalValue,
+				(acc, m) => acc + m.totalNetValue,
 				0
 			)
 			const percentage = (totalMeasured / c.totalValue) * 100
@@ -120,7 +148,7 @@ export const Dashboard = () => {
 									</Tr>
 								</Thead>
 								<tbody>
-									{pendingMeasurements.map((m) => (
+									{pendingMeasurements.map((m, index) => (
 										<Tr
 											key={m.id}
 											onClick={() => navigate(`/measurement/${m.id}`)}
@@ -130,10 +158,10 @@ export const Dashboard = () => {
 											</Td>
 											<Td>{m.supplier.name}</Td>
 											<Td>{m.contract.service}</Td>
-											<Td>#{m.number}</Td>
-											<Td>{new Date(m.createdAt).toLocaleDateString()}</Td>
+											<Td>#{index + 1}</Td>
+											<Td>{formatDate(new Date(m.issueDate))}</Td>
 											<Td className="text-right font-semibold">
-												{formatCurrency(m.totalValue)}
+												{formatCurrency(m.totalNetValue)}
 											</Td>
 											<Td className="text-center">
 												<Button
@@ -277,10 +305,10 @@ export const Dashboard = () => {
 									</Td>
 								</Tr>
 							)}
-							{workMeasurements.map((m) => (
+							{workMeasurements.map((m, index) => (
 								<Tr key={m.id} onClick={() => navigate(`/measurement/${m.id}`)}>
-									<Td className="font-bold">#{m.number}</Td>
-									<Td>{new Date(m.createdAt).toLocaleDateString()}</Td>
+									<Td className="font-bold">#{index + 1}</Td>
+									<Td>{new Date(m.issueDate).toLocaleDateString()}</Td>
 									<Td>
 										<div className="flex flex-col">
 											<span className="font-medium">{m.supplier.name}</span>
@@ -290,10 +318,12 @@ export const Dashboard = () => {
 										</div>
 									</Td>
 									<Td className="text-right font-medium">
-										{formatCurrency(m.totalValue)}
+										{formatCurrency(m.totalNetValue)}
 									</Td>
 									<Td className="text-center">
-										<Badge status={m.status} />
+										<Badge
+											status={mapApprovalStatusToBadge(m.approvalStatus)}
+										/>
 									</Td>
 									<Td className="text-center">
 										<Button

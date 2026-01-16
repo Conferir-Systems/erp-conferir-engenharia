@@ -62,7 +62,8 @@ export interface CreateMeasurementResponse {
 
 export const measurementsApi = {
 	getAll: async (): Promise<EnrichedMeasurementResponse[]> => {
-		const response = await api.get<EnrichedMeasurementResponse[]>('/measurements')
+		const response =
+			await api.get<EnrichedMeasurementResponse[]>('/measurements')
 		return response.data
 	},
 

@@ -14,7 +14,9 @@ import { Work, Supplier } from '../types'
 export const RealizedMeasurements = () => {
 	const navigate = useNavigate()
 
-	const [measurements, setMeasurements] = useState<EnrichedMeasurementResponse[]>([])
+	const [measurements, setMeasurements] = useState<
+		EnrichedMeasurementResponse[]
+	>([])
 	const [works, setWorks] = useState<Work[]>([])
 	const [suppliers, setSuppliers] = useState<Supplier[]>([])
 	const [isLoading, setIsLoading] = useState(true)
@@ -64,7 +66,9 @@ export const RealizedMeasurements = () => {
 		const relevantSupplierIds = new Set(
 			measurements
 				.filter(
-					(m) => m.approvalStatus === 'APROVADO' && m.contract.workId === selectedWorkId
+					(m) =>
+						m.approvalStatus === 'APROVADO' &&
+						m.contract.workId === selectedWorkId
 				)
 				.map((m) => m.contract.supplierId)
 		)
@@ -85,9 +89,7 @@ export const RealizedMeasurements = () => {
 				<h1 className="text-2xl font-bold text-textMain">
 					Medições Realizadas
 				</h1>
-				<p className="text-textSec">
-					Histórico de medições aprovadas e encerradas.
-				</p>
+				<p className="text-textSec">Histórico de medições aprovadas</p>
 			</header>
 
 			<Card>
@@ -166,7 +168,11 @@ export const RealizedMeasurements = () => {
 										onClick={() => navigate(`/measurement/${m.id}`)}
 									>
 										<Td className="font-bold">#{index + 1}</Td>
-										<Td>{m.approvalDate ? new Date(m.approvalDate).toLocaleDateString() : '-'}</Td>
+										<Td>
+											{m.approvalDate
+												? new Date(m.approvalDate).toLocaleDateString()
+												: '-'}
+										</Td>
 										<Td>{m.supplier.name}</Td>
 										<Td className="text-sm text-textSec">
 											{m.contract.service}
