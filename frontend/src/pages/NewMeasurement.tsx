@@ -4,14 +4,16 @@ import { useAuth } from '../context/AuthContext'
 import { useAppContext } from '../context/AppContext'
 import { Card, Table, Thead, Th, Tr, Td, Button } from '../components/UI'
 import { formatCurrency } from '../utils/formatters'
-import { ArrowLeft, Save, Send } from 'lucide-react'
-import { Measurement, MeasurementItem } from '../types'
+import { ArrowLeft, Send } from 'lucide-react'
+import {
+	measurementsApi,
+	CreateMeasurementRequest,
+} from './services/measurements'
 
 export const NewMeasurement = () => {
 	const navigate = useNavigate()
 	const { user: authUser } = useAuth()
-	const { contracts, suppliers, works, measurements, addMeasurement } =
-		useAppContext()
+	const { contracts, suppliers, works, measurements } = useAppContext()
 
 	const [selectedWorkId, setSelectedWorkId] = useState<string>('')
 	const [selectedContractId, setSelectedContractId] = useState<string>('')
@@ -20,6 +22,8 @@ export const NewMeasurement = () => {
 	const [inputQuantities, setInputQuantities] = useState<
 		Record<string, number>
 	>({})
+	const [isSubmitting, setIsSubmitting] = useState(false)
+	const [submitError, setSubmitError] = useState<string | null>(null)
 
 	const canApprove = authUser?.permissions?.approveMeasurement ?? false
 	const availableWorks = works
@@ -85,54 +89,59 @@ export const NewMeasurement = () => {
 		navigate(canApprove ? '/dashboard' : '/dashboard')
 	}
 
-	const handleSave = (status: Measurement['status']) => {
-		if (!selectedContract || !authUser) return
+	const handleSave = async () => {
+		if (!selectedContract) return
 
-		const hasInvalid = contractMath.some((i) => !i.isValid)
-		if (hasInvalid) {
-			alert('Existem itens com quantidade superior ao saldo!')
-			return
-		}
+		// Reset error state
+		setSubmitError(null)
 
-		if (totalMeasurementValue <= 0) {
-			alert('O valor da medição deve ser maior que zero.')
-			return
-		}
-
-		const itemsPayload: MeasurementItem[] = contractMath
-			.filter((i) => i.currentQty > 0)
-			.map((i) => ({
-				id: `mi-${Date.now()}-${i.id}`,
-				measurementId: '',
-				contractItemId: i.id,
-				currentQuantity: i.currentQty,
-				unitPrice: i.unitLaborValue,
-				totalValue: i.currentTotal,
+		// Build items array from input quantities
+		const items = Object.entries(inputQuantities)
+			.filter(([_, qty]) => qty > 0)
+			.map(([contractItemId, quantity]) => ({
+				contractItemId,
+				quantity,
 			}))
 
-		const newMeasurement: Measurement = {
-			id: `m-${Date.now()}`,
+		// Validate at least one item has quantity
+		if (items.length === 0) {
+			setSubmitError('Informe a quantidade de pelo menos um item.')
+			return
+		}
+
+		// Validate quantities don't exceed balance (using contractMath which has calculated balances)
+		for (const item of items) {
+			const mathItem = contractMath.find((ci) => ci.id === item.contractItemId)
+			if (mathItem && item.quantity > mathItem.balanceQty) {
+				setSubmitError(
+					`Quantidade do item "${mathItem.description}" excede o saldo disponível.`
+				)
+				return
+			}
+		}
+
+		// Build request payload
+		const request: CreateMeasurementRequest = {
 			contractId: selectedContract.id,
-			number:
-				measurements.filter((m) => m.contractId === selectedContract.id)
-					.length + 1,
-			createdAt: new Date().toISOString(),
-			createdByUserId: authUser.id,
-			status: status,
-			siteObservation: observation,
-			totalValue: totalMeasurementValue,
-			items: itemsPayload,
+			notes: observation || undefined,
+			items,
 		}
 
-		addMeasurement(newMeasurement)
+		setIsSubmitting(true)
 
-		if (status === 'PENDENTE' && canApprove) {
-			alert(
-				'Medição criada com sucesso! Ela estará disponível na sua lista de aprovações.'
-			)
+		try {
+			await measurementsApi.create(request)
+			navigate('/measurements')
+		} catch (error) {
+			console.error('Error creating measurement:', error)
+			if (error instanceof Error) {
+				setSubmitError(error.message)
+			} else {
+				setSubmitError('Erro ao criar medição. Tente novamente.')
+			}
+		} finally {
+			setIsSubmitting(false)
 		}
-
-		goBack()
 	}
 
 	return (
@@ -329,12 +338,23 @@ export const NewMeasurement = () => {
 						/>
 					</Card>
 
+					{submitError && (
+						<div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+							{submitError}
+						</div>
+					)}
+
 					<div className="fixed bottom-0 left-64 right-0 bg-white border-t border-border p-4 shadow-lg flex justify-end gap-4 z-20">
-						<Button variant="ghost" onClick={() => handleSave('RASCUNHO')}>
-							<Save className="w-4 h-4 mr-2" /> Salvar Rascunho
+						<Button variant="ghost" onClick={goBack}>
+							Cancelar
 						</Button>
-						<Button variant="primary" onClick={() => handleSave('PENDENTE')}>
-							<Send className="w-4 h-4 mr-2" /> Enviar para Aprovação
+						<Button
+							variant="primary"
+							onClick={handleSave}
+							disabled={isSubmitting || !selectedContract}
+						>
+							<Send className="w-4 h-4 mr-2" />
+							{isSubmitting ? 'Enviando...' : 'Enviar para Aprovação'}
 						</Button>
 					</div>
 				</>
