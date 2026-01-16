@@ -34,6 +34,7 @@ export type ContractResponse = {
 		quantity: number
 		unitLaborValue: number
 		totalValue: number
+		accumulatedQuantity: number
 	}[]
 }
 

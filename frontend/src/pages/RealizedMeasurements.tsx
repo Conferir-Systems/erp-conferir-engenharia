@@ -1,21 +1,50 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAppContext } from '../context/AppContext'
 import { Card, Table, Thead, Th, Tr, Td, Button } from '../components/UI'
 import { formatCurrency } from '../utils/formatters'
 import { Search, Eye } from 'lucide-react'
+import { worksApi } from './services/works'
+import { suppliersApi } from './services/suppliers'
+import {
+	measurementsApi,
+	EnrichedMeasurementResponse,
+} from './services/measurements'
+import { Work, Supplier } from '../types'
 
 export const RealizedMeasurements = () => {
 	const navigate = useNavigate()
-	const { works, suppliers, getEnrichedMeasurements } = useAppContext()
 
+	const [measurements, setMeasurements] = useState<EnrichedMeasurementResponse[]>([])
+	const [works, setWorks] = useState<Work[]>([])
+	const [suppliers, setSuppliers] = useState<Supplier[]>([])
+	const [isLoading, setIsLoading] = useState(true)
 	const [selectedWorkId, setSelectedWorkId] = useState('')
 	const [selectedSupplierId, setSelectedSupplierId] = useState('')
+
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const [measurementsData, worksData, suppliersData] = await Promise.all([
+					measurementsApi.getAll(),
+					worksApi.getAll(),
+					suppliersApi.getAll(),
+				])
+				setMeasurements(measurementsData)
+				setWorks(worksData)
+				setSuppliers(suppliersData)
+			} catch (error) {
+				console.error('Error fetching data:', error)
+			} finally {
+				setIsLoading(false)
+			}
+		}
+		fetchData()
+	}, [])
 
 	const availableWorks = works
 
 	const realizedMeasurements = useMemo(() => {
-		let list = getEnrichedMeasurements().filter((m) => m.status === 'APROVADA')
+		let list = measurements.filter((m) => m.approvalStatus === 'APROVADO')
 
 		if (selectedWorkId) {
 			list = list.filter((m) => m.contract.workId === selectedWorkId)
@@ -28,19 +57,27 @@ export const RealizedMeasurements = () => {
 		}
 
 		return list
-	}, [getEnrichedMeasurements, selectedWorkId, selectedSupplierId])
+	}, [measurements, selectedWorkId, selectedSupplierId])
 
 	const availableSuppliersForWork = useMemo(() => {
 		if (!selectedWorkId) return []
 		const relevantSupplierIds = new Set(
-			getEnrichedMeasurements()
+			measurements
 				.filter(
-					(m) => m.status === 'APROVADA' && m.contract.workId === selectedWorkId
+					(m) => m.approvalStatus === 'APROVADO' && m.contract.workId === selectedWorkId
 				)
 				.map((m) => m.contract.supplierId)
 		)
 		return suppliers.filter((s) => relevantSupplierIds.has(s.id))
-	}, [selectedWorkId, suppliers, getEnrichedMeasurements])
+	}, [selectedWorkId, suppliers, measurements])
+
+	if (isLoading) {
+		return (
+			<div className="flex justify-center items-center h-64">
+				<div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+			</div>
+		)
+	}
 
 	return (
 		<div className="space-y-6 pb-20">
@@ -123,19 +160,19 @@ export const RealizedMeasurements = () => {
 									</Td>
 								</Tr>
 							) : (
-								realizedMeasurements.map((m) => (
+								realizedMeasurements.map((m, index) => (
 									<Tr
 										key={m.id}
 										onClick={() => navigate(`/measurement/${m.id}`)}
 									>
-										<Td className="font-bold">#{m.number}</Td>
-										<Td>{new Date(m.createdAt).toLocaleDateString()}</Td>
+										<Td className="font-bold">#{index + 1}</Td>
+										<Td>{m.approvalDate ? new Date(m.approvalDate).toLocaleDateString() : '-'}</Td>
 										<Td>{m.supplier.name}</Td>
 										<Td className="text-sm text-textSec">
 											{m.contract.service}
 										</Td>
 										<Td className="text-right font-medium text-primary">
-											{formatCurrency(m.totalValue)}
+											{formatCurrency(m.totalNetValue)}
 										</Td>
 										<Td className="text-center">
 											<Button

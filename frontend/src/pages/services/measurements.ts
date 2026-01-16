@@ -31,10 +31,28 @@ export interface MeasurementResponse {
 	totalGrossValue: number
 	retentionValue: number
 	totalNetValue: number
+	approvalDate?: string | null
 	approvalStatus: 'PENDENTE' | 'APROVADO' | 'REJEITADO'
 	notes?: string
 	createdAt?: string
 	updatedAt?: string
+}
+
+export interface EnrichedMeasurementResponse extends MeasurementResponse {
+	contract: {
+		id: string
+		service: string
+		workId: string
+		supplierId: string
+	}
+	work: {
+		id: string
+		name: string
+	}
+	supplier: {
+		id: string
+		name: string
+	}
 }
 
 export interface CreateMeasurementResponse {
@@ -43,6 +61,16 @@ export interface CreateMeasurementResponse {
 }
 
 export const measurementsApi = {
+	getAll: async (): Promise<EnrichedMeasurementResponse[]> => {
+		const response = await api.get<EnrichedMeasurementResponse[]>('/measurements')
+		return response.data
+	},
+
+	getById: async (id: string): Promise<MeasurementResponse> => {
+		const response = await api.get<MeasurementResponse>(`/measurements/${id}`)
+		return response.data
+	},
+
 	create: async (
 		data: CreateMeasurementRequest
 	): Promise<CreateMeasurementResponse> => {
