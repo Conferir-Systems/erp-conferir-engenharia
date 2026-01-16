@@ -23,13 +23,16 @@ export const contractService = new ContractService(
 	contractRepository,
 	workRepository,
 	supplierRepository,
-	contractItemRepository
+	contractItemRepository,
+	measurementItemRepository
 )
 export const measurementService = new MeasurementService(
 	measurementRepository,
 	contractRepository,
 	contractItemRepository,
-	measurementItemRepository
+	measurementItemRepository,
+	workRepository,
+	supplierRepository
 )
 export const authService = new AuthService(
 	userRepository,

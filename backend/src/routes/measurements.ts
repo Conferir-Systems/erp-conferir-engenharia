@@ -1,7 +1,14 @@
 import express from 'express'
 import { validate } from '../validation/middleware.js'
-import { createMeasurementSchema } from '../validation/schemas/measurements.js'
-import { createMeasurementHandler } from '../controllers/measurements.js'
+import {
+	createMeasurementSchema,
+	getMeasurementSchema,
+} from '../validation/schemas/measurements.js'
+import {
+	createMeasurementHandler,
+	getMeasurementHandler,
+	getMeasurementsHandler,
+} from '../controllers/measurements.js'
 
 const router = express.Router()
 
@@ -10,7 +17,11 @@ router.post(
 	validate(createMeasurementSchema),
 	createMeasurementHandler
 )
-// router.get('/measurements/:id', validate(getMeasurementSchema), getMeasurementHandler)
-// router.get('/measurements', getMeasurementsHandler)
+router.get(
+	'/measurements/:id',
+	validate(getMeasurementSchema),
+	getMeasurementHandler
+)
+router.get('/measurements', getMeasurementsHandler)
 
 export default router

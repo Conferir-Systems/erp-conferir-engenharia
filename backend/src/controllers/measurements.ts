@@ -13,23 +13,20 @@ export const createMeasurementHandler = asyncHandler(
 	}
 )
 
-/*
 export const getMeasurementHandler = asyncHandler(
-    async (req: Request, res: Response) => {
-        const id = req.params.id
+	async (req: Request, res: Response) => {
+		const id = req.params.id
 
-        const measurement = 
-            await measurementService.getMeasurement(id)
+		const measurement = await measurementService.getMeasurement(id)
 
-        res.status(200).json(measurement)
-    }
+		res.status(200).json(measurement)
+	}
 )
 
 export const getMeasurementsHandler = asyncHandler(
-    async (req: Request, res: Response) => {
-        const measurements = await measurementService.getMeasurements()
+	async (req: Request, res: Response) => {
+		const measurements = await measurementService.getEnrichedMeasurements()
 
-        res.status(200).json(measurements)
-    }
+		res.status(200).json(measurements)
+	}
 )
-*/

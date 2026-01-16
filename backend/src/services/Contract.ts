@@ -5,6 +5,7 @@ import { IContractRepository } from '../repository/contracts.js'
 import { IWorkRepository } from '../repository/works.js'
 import { ISupplierRepository } from '../repository/suppliers.js'
 import { IContractItemRepository } from '../repository/contractItems.js'
+import { IMeasurementItemRepository } from '../repository/measurementItems.js'
 import { ContractResponse } from '../types/api/contracts.js'
 
 export type CreateContractParams = {
@@ -25,7 +26,8 @@ export class ContractService {
 		private contractRepo: IContractRepository,
 		private workRepo: IWorkRepository,
 		private supplierRepo: ISupplierRepository,
-		private contractItemRepo: IContractItemRepository
+		private contractItemRepo: IContractItemRepository,
+		private measurementItemRepo: IMeasurementItemRepository
 	) {}
 
 	async createContractWithItems(
@@ -65,6 +67,11 @@ export class ContractService {
 		const workId = createdContract.workId
 		const supplierId = createdContract.supplierId
 
+		const itemsWithAccumulated = items.map((item) => ({
+			...item,
+			accumulatedQuantity: 0,
+		}))
+
 		const contractResponse: ContractResponse = {
 			id: createdContract.id,
 			work: await this.workRepo.findById(workId),
@@ -75,7 +82,7 @@ export class ContractService {
 			startDate: createdContract.startDate,
 			deliveryTime: createdContract.deliveryTime,
 			status: createdContract.status,
-			items: items,
+			items: itemsWithAccumulated,
 		}
 
 		return contractResponse
@@ -106,6 +113,22 @@ export class ContractService {
 		const supplier = await this.supplierRepo.findById(contract.supplierId)
 		const items = await this.contractItemRepo.findByContractId(contract.id)
 
+		// Calculate accumulated quantities from existing measurements
+		const measurementItems = await this.measurementItemRepo.findByContractId(id)
+		const accumulatedByItem = new Map<string, number>()
+		for (const measurementItem of measurementItems) {
+			const current = accumulatedByItem.get(measurementItem.contractItemId) || 0
+			accumulatedByItem.set(
+				measurementItem.contractItemId,
+				current + measurementItem.quantity
+			)
+		}
+
+		const itemsWithAccumulated = items.map((item) => ({
+			...item,
+			accumulatedQuantity: accumulatedByItem.get(item.id) || 0,
+		}))
+
 		const contractResponse: ContractResponse = {
 			id: contract.id,
 			work: work,
@@ -118,7 +141,7 @@ export class ContractService {
 			status: contract.status,
 			createdAt: contract.createdAt,
 			updatedAt: contract.updatedAt,
-			items: items,
+			items: itemsWithAccumulated,
 		}
 
 		return contractResponse

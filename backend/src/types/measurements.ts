@@ -36,3 +36,20 @@ export type CreateMeasurementInputRepository = {
 	notes?: string
 	items: MeasurementItemInputRepository[]
 }
+
+export type EnrichedMeasurement = Measurement & {
+	contract: {
+		id: string
+		service: string
+		workId: string
+		supplierId: string
+	}
+	work: {
+		id: string
+		name: string
+	}
+	supplier: {
+		id: string
+		name: string
+	}
+}

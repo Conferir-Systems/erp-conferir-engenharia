@@ -1,5 +1,9 @@
 import { randomUUID } from 'crypto'
-import { Measurement, MeasurementParams } from '../types/measurements.js'
+import {
+	Measurement,
+	MeasurementParams,
+	EnrichedMeasurement,
+} from '../types/measurements.js'
 import {
 	MeasurementItem,
 	MeasurementItemInputRepository,
@@ -8,6 +12,8 @@ import { IMeasurementRepository } from '../repository/measurements.js'
 import { IContractRepository } from '../repository/contracts.js'
 import { IContractItemRepository } from '../repository/contractItems.js'
 import { IMeasurementItemRepository } from '../repository/measurementItems.js'
+import { IWorkRepository } from '../repository/works.js'
+import { ISupplierRepository } from '../repository/suppliers.js'
 import { NotFoundError } from '../errors/NotFoundError.js'
 import { ValidationError } from '../errors/ValidationError.js'
 
@@ -16,8 +22,96 @@ export class MeasurementService {
 		private measurementRepo: IMeasurementRepository,
 		private contractRepo: IContractRepository,
 		private contractItemRepo: IContractItemRepository,
-		private measurementItemRepo: IMeasurementItemRepository
+		private measurementItemRepo: IMeasurementItemRepository,
+		private workRepo: IWorkRepository,
+		private supplierRepo: ISupplierRepository
 	) {}
+
+	async getMeasurement(id: string): Promise<Measurement> {
+		const measurement = await this.measurementRepo.findById(id)
+
+		if (!measurement) {
+			throw new NotFoundError(`Measurement with id ${id} not found`)
+		}
+
+		return measurement
+	}
+
+	async getMeasurements(): Promise<Measurement[]> {
+		const measurements = await this.measurementRepo.findAll()
+
+		if (!measurements) return []
+
+		return measurements
+	}
+
+	async getEnrichedMeasurements(): Promise<EnrichedMeasurement[]> {
+		const measurements = await this.measurementRepo.findAll()
+		if (!measurements || measurements.length === 0) return []
+
+		// Get unique contract IDs
+		const contractIds = [...new Set(measurements.map((m) => m.contractId))]
+
+		// Fetch all contracts
+		const contracts = await Promise.all(
+			contractIds.map((id) => this.contractRepo.findById(id))
+		)
+		const contractsMap = new Map(
+			contracts.filter(Boolean).map((c) => [c!.id, c!])
+		)
+
+		// Get unique work and supplier IDs
+		const workIds = [
+			...new Set(contracts.filter(Boolean).map((c) => c!.workId)),
+		]
+		const supplierIds = [
+			...new Set(contracts.filter(Boolean).map((c) => c!.supplierId)),
+		]
+
+		// Fetch all works and suppliers
+		const works = await Promise.all(
+			workIds.map((id) => this.workRepo.findById(id))
+		)
+		const worksMap = new Map(works.filter(Boolean).map((w) => [w!.id, w!]))
+
+		const suppliers = await Promise.all(
+			supplierIds.map((id) => this.supplierRepo.findById(id))
+		)
+		const suppliersMap = new Map(
+			suppliers.filter(Boolean).map((s) => [s!.id, s!])
+		)
+
+		// Build enriched measurements
+		return measurements
+			.map((measurement) => {
+				const contract = contractsMap.get(measurement.contractId)
+				if (!contract) return null
+
+				const work = worksMap.get(contract.workId)
+				const supplier = suppliersMap.get(contract.supplierId)
+
+				if (!work || !supplier) return null
+
+				return {
+					...measurement,
+					contract: {
+						id: contract.id,
+						service: contract.service,
+						workId: contract.workId,
+						supplierId: contract.supplierId,
+					},
+					work: {
+						id: work.id,
+						name: work.name,
+					},
+					supplier: {
+						id: supplier.id,
+						name: supplier.name,
+					},
+				}
+			})
+			.filter((m): m is EnrichedMeasurement => m !== null)
+	}
 
 	async createMeasurementWithItems(
 		params: MeasurementParams
@@ -35,8 +129,7 @@ export class MeasurementService {
 			contract.retentionPercentage || contractWithoutRetentionPercentage
 
 		const contractItemIds = params.items.map((item) => item.contractItemId)
-		const contractItems =
-			await this.contractItemRepo.findByIds(contractItemIds)
+		const contractItems = await this.contractItemRepo.findByIds(contractItemIds)
 
 		const contractItemsMap = new Map(
 			contractItems.map((item) => [item.id, item])
@@ -103,7 +196,8 @@ export class MeasurementService {
 
 		const measuredQuantitiesByItem = new Map<string, number>()
 		for (const item of existingMeasurementItems) {
-			const currentQuantity = measuredQuantitiesByItem.get(item.contractItemId) || 0
+			const currentQuantity =
+				measuredQuantitiesByItem.get(item.contractItemId) || 0
 			measuredQuantitiesByItem.set(
 				item.contractItemId,
 				currentQuantity + item.quantity
@@ -116,7 +210,8 @@ export class MeasurementService {
 				continue
 			}
 
-			const alreadyMeasured = measuredQuantitiesByItem.get(item.contractItemId) || 0
+			const alreadyMeasured =
+				measuredQuantitiesByItem.get(item.contractItemId) || 0
 			const availableQuantity = contractItem.quantity - alreadyMeasured
 
 			if (item.quantity > availableQuantity) {

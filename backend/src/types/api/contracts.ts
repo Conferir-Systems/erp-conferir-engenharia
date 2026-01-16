@@ -2,6 +2,10 @@ import { Work } from '../works'
 import { Supplier } from '../supplier'
 import { ContractItem } from '../contractItems'
 
+export type ContractItemWithAccumulated = ContractItem & {
+	accumulatedQuantity: number
+}
+
 export type ContractResponse = {
 	id: string
 	work: Work | null
@@ -14,5 +18,5 @@ export type ContractResponse = {
 	status: 'Ativo' | 'Encerrado'
 	createdAt?: Date
 	updatedAt?: Date
-	items: ContractItem[]
+	items: ContractItemWithAccumulated[]
 }

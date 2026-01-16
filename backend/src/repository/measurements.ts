@@ -27,6 +27,16 @@ class MeasurementRepository
 		super('measurements')
 	}
 
+	async findById(id: string): Promise<Measurement | null> {
+		const row = await this.db(this.tableName).where('id', id).first()
+		return row ? this.toDomain(row) : null
+	}
+
+	async findAll(): Promise<Measurement[]> {
+		const rows = await this.db(this.tableName).orderBy('created_at', 'desc')
+		return rows.map((row) => this.toDomain(row))
+	}
+
 	async createMeasurementWithItems(
 		data: CreateMeasurementInputRepository
 	): Promise<{ measurement: Measurement; items: MeasurementItem[] }> {
