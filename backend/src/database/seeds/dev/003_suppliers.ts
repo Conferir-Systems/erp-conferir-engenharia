@@ -14,6 +14,8 @@ export const SUPPLIER_IDS = {
 }
 
 export async function seed(knex: Knex): Promise<void> {
+	await knex('measurement_items').del()
+	await knex('measurements').del()
 	await knex('contract_items').del()
 	await knex('contracts').del()
 
