@@ -26,7 +26,9 @@ export const contractService = new ContractService(
 )
 export const measurementService = new MeasurementService(
 	measurementRepository,
-	contractRepository
+	contractRepository,
+	contractItemRepository,
+	measurementItemRepository
 )
 export const authService = new AuthService(
 	userRepository,

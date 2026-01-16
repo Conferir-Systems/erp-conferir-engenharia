@@ -3,18 +3,11 @@ import { z } from 'zod'
 const measurementItemSchema = z.object({
 	contractItemId: z.string().uuid('Invalid contract item ID'),
 	quantity: z.number().positive('Quantity must be positive'),
-	unitLaborValue: z.number().nonnegative('Unit labor value cannot be negative'),
-	totalGrossValue: z
-		.number()
-		.nonnegative('Total gross value cannot be negative'),
 })
 
 export const createMeasurementSchema = z.object({
 	body: z.object({
 		contractId: z.string().uuid('Invalid contract ID'),
-		issueDate: z.coerce.date({
-			message: 'Issue date must be a valid date',
-		}),
 		notes: z
 			.string()
 			.trim()

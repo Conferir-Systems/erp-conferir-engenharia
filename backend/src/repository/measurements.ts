@@ -85,6 +85,19 @@ class MeasurementRepository
 			notes: data.notes,
 		}
 	}
+
+	private measurementItemToDatabase(
+		data: MeasurementItem
+	): Partial<MeasurementItemDatabaseRow> {
+		return {
+			id: data.id,
+			measurement_id: data.measurementId,
+			contract_item_id: data.contractItemId,
+			quantity: data.quantity,
+			unit_labor_value: data.unitLaborValue,
+			total_gross_value: data.totalGrossValue,
+		}
+	}
 }
 
 export const measurementRepository = new MeasurementRepository()

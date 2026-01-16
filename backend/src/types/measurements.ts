@@ -21,7 +21,6 @@ export type Measurement = {
 
 export type MeasurementParams = {
 	contractId: string
-	issueDate: Date
 	notes: string
 	items: MeasurementItemParams[]
 }
