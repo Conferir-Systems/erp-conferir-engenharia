@@ -50,3 +50,16 @@ export const getContractsDetailsHandler = asyncHandler(
 		res.status(200).json(contracts)
 	}
 )
+
+export const getActiveContractsHandler = asyncHandler(
+	async (req: Request, res: Response) => {
+		const { workId, supplierId } = req.query
+
+		const contracts = await contractService.getActiveContracts({
+			workId: workId as string | undefined,
+			supplierId: supplierId as string | undefined,
+		})
+
+		res.status(200).json(contracts)
+	}
+)
