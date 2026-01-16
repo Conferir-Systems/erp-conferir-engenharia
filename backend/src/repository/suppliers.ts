@@ -3,7 +3,7 @@ import type { SupplierDatabaseRow } from '../types/database.js'
 import { BaseRepository } from './BaseRepository.js'
 import { duplicateError } from '../utils/duplicateValueError.js'
 
-export interface ISupplierRepository {
+export type ISupplierRepository = {
 	create(supplier: Supplier): Promise<void>
 	findById(id: string): Promise<Supplier | null>
 	findAll(): Promise<Supplier[] | null>

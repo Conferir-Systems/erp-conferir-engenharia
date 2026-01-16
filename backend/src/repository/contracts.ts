@@ -12,7 +12,7 @@ import type { ContractItem, ContractListItem } from '../types/contractItems.js'
 import { BaseRepository } from './BaseRepository.js'
 import { ValidationError } from '../errors/ValidationError.js'
 
-export interface IContractRepository {
+export type IContractRepository = {
 	createContractWithItems(
 		data: CreateContractInputRepository
 	): Promise<{ contract: Contract; items: ContractItem[] }>

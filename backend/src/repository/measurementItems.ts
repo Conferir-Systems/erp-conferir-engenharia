@@ -2,7 +2,7 @@ import type { MeasurementItem } from '../types/measurementItems'
 import type { MeasurementItemDatabaseRow } from '../types/database'
 import { BaseRepository } from './BaseRepository'
 
-export interface IMeasurementItemRepository {
+export type IMeasurementItemRepository = {
 	create(measurementItem: MeasurementItem): Promise<void>
 	createMany(measurementItems: MeasurementItem[]): Promise<void>
 	findByContractId(contractId: string): Promise<MeasurementItem[]>

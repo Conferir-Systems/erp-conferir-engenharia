@@ -10,7 +10,7 @@ import type { MeasurementItem } from '../types/measurementItems.ts'
 import { BaseRepository } from './BaseRepository.js'
 import { ValidationError } from '../errors/ValidationError.js'
 
-export interface IMeasurementRepository {
+export type IMeasurementRepository = {
 	create(measurement: Measurement): Promise<void>
 	createMeasurementWithItems(
 		data: CreateMeasurementInputRepository

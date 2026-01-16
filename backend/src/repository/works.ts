@@ -2,7 +2,7 @@ import type { Work } from '../types/works.js'
 import type { WorkDatabaseRow } from '../types/database.js'
 import { BaseRepository } from './BaseRepository.js'
 
-export interface IWorkRepository {
+export type IWorkRepository = {
 	create(work: Work): Promise<void>
 	update(id: string, updates: Partial<Omit<Work, 'id'>>): Promise<void>
 	delete(id: string): Promise<void>

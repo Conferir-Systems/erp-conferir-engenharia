@@ -2,7 +2,7 @@ import type { ContractItem } from '../types/contractItems.js'
 import type { ContractItemDatabaseRow } from '../types/database.js'
 import { BaseRepository } from './BaseRepository.js'
 
-export interface IContractItemRepository {
+export type IContractItemRepository = {
 	create(contractItem: ContractItem): Promise<void>
 	createMany(contractItems: ContractItem[]): Promise<void>
 	findById(id: string): Promise<ContractItem | null>

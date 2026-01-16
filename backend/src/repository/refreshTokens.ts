@@ -1,7 +1,7 @@
 import { BaseRepository } from './BaseRepository.js'
 import { RefreshToken, RefreshTokenDatabaseRow } from '../types/auth.js'
 
-export interface IRefreshTokenRepository {
+export type IRefreshTokenRepository = {
 	create(token: RefreshToken): Promise<void>
 	findByToken(token: string): Promise<RefreshToken | null>
 	revokeToken(token: string): Promise<void>

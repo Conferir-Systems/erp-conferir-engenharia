@@ -3,7 +3,7 @@ import type { UserDatabaseRow } from '../types/database.js'
 import { BaseRepository } from './BaseRepository.js'
 import { ConflictError } from '../errors/index.js'
 
-export interface IUserRepository {
+export type IUserRepository = {
 	create(user: User): Promise<void>
 	update(
 		id: string,

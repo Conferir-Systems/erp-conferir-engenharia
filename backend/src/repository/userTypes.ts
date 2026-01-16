@@ -3,7 +3,7 @@ import { UserTypeDatabaseRow } from '../types/database.js'
 import { BaseRepository } from './BaseRepository.js'
 import { ConflictError } from '../errors/index.js'
 
-export interface IUserTypeRepository {
+export type IUserTypeRepository = {
 	create(userType: UserType): Promise<void>
 	findById(id: string): Promise<UserType | null>
 	findAll(): Promise<UserType[]>
