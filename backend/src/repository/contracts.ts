@@ -5,14 +5,13 @@ import type {
 import type {
 	ContractDatabaseRow,
 	ContractQueryRow,
+	ContractItemDatabaseRow
 } from '../types/database.js'
 import type { ContractItem, ContractListItem } from '../types/contractItems.js'
 import { BaseRepository } from './BaseRepository.js'
-import { contractItemRepository } from './contractItems.js'
 import { ValidationError } from '../errors/ValidationError.js'
 
 export interface IContractRepository {
-	create(contract: Contract): Promise<void>
 	createContractWithItems(
 		data: CreateContractInputRepository
 	): Promise<{ contract: Contract; items: ContractItem[] }>
@@ -37,14 +36,15 @@ class ContractRepository
 	): Promise<{ contract: Contract; items: ContractItem[] }> {
 		const contract: Contract = {
 			id: data.id,
-			workId: data.work_id,
-			supplierId: data.supplier_id,
+			workId: data.workId,
+			supplierId: data.supplierId,
 			service: data.service,
 			totalValue: data.totalValue,
-			retentionPercentage: data.retention_percentage,
-			startDate: new Date(data.start_date),
-			deliveryTime: new Date(data.delivery_time),
+			retentionPercentage: data.retentionPercentage,
+			startDate: new Date(data.startDate),
+			deliveryTime: new Date(data.deliveryTime),
 			status: data.status,
+			approvalStatus: data.approvalStatus,
 		}
 
 		const contractItems: ContractItem[] = data.items
@@ -57,7 +57,7 @@ class ContractRepository
 			await trx(this.tableName).insert(this.toDatabase(contract))
 
 			const itemsToInsert = contractItems.map((item) =>
-				contractItemRepository['toDatabase'](item)
+				this.contractItemToDatabase(item)
 			)
 			await trx('contract_items').insert(itemsToInsert)
 		})
@@ -110,6 +110,9 @@ class ContractRepository
 			startDate: row.start_date,
 			deliveryTime: row.delivery_time,
 			status: row.status,
+			approvalStatus: row.approval_status,
+			createdAt: row.created_at,
+			updatedAt: row.updated_at,
 		}
 	}
 
@@ -124,8 +127,23 @@ class ContractRepository
 			start_date: data.startDate,
 			delivery_time: data.deliveryTime,
 			status: data.status,
+			approval_status: data.approvalStatus,
 			created_at: data.createdAt ?? new Date(),
 			updated_at: data.updatedAt ?? new Date(),
+		}
+	}
+
+	private contractItemToDatabase(
+		data: ContractItem
+	): Partial<ContractItemDatabaseRow> {
+		return {
+			id: data.id,
+			contract_id: data.contractId,
+			unit_measure: data.unitMeasure,
+			quantity: data.quantity,
+			unit_labor_value: data.unitLaborValue,
+			total_value: data.totalValue,
+			description: data.description,	
 		}
 	}
 }

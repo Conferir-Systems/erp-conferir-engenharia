@@ -51,14 +51,15 @@ export class ContractService {
 		const { contract: createdContract, items } =
 			await this.contractRepo.createContractWithItems({
 				id: contractId,
-				work_id: params.workId,
-				supplier_id: params.supplierId,
+				workId: params.workId,
+				supplierId: params.supplierId,
 				service: params.service.trim(),
 				totalValue: totalValue,
-				retention_percentage: params.retentionPercentage,
-				start_date: params.startDate,
-				delivery_time: params.deliveryTime,
+				retentionPercentage: params.retentionPercentage,
+				startDate: params.startDate,
+				deliveryTime: params.deliveryTime,
 				status: 'Ativo',
+				approvalStatus: 'Pendente',
 				items: contractItems,
 			})
 
@@ -75,6 +76,7 @@ export class ContractService {
 			startDate: createdContract.startDate,
 			deliveryTime: createdContract.deliveryTime,
 			status: createdContract.status,
+			approvalStatus: createdContract.approvalStatus,
 			items: items,
 		}
 
@@ -136,6 +138,7 @@ export class ContractService {
 			startDate: contract.startDate,
 			deliveryTime: contract.deliveryTime,
 			status: contract.status,
+			approvalStatus: contract.approvalStatus,
 			items: items,
 		}
 

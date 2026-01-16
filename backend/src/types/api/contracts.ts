@@ -1,6 +1,7 @@
 import { Work } from '../works'
 import { Supplier } from '../supplier'
 import { ContractItem } from '../contractItems'
+import { Status, ApprovalStatus } from '../contracts'
 
 export type ContractResponse = {
 	id: string
@@ -11,6 +12,7 @@ export type ContractResponse = {
 	retentionPercentage: number
 	startDate: Date
 	deliveryTime: Date
-	status: 'Ativo' | 'Encerrado'
+	status: Status
+	approvalStatus: ApprovalStatus
 	items: ContractItem[]
 }

@@ -1,3 +1,5 @@
+import { Status, ApprovalStatus } from "./contracts"
+
 export type UserDatabaseRow = {
 	id: string
 	first_name: string
@@ -45,7 +47,8 @@ export type ContractDatabaseRow = {
 	retention_percentage: number
 	start_date: Date
 	delivery_time: Date
-	status: 'Ativo' | 'Encerrado'
+	status: Status
+	approval_status: ApprovalStatus
 	created_at: Date
 	updated_at: Date
 }
@@ -57,7 +60,7 @@ export type ContractQueryRow = {
 	retention_percentage: number
 	start_date: Date
 	delivery_time: Date | null
-	status: 'Ativo' | 'Encerrado'
+	status: Status
 	work_id: string
 	work_name: string
 	supplier_id: string
