@@ -19,6 +19,7 @@ export type IContractRepository = {
 	findAllWithFilters(filters?: {
 		workId?: string
 		supplierId?: string
+		status?: Status
 	}): Promise<ContractListItem[]>
 	findById(id: string): Promise<Contract | null>
 	findAll(): Promise<Contract[] | null>
@@ -81,6 +82,7 @@ class ContractRepository
 	async findAllWithFilters(filters?: {
 		workId?: string
 		supplierId?: string
+		status?: Status
 	}): Promise<ContractListItem[]> {
 		let query = this.db('contracts')
 			.select<
@@ -95,6 +97,10 @@ class ContractRepository
 
 		if (filters?.supplierId) {
 			query = query.where('contracts.supplier_id', filters.supplierId)
+		}
+
+		if (filters?.status) {
+			query = query.where('contracts.status', filters.status)
 		}
 
 		const rows = await query
