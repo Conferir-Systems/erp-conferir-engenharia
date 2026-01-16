@@ -31,6 +31,7 @@ export const NewMeasurement = () => {
 	>({})
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const [submitError, setSubmitError] = useState<string | null>(null)
+	const [isSuccess, setIsSuccess] = useState(false)
 
 	const canApprove = authUser?.permissions?.approveMeasurement ?? false
 
@@ -156,7 +157,7 @@ export const NewMeasurement = () => {
 
 		try {
 			await measurementsApi.create(request)
-			navigate('/dashboard')
+			setIsSuccess(true)
 		} catch (error) {
 			console.error('Error creating measurement:', error)
 			if (error instanceof Error) {
@@ -382,6 +383,46 @@ export const NewMeasurement = () => {
 						</Button>
 					</div>
 				</>
+			)}
+
+			{isSuccess && (
+				<div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+					<div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6 animate-in fade-in zoom-in duration-200">
+						<div className="flex flex-col items-center text-center mb-6">
+							<div className="flex-shrink-0 w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-4">
+								<svg
+									className="w-10 h-10 text-green-600"
+									fill="none"
+									stroke="currentColor"
+									viewBox="0 0 24 24"
+								>
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth={2}
+										d="M5 13l4 4L19 7"
+									/>
+								</svg>
+							</div>
+							<h3 className="text-xl font-bold text-textMain mb-2">
+								Medição criada com sucesso!
+							</h3>
+							<p className="text-sm text-textSec">
+								Sua medição foi enviada para aprovação.
+							</p>
+						</div>
+
+						<div className="flex flex-col gap-3">
+							<Button
+								variant="primary"
+								onClick={() => navigate('/dashboard')}
+								className="w-full"
+							>
+								Ir para o Dashboard
+							</Button>
+						</div>
+					</div>
+				</div>
 			)}
 		</div>
 	)
