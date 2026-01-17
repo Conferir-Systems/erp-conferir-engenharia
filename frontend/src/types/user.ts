@@ -1,4 +1,4 @@
-import type { UUID } from './common.js'
+import type { UUID } from './index.js'
 
 export type UserPermission = 'AUTHORIZED' | 'UNAUTHORIZED'
 

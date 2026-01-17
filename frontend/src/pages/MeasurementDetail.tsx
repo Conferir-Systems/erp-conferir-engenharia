@@ -38,7 +38,7 @@ export const MeasurementDetail = () => {
 
 	const canApprove = authUser?.permissions?.approveMeasurement ?? false
 	const isPending = measurement.approvalStatus === 'PENDENTE'
-	const isApproved = measurement.approvalStatus === 'APROVADO'
+	const isApproved = measurement.approvalStatus === 'APROVADA'
 
 	const handleApprove = () => {
 		if (

@@ -1,8 +1,7 @@
-import type { UUID } from './common.js'
-import type { Work } from './work.js'
-import type { Supplier } from './supplier.js'
+import type { UUID, Work, Supplier } from './index.js'
 
-export type ContractStatus = 'Ativo' | 'Concluído'
+export type ContractStatus = 'Active' | 'Completed'
+export type ApprovalStatus = 'Pending' | 'Approved'
 
 export type ContractItem = {
 	id: UUID
@@ -35,7 +34,8 @@ export type ContractListItem = {
 	startDate: string
 	deliveryTime: string | null
 	status: ContractStatus
-	percentage: number
+	approvalStatus: ApprovalStatus
+	retentionPercentage: number
 }
 
 export type CreateContractItemRequest = {
@@ -46,8 +46,8 @@ export type CreateContractItemRequest = {
 }
 
 export type CreateContractRequest = {
-	workId: string
-	supplierId: string
+	workId: UUID
+	supplierId: UUID
 	service: string
 	retentionPercentage: number
 	startDate: string
@@ -56,8 +56,8 @@ export type CreateContractRequest = {
 }
 
 export type ContractResponseItem = {
-	id: string
-	contractId: string
+	id: UUID
+	contractId: UUID
 	description: string
 	unitMeasure: string
 	quantity: number
@@ -67,7 +67,7 @@ export type ContractResponseItem = {
 }
 
 export type ContractResponse = {
-	id: string
+	id: UUID
 	work: Work | null
 	supplier: Supplier | null
 	service: string

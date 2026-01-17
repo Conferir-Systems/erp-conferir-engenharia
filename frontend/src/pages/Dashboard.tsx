@@ -15,9 +15,9 @@ import { formatDate } from '../utils/formatters'
 
 const mapApprovalStatusToBadge = (status: string): string => {
 	const mapping: Record<string, string> = {
-		APROVADO: 'APROVADA',
+		APROVADA: 'APROVADA',
 		PENDENTE: 'PENDENTE',
-		REJEITADO: 'REPROVADA',
+		REJEITADA: 'REPROVADA',
 	}
 	return mapping[status] || status
 }
@@ -55,7 +55,7 @@ export const Dashboard = () => {
 	}, [])
 
 	const filteredContracts = contracts.filter(
-		(c) => c.workId === selectedWorkId && c.status === 'Ativo'
+		(c) => c.workId === selectedWorkId && c.status === 'Active'
 	)
 	const workMeasurements = measurements.filter(
 		(m) => m.contract.workId === selectedWorkId
@@ -64,7 +64,7 @@ export const Dashboard = () => {
 	const contractsWithData = filteredContracts.map((c) => {
 		const sup = suppliers.find((s) => s.id === c.supplierId)
 		const ms = measurements.filter(
-			(m) => m.contractId === c.id && m.approvalStatus === 'APROVADO'
+			(m) => m.contractId === c.id && m.approvalStatus === 'APROVADA'
 		)
 		const measured = ms.reduce((acc, curr) => acc + curr.totalNetValue, 0)
 		const pct = (measured / c.totalValue) * 100
@@ -77,7 +77,7 @@ export const Dashboard = () => {
 
 	const activeContractsWithData = activeContracts.map((c) => {
 		const measurementsForContract = measurements.filter(
-			(m) => m.contractId === c.id && m.approvalStatus === 'APROVADO'
+			(m) => m.contractId === c.id && m.approvalStatus === 'APROVADA'
 		)
 		const totalMeasured = measurementsForContract.reduce(
 			(acc, m) => acc + (m.totalNetValue || 0),

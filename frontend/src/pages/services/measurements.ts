@@ -1,62 +1,19 @@
+import {
+	CreateMeasurementRequest,
+	MeasurementResponse,
+	EnrichedMeasurementResponse,
+	CreateMeasurementResponse,
+} from '../../types'
 import { api } from './api'
 
-export type CreateMeasurementItemRequest = {
-	contractItemId: string
-	quantity: number
-}
-
-export type CreateMeasurementRequest = {
-	contractId: string
-	notes?: string
-	items: CreateMeasurementItemRequest[]
-}
-
-export type MeasurementItemResponse = {
-	id: string
-	measurementId: string
-	contractItemId: string
-	quantity: number
-	unitLaborValue: number
-	totalGrossValue: number
-	createdAt?: string
-	updatedAt?: string
-}
-
-export type MeasurementResponse = {
-	id: string
-	contractId: string
-	issueDate: string
-	totalGrossValue: number
-	retentionValue: number
-	totalNetValue: number
-	approvalDate?: string | null
-	approvalStatus: 'PENDENTE' | 'APROVADO' | 'REJEITADO'
-	notes?: string
-	createdAt?: string
-	updatedAt?: string
-}
-
-export type EnrichedMeasurementResponse = MeasurementResponse & {
-	contract: {
-		id: string
-		service: string
-		workId: string
-		supplierId: string
-	}
-	work: {
-		id: string
-		name: string
-	}
-	supplier: {
-		id: string
-		name: string
-	}
-}
-
-export type CreateMeasurementResponse = {
-	measurement: MeasurementResponse
-	items: MeasurementItemResponse[]
-}
+export type {
+	CreateMeasurementItemRequest,
+	CreateMeasurementRequest,
+	MeasurementItemResponse,
+	MeasurementResponse,
+	EnrichedMeasurementResponse,
+	CreateMeasurementResponse,
+} from '../../types'
 
 export const measurementsApi = {
 	getAll: async (): Promise<EnrichedMeasurementResponse[]> => {

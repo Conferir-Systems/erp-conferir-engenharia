@@ -180,7 +180,7 @@ export const ContractDetails = () => {
 					<span className="flex items-center gap-3">
 						Informações do Contrato
 						<Badge
-							status={contract.status === 'Ativo' ? 'ATIVO' : 'CONCLUIDO'}
+							status={contract.status === 'Active' ? 'ATIVO' : 'CONCLUIDO'}
 						/>
 					</span>
 				}

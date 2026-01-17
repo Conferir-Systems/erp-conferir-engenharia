@@ -58,7 +58,7 @@ export const NewMeasurement = () => {
 		const fetchContracts = async () => {
 			try {
 				const data = await contractsApi.getAll({ workId: selectedWorkId })
-				setContracts(data.filter((c) => c.status === 'Ativo'))
+				setContracts(data.filter((c) => c.status === 'Active'))
 			} catch (error) {
 				console.error('Error fetching contracts:', error)
 			}

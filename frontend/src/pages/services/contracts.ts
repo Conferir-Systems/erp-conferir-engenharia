@@ -5,8 +5,6 @@ import {
 } from '../../types/index'
 import { api } from './api'
 
-export type { ContractListItem, CreateContractRequest, ContractResponse }
-
 export const contractsApi = {
 	create: async (data: CreateContractRequest): Promise<ContractResponse> => {
 		const response = await api.post<ContractResponse>('/contracts', data)
@@ -16,10 +14,13 @@ export const contractsApi = {
 	getAll: async (filters?: {
 		workId?: string
 		supplierId?: string
+		approvalStatus?: string
 	}): Promise<ContractListItem[]> => {
 		const params = new URLSearchParams()
 		if (filters?.workId) params.append('workId', filters.workId)
 		if (filters?.supplierId) params.append('supplierId', filters.supplierId)
+		if (filters?.approvalStatus)
+			params.append('approvalStatus', filters.approvalStatus)
 		params.append('includeDetails', 'true')
 
 		const queryString = params.toString()
@@ -40,7 +41,7 @@ export const contractsApi = {
 		const params = new URLSearchParams()
 		if (filters?.workId) params.append('workId', filters.workId)
 		if (filters?.supplierId) params.append('supplierId', filters.supplierId)
-		params.append('status', 'Ativo')
+		params.append('status', 'Active')
 		params.append('includeDetails', 'true')
 
 		const queryString = params.toString()

@@ -1,5 +1,4 @@
-import { ContractResponse } from '../pages/services/contracts'
-import { ContractData } from '../types/contractPdf'
+import { ContractResponse, ContractData } from '../types'
 import { formatDocument } from '../utils/formatters'
 
 export const prepareContractData = (

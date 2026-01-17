@@ -46,7 +46,7 @@ export const RealizedMeasurements = () => {
 	const availableWorks = works
 
 	const realizedMeasurements = useMemo(() => {
-		let list = measurements.filter((m) => m.approvalStatus === 'APROVADO')
+		let list = measurements.filter((m) => m.approvalStatus === 'APROVADA')
 
 		if (selectedWorkId) {
 			list = list.filter((m) => m.contract.workId === selectedWorkId)
@@ -67,7 +67,7 @@ export const RealizedMeasurements = () => {
 			measurements
 				.filter(
 					(m) =>
-						m.approvalStatus === 'APROVADO' &&
+						m.approvalStatus === 'APROVADA' &&
 						m.contract.workId === selectedWorkId
 				)
 				.map((m) => m.contract.supplierId)

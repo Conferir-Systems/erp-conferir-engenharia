@@ -1,19 +1,11 @@
-import { Supplier } from '../../types'
+import {
+	Supplier,
+	CreateSupplierRequest,
+	UpdateSupplierRequest,
+} from '../../types'
 import { api } from './api'
 
-export type CreateSupplierRequest = {
-	name: string
-	typePerson: 'FISICA' | 'JURIDICA'
-	document: string
-	pix?: string
-}
-
-export type UpdateSupplierRequest = {
-	name?: string
-	typePerson?: 'FISICA' | 'JURIDICA'
-	document?: string
-	pix?: string
-}
+export type { CreateSupplierRequest, UpdateSupplierRequest } from '../../types'
 
 export const suppliersApi = {
 	getAll: async (): Promise<Supplier[]> => {

@@ -11,7 +11,12 @@ import {
 	Select,
 } from '../components/UI'
 import { ArrowLeft, Loader2 } from 'lucide-react'
-import { ContractListItem, Work, Supplier } from '../types/index'
+import {
+	ContractListItem,
+	Work,
+	Supplier,
+	ContractApprovalStatus,
+} from '../types/index'
 import { contractsApi } from './services/contracts'
 import { worksApi } from './services/works'
 import { suppliersApi } from './services/suppliers'
@@ -26,14 +31,21 @@ export const Contracts = () => {
 	const [error, setError] = useState<string | null>(null)
 	const [selectedWorkId, setSelectedWorkId] = useState<string>('')
 	const [selectedSupplierId, setSelectedSupplierId] = useState<string>('')
+	const [approvalFilter, setApprovalFilter] =
+		useState<ContractApprovalStatus>('Pending')
 
 	const fetchContracts = useCallback(async () => {
 		try {
 			setLoading(true)
 			setError(null)
-			const filters: { workId?: string; supplierId?: string } = {}
+			const filters: {
+				workId?: string
+				supplierId?: string
+				approvalStatus?: string
+			} = {}
 			if (selectedWorkId) filters.workId = selectedWorkId
 			if (selectedSupplierId) filters.supplierId = selectedSupplierId
+			filters.approvalStatus = approvalFilter
 
 			const data = await contractsApi.getAll(filters)
 			setContracts(data)
@@ -43,7 +55,7 @@ export const Contracts = () => {
 		} finally {
 			setLoading(false)
 		}
-	}, [selectedWorkId, selectedSupplierId])
+	}, [selectedWorkId, selectedSupplierId, approvalFilter])
 
 	const fetchInitialData = async () => {
 		try {
@@ -99,11 +111,36 @@ export const Contracts = () => {
 					<Button variant="ghost" onClick={() => navigate(-1)}>
 						<ArrowLeft className="w-5 h-5" />
 					</Button>
-					<div>
-						<h1 className="text-2xl font-bold text-textMain">
-							Gestão de Contratos
-						</h1>
-						<p className="text-textSec">Contratos cadastrados</p>
+					<div className="flex items-center gap-4">
+						<div>
+							<h1 className="text-2xl font-bold text-textMain">
+								Gestão de Contratos
+							</h1>
+							<p className="text-textSec">Contratos cadastrados</p>
+						</div>
+						<div className="flex border border-border rounded-lg overflow-hidden">
+							<button
+								onClick={() => setApprovalFilter('Pending')}
+								className={`px-4 py-1.5 text-sm font-medium transition-all ${
+									approvalFilter === 'Pending'
+										? 'bg-statusDraft text-white'
+										: 'bg-white text-textSec hover:bg-gray-50'
+								}`}
+							>
+								Pendente
+							</button>
+							<div className="w-px bg-border" />
+							<button
+								onClick={() => setApprovalFilter('Approved')}
+								className={`px-4 py-1.5 text-sm font-medium transition-all ${
+									approvalFilter === 'Approved'
+										? 'bg-statusApproved text-white'
+										: 'bg-white text-textSec hover:bg-gray-50'
+								}`}
+							>
+								Aprovado
+							</button>
+						</div>
 					</div>
 				</div>
 			</header>
@@ -168,12 +205,12 @@ export const Contracts = () => {
 												<div
 													className="bg-primary h-2 rounded-full transition-all"
 													style={{
-														width: `${Math.min(contract.percentage, 100)}%`,
+														width: `${Math.min(contract.retentionPercentage, 100)}%`,
 													}}
 												/>
 											</div>
 											<span className="text-xs text-textSec font-medium min-w-[40px] text-right">
-												{contract.percentage}%
+												{contract.retentionPercentage}%
 											</span>
 										</div>
 									</Td>
