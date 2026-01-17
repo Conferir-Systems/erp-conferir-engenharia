@@ -1,6 +1,4 @@
-import { UserType } from '../types/userTypes.js'
-import { UserTypeDatabaseRow } from '../types/database.js'
-import type { UUID } from '../types/common.js'
+import type { UserType, UserTypeDatabaseRow, UUID } from '../types/index.js'
 import { BaseRepository } from './BaseRepository.js'
 import { ConflictError } from '../errors/index.js'
 

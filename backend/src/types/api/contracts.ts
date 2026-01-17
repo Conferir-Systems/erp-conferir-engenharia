@@ -4,10 +4,6 @@ import { ContractItem } from '../contractItems.js'
 import { Status, ApprovalStatus } from '../contracts.js'
 import type { UUID } from '../common.js'
 
-export type ContractItemWithAccumulated = ContractItem & {
-	accumulatedQuantity: number
-}
-
 export type ContractResponse = {
 	id: UUID
 	work: Work | null
@@ -22,4 +18,8 @@ export type ContractResponse = {
 	createdAt?: Date
 	updatedAt?: Date
 	items: ContractItemWithAccumulated[]
+}
+
+export type ContractItemWithAccumulated = ContractItem & {
+	accumulatedQuantity: number
 }

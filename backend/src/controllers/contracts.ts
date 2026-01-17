@@ -27,7 +27,8 @@ export const getContractsHandler = asyncHandler(
 export const getContractHandler = asyncHandler(
 	async (req: Request, res: Response) => {
 		const id = req.params.id
-		const contract = await contractService.getContract(id)
+		const contract =
+			await contractService.getContractWithWorkAndSupplierData(id)
 
 		if (!contract) {
 			res.status(404).json({ message: 'Contract not found' })

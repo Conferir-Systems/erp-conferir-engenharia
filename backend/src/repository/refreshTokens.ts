@@ -1,6 +1,9 @@
 import { BaseRepository } from './BaseRepository.js'
-import { RefreshToken, RefreshTokenDatabaseRow } from '../types/auth.js'
-import type { UUID } from '../types/common.js'
+import type {
+	RefreshToken,
+	RefreshTokenDatabaseRow,
+	UUID,
+} from '../types/index.js'
 
 export type IRefreshTokenRepository = {
 	create(token: RefreshToken): Promise<void>

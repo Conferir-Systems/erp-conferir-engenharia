@@ -1,7 +1,9 @@
-import type { ContractItem } from '../types/contractItems.js'
-import type { ContractItemDatabaseRow } from '../types/database.js'
+import type {
+	ContractItem,
+	ContractItemDatabaseRow,
+	UUID,
+} from '../types/index.js'
 import { BaseRepository } from './BaseRepository.js'
-import type { UUID } from '../types/common.js'
 
 export type IContractItemRepository = {
 	create(contractItem: ContractItem): Promise<void>

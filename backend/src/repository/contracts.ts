@@ -2,14 +2,13 @@ import type {
 	Contract,
 	CreateContractInputRepository,
 	Status,
-} from '../types/contracts.js'
-import type {
 	ContractDatabaseRow,
 	ContractQueryRow,
 	ContractItemDatabaseRow,
-} from '../types/database.js'
-import type { UUID } from '../types/common.js'
-import type { ContractItem, ContractListItem } from '../types/contractItems.js'
+	UUID,
+	ContractItem,
+	ContractListItem,
+} from '../types/index.js'
 import { BaseRepository } from './BaseRepository.js'
 import { ValidationError } from '../errors/ValidationError.js'
 

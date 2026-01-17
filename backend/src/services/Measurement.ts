@@ -17,6 +17,7 @@ import { IWorkRepository } from '../repository/works.js'
 import { ISupplierRepository } from '../repository/suppliers.js'
 import { NotFoundError } from '../errors/NotFoundError.js'
 import { ValidationError } from '../errors/ValidationError.js'
+import { MeasurementWithItemsResponse } from '../types/api/measurements.js'
 
 export class MeasurementService {
 	constructor(
@@ -38,12 +39,61 @@ export class MeasurementService {
 		return measurement
 	}
 
+	async getMeasurementWithItems(
+		id: UUID
+	): Promise<MeasurementWithItemsResponse> {
+		const measurement = await this.measurementRepo.findById(id)
+		if (!measurement) throw new NotFoundError('Measurement not found')
+
+		const items = await this.measurementItemRepo.findByMeasurementId(id)
+
+		return {
+			id: measurement.id,
+			contractId: measurement.contractId,
+			issueDate: measurement.issueDate,
+			totalGrossValue: measurement.totalGrossValue,
+			retentionValue: measurement.retentionValue,
+			totalNetValue: measurement.totalNetValue,
+			approvalDate: measurement.approvalDate || null,
+			approvalStatus: measurement.approvalStatus,
+			notes: measurement.notes,
+			items,
+		}
+	}
+
 	async getMeasurements(): Promise<Measurement[]> {
 		const measurements = await this.measurementRepo.findAll()
 
 		if (!measurements) return []
 
 		return measurements
+	}
+
+	async getMeasurementsWithItems(): Promise<MeasurementWithItemsResponse[]> {
+		const measurements = await this.measurementRepo.findAll()
+		if (!measurements || measurements.length === 0) return []
+
+		const measurementsWithItems = await Promise.all(
+			measurements.map(async (measurement) => {
+				const items = await this.measurementItemRepo.findByMeasurementId(
+					measurement.id
+				)
+				return {
+					id: measurement.id,
+					contractId: measurement.contractId,
+					issueDate: measurement.issueDate,
+					totalGrossValue: measurement.totalGrossValue,
+					retentionValue: measurement.retentionValue,
+					totalNetValue: measurement.totalNetValue,
+					approvalDate: measurement.approvalDate || null,
+					approvalStatus: measurement.approvalStatus,
+					notes: measurement.notes,
+					items,
+				}
+			})
+		)
+
+		return measurementsWithItems
 	}
 
 	async getEnrichedMeasurements(): Promise<EnrichedMeasurement[]> {

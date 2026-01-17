@@ -1,7 +1,7 @@
 import { Knex } from 'knex'
 import { db } from '../database/db.js'
 import { NotFoundError } from '../errors/index.js'
-import type { UUID } from '../types/common.js'
+import type { UUID } from '../types/index.js'
 
 export abstract class BaseRepository<TDomain, TDatabase = TDomain> {
 	constructor(protected readonly tableName: string) {}

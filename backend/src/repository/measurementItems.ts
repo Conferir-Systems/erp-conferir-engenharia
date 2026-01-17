@@ -1,12 +1,15 @@
-import type { MeasurementItem } from '../types/measurementItems'
-import type { MeasurementItemDatabaseRow } from '../types/database'
-import { BaseRepository } from './BaseRepository'
-import type { UUID } from '../types/common.js'
+import type {
+	MeasurementItem,
+	MeasurementItemDatabaseRow,
+	UUID,
+} from '../types/index.js'
+import { BaseRepository } from './BaseRepository.js'
 
 export type IMeasurementItemRepository = {
 	create(measurementItem: MeasurementItem): Promise<void>
 	createMany(measurementItems: MeasurementItem[]): Promise<void>
 	findByContractId(contractId: UUID): Promise<MeasurementItem[]>
+	findByMeasurementId(measurementId: UUID): Promise<MeasurementItem[]>
 }
 
 class MeasurementItemRepository
@@ -31,6 +34,14 @@ class MeasurementItemRepository
 			)
 			.where('measurements.contract_id', contractId)
 			.select('measurement_items.*')) as MeasurementItemDatabaseRow[]
+
+		return rows.map((row) => this.toDomain(row))
+	}
+
+	async findByMeasurementId(measurementId: UUID): Promise<MeasurementItem[]> {
+		const rows = (await this.db(this.tableName)
+			.where('measurement_id', measurementId)
+			.select('*')) as MeasurementItemDatabaseRow[]
 
 		return rows.map((row) => this.toDomain(row))
 	}

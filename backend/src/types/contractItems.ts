@@ -1,14 +1,17 @@
 import { Status } from './contracts.js'
 import type { UUID } from './common.js'
 
-export type ContractItem = {
-	id: UUID
-	contractId: UUID
+export type ContractItemParams = {
 	unitMeasure: string
 	quantity: number
 	unitLaborValue: number
-	totalValue: number
 	description: string
+}
+
+export type ContractItem = ContractItemParams & {
+	id: UUID
+	contractId: UUID
+	totalValue: number
 	createdAt?: Date
 	updatedAt?: Date
 }

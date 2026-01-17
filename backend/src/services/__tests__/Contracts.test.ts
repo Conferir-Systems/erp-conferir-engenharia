@@ -70,7 +70,7 @@ describe('Contract - integration crud test', () => {
 	})
 
 	describe('when getting a contract', () => {
-		it('should return a contract by id', async () => {
+		it('should return a contract with work and supplier data by contract id', async () => {
 			const createContractParams: CreateContractParams = {
 				workId: testWork.id,
 				supplierId: testSupplier.id,
@@ -90,7 +90,9 @@ describe('Contract - integration crud test', () => {
 
 			const createdContract =
 				await contractService.createContractWithItems(createContractParams)
-			const contract = await contractService.getContract(createdContract.id)
+			const contract = await contractService.getContractWithWorkAndSupplierData(
+				createdContract.id
+			)
 
 			expect(contract).toEqual({
 				id: createdContract.id,

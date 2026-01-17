@@ -4,7 +4,7 @@ import {
 } from './measurementItems.js'
 import type { UUID } from './common.js'
 
-export type ApprovalStatus = 'PENDENTE' | 'APROVADO' | 'REJEITADO'
+export type ApprovalStatus = 'PENDENTE' | 'APROVADA' | 'REJEITADA'
 
 export type MeasurementParams = {
 	contractId: UUID

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { verifyAccessToken } from '../utils/jwt.js'
-import { JwtPayload } from '../types/auth.js'
+import type { JwtPayload } from '../types/index.js'
 import { UnauthorizedError } from '../errors/index.js'
 import * as jose from 'jose'
 

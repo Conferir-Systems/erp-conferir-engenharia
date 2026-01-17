@@ -1,14 +1,12 @@
 import type {
 	Measurement,
 	CreateMeasurementInputRepository,
-} from '../types/measurements'
-import type {
 	MeasurementDatabaseRow,
 	MeasurementItemDatabaseRow,
-} from '../types/database.ts'
-import type { MeasurementItem } from '../types/measurementItems.ts'
-import type { MeasurementResponse } from '../types/api/measurements'
-import type { UUID } from '../types/common.js'
+	MeasurementItem,
+	MeasurementResponse,
+	UUID,
+} from '../types/index.js'
 import { BaseRepository } from './BaseRepository.js'
 import { ValidationError } from '../errors/ValidationError.js'
 

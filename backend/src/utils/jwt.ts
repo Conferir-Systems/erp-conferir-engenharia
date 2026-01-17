@@ -1,6 +1,5 @@
 import * as jose from 'jose'
-import { JwtPayload } from '../types/auth.js'
-import type { UUID } from '../types/common.js'
+import type { JwtPayload, UUID } from '../types/index.js'
 
 function getJwtSecret(): Uint8Array {
 	if (!process.env.JWT_SECRET) {

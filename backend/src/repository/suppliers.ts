@@ -1,8 +1,6 @@
-import type { Supplier } from '../types/supplier.js'
-import type { SupplierDatabaseRow } from '../types/database.js'
+import type { Supplier, SupplierDatabaseRow, UUID } from '../types/index.js'
 import { BaseRepository } from './BaseRepository.js'
 import { duplicateError } from '../utils/duplicateValueError.js'
-import type { UUID } from '../types/common.js'
 
 export type ISupplierRepository = {
 	create(supplier: Supplier): Promise<void>
