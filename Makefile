@@ -1,15 +1,5 @@
-# =============================================================================
-# Payment Measurement System - Makefile
-# =============================================================================
-# This file contains shortcuts for common development tasks
-# Usage: make <target>
-# Example: make dev
-# =============================================================================
-
-# .PHONY tells make these aren't actual files, just command names
 .PHONY: help dev up down restart logs ps clean install test test-single lint format migrate-make migrate-latest migrate-rollback migrate-status seed-make seed-run db-shell-test logs-db-test update
 
-# Default target - runs when you just type 'make'
 .DEFAULT_GOAL := help
 
 help:
@@ -60,53 +50,29 @@ help:
 	@echo "Cleanup:"
 	@echo "  make clean            Stop and remove containers"
 	@echo "  make clean-all        Clean everything including images"
-	@echo ""
 
-# Start all services in detached mode
 dev: up
 
 up:
-	@echo "Starting all services..."
 	docker compose up -d
-	@echo "Services started!"
-	@echo ""
 	@echo "Access your application:"
 	@echo "   Frontend:      http://localhost:5173"
 	@echo "   Backend:       http://localhost:3000"
 	@echo "   Database:      localhost:5432"
 	@echo "   Test Database: localhost:5433"
-	@echo ""
-	@echo "Use 'make logs' to view logs"
 
-# Stop all services
 down:
-	@echo "Stopping all services..."
 	docker compose down
-	@echo "Services stopped!"
 
-# Restart all services
 restart:
-	@echo "Restarting all services..."
 	docker compose restart
-	@echo "Services restarted!"
 
-# Rebuild and start all containers
 build:
-	@echo "Building all containers..."
 	docker compose up -d --build
-	@echo "Containers built and started!"
 
-# Update containers with fresh dependencies (use after git pull or when dependencies change)
 update:
-	@echo "Updating containers with fresh dependencies..."
-	@echo "Step 1/2: Rebuilding containers..."
 	docker compose build
-	@echo "Step 2/2: Recreating containers with fresh volumes..."
 	docker compose up -d --force-recreate --renew-anon-volumes
-	@echo "Update complete! Fresh dependencies installed."
-	@echo "Tip: Run 'make test' to verify everything works."
-
-# MONITORING COMMANDS
 
 logs:
 	docker compose logs -f
@@ -126,68 +92,40 @@ logs-db-test:
 ps:
 	docker compose ps
 
-# INSTALLATION COMMANDS
-
 install: install-backend install-frontend
-	@echo ""
-	@echo "All dependencies installed!"
 
 install-backend:
-	@echo "Installing backend dependencies..."
 	docker compose exec conf-api npm install
-	@echo "Backend dependencies installed!"
 
 install-frontend:
-	@echo "Installing frontend dependencies..."
 	docker compose exec conf-client npm install
-	@echo "Frontend dependencies installed!"
-
-# TESTING COMMANDS
 
 test: test-backend
 	@echo "All tests completed!"
 
 test-backend:
-	@echo "Running backend tests..."
 	docker compose exec -e DB_TEST_HOST=conf-postgres-test conf-api npm test
 
 test-single:
-	@if [ -z "$(file)" ]; then \
-		echo "Error: Test file is required"; \
-		echo "Usage: make test-single file=src/services/__tests__/Contracts.test.ts"; \
-		exit 1; \
-	fi
-	@echo "Running test: $(file)..."
+	@echo "Usage: make test-single file=src/services/__tests__/Contracts.test.ts"; \
 	docker compose exec -e DB_TEST_HOST=conf-postgres-test conf-api npm test $(file)
 
 test-watch:
-	@echo "Running tests in watch mode..."
-	@echo "Press Ctrl+C to stop"
 	docker compose exec conf-api npm run test:watch
 
 test-coverage:
-	@echo "Running tests with coverage..."
 	docker compose exec conf-api npm run test:coverage
 	@echo ""
 	@echo "Coverage report generated in backend/coverage/"
 
-# DATABASE COMMANDS
 
 db-shell:
-	@echo "Opening PostgreSQL shell (development)..."
-	@echo "Type '\q' to exit"
 	docker compose exec conf-postgres psql -U postgres -d conf
 
 db-shell-test:
-	@echo "Opening PostgreSQL shell (test)..."
-	@echo "Type '\q' to exit"
 	docker compose exec conf-postgres-test psql -U postgres -d conf_test
 
-# Reset database (WARNING: deletes all data!)
 db-reset:
-	@echo "WARNING: This will delete ALL data in both dev and test databases!"
-	@echo -n "Are you sure? Type 'yes' to continue: " && read answer && [ "$$answer" = "yes" ]
-	@echo "Resetting databases..."
 	docker compose down -v
 	docker compose up -d conf-postgres conf-postgres-test
 	@sleep 5
@@ -195,32 +133,24 @@ db-reset:
 	@echo "Migrations will run automatically on startup..."
 	@echo "Databases reset complete!"
 
-# CLEANUP COMMANDS
 
 clean:
-	@echo "Cleaning up containers and volumes..."
 	docker compose down -v
 	@echo "Cleanup complete!"
 
 clean-all: clean
-	@echo "Removing Docker images..."
 	docker compose down -v --rmi all
 	@echo "Full cleanup complete!"
 
-# UTILITY COMMANDS
 
 shell-backend:
-	@echo "Opening backend shell..."
 	docker compose exec conf-api sh
 
 shell-frontend:
-	@echo "Opening frontend shell..."
 	docker compose exec conf-client sh
 
-# CODE QUALITY COMMANDS
 
 lint:
-	@echo "Running ESLint on all code..."
 	@echo "Backend:"
 	@docker compose exec -T conf-api npm run lint
 	@echo ""
@@ -229,7 +159,6 @@ lint:
 	@echo "Linting complete!"
 
 lint-fix:
-	@echo "Running ESLint with auto-fix..."
 	@echo "Backend:"
 	@docker compose exec conf-api npm run lint:fix
 	@echo ""
@@ -238,7 +167,6 @@ lint-fix:
 	@echo "Auto-fix complete!"
 
 format:
-	@echo "Formatting code with Prettier..."
 	@echo "Backend:"
 	@docker compose exec -T conf-api npm run format
 	@echo ""
@@ -247,7 +175,6 @@ format:
 	@echo "Formatting complete!"
 
 format-check:
-	@echo "Checking code formatting..."
 	@echo "Backend:"
 	@docker compose exec conf-api npm run format:check
 	@echo ""
@@ -261,11 +188,9 @@ pre-commit: format-check lint
 	@echo "Ready to commit!"
 
 lint-backend:
-	@echo "Linting backend code..."
 	docker compose exec conf-api npm run lint
 
 health:
-	@echo "Checking service health..."
 	@echo -n "Backend:  "
 	@curl -s http://localhost:3000/health > /dev/null && echo "Running" || echo "Not responding"
 	@echo -n "Frontend: "
@@ -273,26 +198,21 @@ health:
 	@echo -n "Database: "
 	@docker compose exec postgres pg_isready -U postgres > /dev/null 2>&1 && echo "Running" || echo "Not responding"
 
-# MIGRATION COMMANDS
-
 migrate-make:
 	@if [ -z "$(name)" ]; then \
 		echo "Error: Migration name is required"; \
 		echo "Usage: make migrate-make name=create_users_table"; \
 		exit 1; \
 	fi
-	@echo "Creating migration: $(name)..."
 	@docker compose exec conf-api npm run migrate:make $(name)
 	@docker compose exec conf-api chown -R node:node /app/src/database/migrations
 	@echo "Migration created!"
 
 migrate-latest:
-	@echo "Running migrations..."
 	@docker compose exec conf-api npm run migrate:latest
 	@echo "Migrations complete!"
 
 migrate-rollback:
-	@echo "Rolling back last migration..."
 	@docker compose exec conf-api npm run migrate:rollback
 	@echo "Rollback complete!"
 

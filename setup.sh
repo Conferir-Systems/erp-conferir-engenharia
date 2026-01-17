@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Script to setup the project
-
 set -e  # Stop if has an error
 
 # Colors to output

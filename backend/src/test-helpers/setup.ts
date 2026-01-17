@@ -22,9 +22,8 @@ beforeAll(async () => {
 				stdio: 'inherit',
 			}
 		)
-		console.log('Test database migrations completed')
 	} catch (error) {
-		console.error('Failed to run migrations:', error)
+		console.error('Failed to run migrations ', error)
 		throw error
 	}
 })
@@ -33,6 +32,8 @@ beforeEach(async () => {})
 
 afterEach(async () => {
 	const tables = [
+		'measuremen_items',
+		'measurements',
 		'contract_items',
 		'contracts',
 		'users',

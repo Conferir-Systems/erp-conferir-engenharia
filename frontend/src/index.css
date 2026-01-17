@@ -9,7 +9,6 @@
 }
 
 @layer utilities {
-	/* Custom scrollbar for table containers */
 	.custom-scroll::-webkit-scrollbar {
 		height: 8px;
 		width: 8px;
