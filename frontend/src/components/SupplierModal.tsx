@@ -8,7 +8,7 @@ import {
 import { Supplier } from '../types'
 import { FetchError } from '../lib/fetchClient'
 
-interface SupplierModalProps {
+type SupplierModalProps = {
 	isOpen: boolean
 	onClose: () => void
 	onSave: (data: CreateSupplierRequest | UpdateSupplierRequest) => Promise<void>

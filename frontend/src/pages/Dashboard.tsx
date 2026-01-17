@@ -9,6 +9,7 @@ import {
 	measurementsApi,
 	EnrichedMeasurementResponse,
 } from './services/measurements'
+import { contractsApi, ContractResponse } from './services/contracts'
 import { formatDate } from '../utils/formatters'
 
 const mapApprovalStatusToBadge = (status: string): string => {
@@ -28,6 +29,7 @@ export const Dashboard = () => {
 	const [measurements, setMeasurements] = useState<
 		EnrichedMeasurementResponse[]
 	>([])
+	const [activeContracts, setActiveContracts] = useState<ContractResponse[]>([])
 
 	const canApprove = authUser?.permissions?.approveMeasurement ?? false
 
@@ -36,15 +38,19 @@ export const Dashboard = () => {
 	)
 
 	useEffect(() => {
-		const fetchMeasurements = async () => {
+		const fetchData = async () => {
 			try {
-				const data = await measurementsApi.getAll()
-				setMeasurements(data)
+				const [measurementsData, activeContractsData] = await Promise.all([
+					measurementsApi.getAll(),
+					contractsApi.getActive(),
+				])
+				setMeasurements(measurementsData)
+				setActiveContracts(activeContractsData)
 			} catch (error) {
-				console.error('Error fetching measurements:', error)
+				console.error('Error fetching data:', error)
 			}
 		}
-		fetchMeasurements()
+		fetchData()
 	}, [])
 
 	const filteredContracts = contracts.filter(
@@ -68,29 +74,25 @@ export const Dashboard = () => {
 		(m) => m.approvalStatus === 'PENDENTE'
 	)
 
-	const activeContracts = contracts
-		.filter((c) => c.status === 'Ativo')
-		.map((c) => {
-			const work = works.find((s) => s.id === c.workId)
-			const supplier = suppliers.find((s) => s.id === c.supplierId)
+	const activeContractsWithData = activeContracts.map((c) => {
+		const measurementsForContract = measurements.filter(
+			(m) => m.contractId === c.id && m.approvalStatus === 'APROVADO'
+		)
+		const totalMeasured = measurementsForContract.reduce(
+			(acc, m) => acc + (m.totalNetValue || 0),
+			0
+		)
+		const totalValue = c.totalValue || 0
+		const percentage = totalValue > 0 ? (totalMeasured / totalValue) * 100 : 0
 
-			const measurementsForContract = measurements.filter(
-				(m) => m.contractId === c.id && m.approvalStatus === 'APROVADO'
-			)
-			const totalMeasured = measurementsForContract.reduce(
-				(acc, m) => acc + m.totalNetValue,
-				0
-			)
-			const percentage = (totalMeasured / c.totalValue) * 100
-
-			return {
-				...c,
-				workName: work?.name || 'N/A',
-				supplierName: supplier?.name || 'N/A',
-				totalMeasured,
-				percentage,
-			}
-		})
+		return {
+			...c,
+			workName: c.work?.name || 'N/A',
+			supplierName: c.supplier?.name || 'N/A',
+			totalMeasured,
+			percentage,
+		}
+	})
 
 	return (
 		<div className="space-y-8">
@@ -195,7 +197,7 @@ export const Dashboard = () => {
 								</Tr>
 							</Thead>
 							<tbody>
-								{activeContracts.map((c) => (
+								{activeContractsWithData.map((c) => (
 									<Tr key={c.id}>
 										<Td className="font-medium">{c.workName}</Td>
 										<Td>{c.supplierName}</Td>

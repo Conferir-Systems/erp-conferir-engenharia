@@ -1,5 +1,7 @@
-export interface AuthUser {
-	id: string
+import type { UUID } from './common.js'
+
+export type AuthUser = {
+	id: UUID
 	firstName: string
 	lastName: string
 	email: string
@@ -10,30 +12,30 @@ export interface AuthUser {
 	}
 }
 
-export interface LoginRequest {
+export type LoginRequest = {
 	email: string
 	password: string
 }
 
-export interface LoginResponse {
+export type LoginResponse = {
 	accessToken: string
 	refreshToken: string
 	user: AuthUser
 }
 
-export interface RefreshTokenRequest {
+export type RefreshTokenRequest = {
 	refreshToken: string
 }
 
-export interface RefreshTokenResponse {
+export type RefreshTokenResponse = {
 	accessToken: string
 }
 
-export interface LogoutRequest {
+export type LogoutRequest = {
 	refreshToken: string
 }
 
-export interface AuthContextType {
+export type AuthContextType = {
 	user: AuthUser | null
 	accessToken: string | null
 	refreshToken: string | null

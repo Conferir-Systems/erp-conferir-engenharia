@@ -11,13 +11,13 @@ import { CONTRACTS, WORKS, SUPPLIERS } from '../constants'
 import { useAuth } from './AuthContext'
 import { convertAuthUserToUser } from '../utils/authAdapter'
 
-interface AppContextType {
+type AppContextType = {
 	currentUser: User | null
 	measurements: Measurement[]
 	addMeasurement: (measurement: Measurement) => void
 	updateMeasurementStatus: (
 		id: string,
-		status: Measurement['status'],
+		status: Measurement['approvalStatus'],
 		observation?: string
 	) => void
 	contracts: Contract[]
@@ -62,17 +62,15 @@ export const AppProvider = ({ children }: { children?: ReactNode }) => {
 
 	const updateMeasurementStatus = (
 		id: string,
-		status: Measurement['status'],
-		observation?: string
+		status: Measurement['approvalStatus'],
+		_observation?: string
 	) => {
 		setMeasurements((prev) =>
 			prev.map((m) => {
 				if (m.id === id) {
 					return {
 						...m,
-						status,
-						directorObservation:
-							observation !== undefined ? observation : m.directorObservation,
+						approvalStatus: status,
 					}
 				}
 				return m
@@ -106,7 +104,8 @@ export const AppProvider = ({ children }: { children?: ReactNode }) => {
 			})
 			.sort(
 				(a, b) =>
-					new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+					new Date(b.createdAt || 0).getTime() -
+					new Date(a.createdAt || 0).getTime()
 			)
 	}
 

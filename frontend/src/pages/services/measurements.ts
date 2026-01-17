@@ -24,7 +24,7 @@ export interface MeasurementItemResponse {
 	updatedAt?: string
 }
 
-export interface MeasurementResponse {
+export type MeasurementResponse = {
 	id: string
 	contractId: string
 	issueDate: string
@@ -38,7 +38,7 @@ export interface MeasurementResponse {
 	updatedAt?: string
 }
 
-export interface EnrichedMeasurementResponse extends MeasurementResponse {
+export type EnrichedMeasurementResponse = MeasurementResponse & {
 	contract: {
 		id: string
 		service: string
@@ -55,7 +55,7 @@ export interface EnrichedMeasurementResponse extends MeasurementResponse {
 	}
 }
 
-export interface CreateMeasurementResponse {
+export type CreateMeasurementResponse = {
 	measurement: MeasurementResponse
 	items: MeasurementItemResponse[]
 }

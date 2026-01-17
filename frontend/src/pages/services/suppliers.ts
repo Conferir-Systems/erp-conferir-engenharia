@@ -1,14 +1,14 @@
 import { Supplier } from '../../types'
 import { api } from './api'
 
-export interface CreateSupplierRequest {
+export type CreateSupplierRequest = {
 	name: string
 	typePerson: 'FISICA' | 'JURIDICA'
 	document: string
 	pix?: string
 }
 
-export interface UpdateSupplierRequest {
+export type UpdateSupplierRequest = {
 	name?: string
 	typePerson?: 'FISICA' | 'JURIDICA'
 	document?: string

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { LucideIcon, Eye, EyeOff } from 'lucide-react'
 
-interface CardProps {
+type CardProps = {
 	children?: React.ReactNode
 	className?: string
 	title?: React.ReactNode
@@ -29,7 +29,7 @@ export const Card = ({
 	</div>
 )
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 	variant?: 'primary' | 'secondary' | 'danger' | 'ghost'
 	icon?: LucideIcon
 	size?: 'sm' | 'md'
@@ -98,7 +98,7 @@ export const Badge = ({ status }: { status: string }) => {
 	)
 }
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 	label?: string
 	error?: string
 	className?: string
@@ -126,10 +126,10 @@ export const Input = ({
 	</div>
 )
 
-interface PasswordInputProps extends Omit<
+type PasswordInputProps = Omit<
 	React.InputHTMLAttributes<HTMLInputElement>,
 	'type'
-> {
+> & {
 	label?: string
 	error?: string
 	className?: string
@@ -175,7 +175,7 @@ export const PasswordInput = ({
 	)
 }
 
-interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+type SelectProps = React.SelectHTMLAttributes<HTMLSelectElement> & {
 	label?: string
 	error?: string
 	options: { value: string; label: string }[]
@@ -272,7 +272,7 @@ export const Td = ({
 	</td>
 )
 
-interface DateInputProps {
+type DateInputProps = {
 	label?: string
 	error?: string
 	className?: string

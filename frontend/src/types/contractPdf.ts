@@ -1,5 +1,7 @@
-export interface ItemData {
-	id: string
+import type { UUID } from './common.js'
+
+export type ItemData = {
+	id: UUID
 	description: string
 	unitMeasure: string
 	quantity: number
@@ -7,7 +9,7 @@ export interface ItemData {
 	total: number
 }
 
-export interface ContractData {
+export type ContractData = {
 	issueDate: string
 
 	contractor: {
