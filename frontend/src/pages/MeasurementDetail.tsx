@@ -1,43 +1,53 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { useAppContext } from '../context/AppContext'
-import {
-	Card,
-	Table,
-	Thead,
-	Th,
-	Tr,
-	Td,
-	Badge,
-	Button,
-	Input,
-} from '../components/UI'
+import { Card, Badge, Button, Input } from '../components/UI'
 import { formatCurrency } from '../utils/formatters'
 import { ArrowLeft, CheckCircle, XCircle, Download, Send } from 'lucide-react'
+import {
+	measurementsApi,
+	EnrichedMeasurementResponse,
+} from './services/measurements'
 
 export const MeasurementDetail = () => {
 	const { id } = useParams()
 	const navigate = useNavigate()
 	const { user: authUser } = useAuth()
-	const { getEnrichedMeasurements, updateMeasurementStatus } = useAppContext()
 	const [directorNote, setDirectorNote] = useState('')
+	const [measurement, setMeasurement] =
+		useState<EnrichedMeasurementResponse | null>(null)
+	const [isLoading, setIsLoading] = useState(true)
 
-	const measurement = getEnrichedMeasurements().find((m) => m.id === id)
+	useEffect(() => {
+		const fetchMeasurement = async () => {
+			try {
+				const measurements = await measurementsApi.getAll()
+				const found = measurements.find((m) => m.id === id)
+				setMeasurement(found || null)
+			} catch (error) {
+				console.error('Error fetching measurement:', error)
+			} finally {
+				setIsLoading(false)
+			}
+		}
+		fetchMeasurement()
+	}, [id])
 
+	if (isLoading) return <div className="p-8">Carregando...</div>
 	if (!measurement) return <div className="p-8">Medição não encontrada.</div>
 
 	const canApprove = authUser?.permissions?.approveMeasurement ?? false
 	const isPending = measurement.approvalStatus === 'PENDENTE'
-	const isApproved = measurement.approvalStatus === 'APROVADA'
+	const isApproved = measurement.approvalStatus === 'APROVADO'
+
 	const handleApprove = () => {
 		if (
 			window.confirm(
 				'Confirma a aprovação desta medição?\nO PDF será gerado e enviado ao financeiro.'
 			)
 		) {
-			updateMeasurementStatus(measurement.id, 'APROVADA', directorNote)
-
+			// TODO: Implement approval via API
+			alert('Funcionalidade de aprovação em desenvolvimento')
 			navigate('/dashboard')
 		}
 	}
@@ -47,8 +57,9 @@ export const MeasurementDetail = () => {
 			alert('Para reprovar, é necessário inserir uma observação.')
 			return
 		}
-		updateMeasurementStatus(measurement.id, 'REJEITADA', directorNote)
-		navigate('/director')
+		// TODO: Implement rejection via API
+		alert('Funcionalidade de rejeição em desenvolvimento')
+		navigate('/dashboard')
 	}
 
 	const handleSendToFinance = () => {
@@ -88,90 +99,85 @@ export const MeasurementDetail = () => {
 
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 				<div className="col-span-2 space-y-6">
-					<Card title="Itens Medidos">
-						<Table>
-							<Thead>
-								<Tr>
-									<Th>Descrição</Th>
-									<Th className="text-center">Und</Th>
-									<Th className="text-right">Qtd. Medida</Th>
-									<Th className="text-right">Valor Unit.</Th>
-									<Th className="text-right">Total</Th>
-								</Tr>
-							</Thead>
-							<tbody>
-								{measurement.items.map((item, idx) => {
-									const contractItem = measurement.contract.items.find(
-										(ci) => ci.id === item.contractItemId
-									)
-									return (
-										<Tr key={idx}>
-											<Td>{contractItem?.description || 'Item removido'}</Td>
-											<Td className="text-center text-textSec">
-												{contractItem?.unitMeasure}
-											</Td>
-											<Td className="text-right font-medium">
-												{item.quantity}
-											</Td>
-											<Td className="text-right text-textSec">
-												{formatCurrency(item.unitLaborValue)}
-											</Td>
-											<Td className="text-right font-bold">
-												{formatCurrency(item.totalGrossValue)}
-											</Td>
-										</Tr>
-									)
-								})}
-							</tbody>
-						</Table>
-						<div className="p-4 flex justify-end border-t border-border bg-surfaceHighlight">
-							<span className="text-lg font-bold text-textMain">
-								Total: {formatCurrency(measurement.totalNetValue)}
-							</span>
+					<Card title="Detalhes da Medição">
+						<div className="space-y-4">
+							<div className="flex justify-between items-center p-4 bg-surfaceHighlight rounded">
+								<span className="text-textSec">Valor Bruto</span>
+								<span className="text-lg font-semibold">
+									{formatCurrency(measurement.totalGrossValue)}
+								</span>
+							</div>
+							<div className="flex justify-between items-center p-4 bg-surfaceHighlight rounded">
+								<span className="text-textSec">Retenção</span>
+								<span className="text-lg font-semibold text-red-600">
+									-{formatCurrency(measurement.retentionValue)}
+								</span>
+							</div>
+							<div className="flex justify-between items-center p-4 bg-primary/10 rounded border-2 border-primary">
+								<span className="text-textMain font-bold">Valor Líquido</span>
+								<span className="text-2xl font-bold text-primary">
+									{formatCurrency(measurement.totalNetValue)}
+								</span>
+							</div>
+							{measurement.notes && (
+								<div className="p-4 bg-blue-50 rounded border border-blue-200">
+									<p className="text-sm font-semibold text-blue-900 mb-1">
+										Observações:
+									</p>
+									<p className="text-sm text-blue-800">{measurement.notes}</p>
+								</div>
+							)}
 						</div>
 					</Card>
 				</div>
 
 				<div className="space-y-6">
-					<Card title="Dados Gerais">
+					<Card title="Informações">
 						<div className="space-y-4 text-sm">
+							<div>
+								<label className="text-textSec block mb-1">Obra</label>
+								<p className="font-medium text-textMain">
+									{measurement.work.name}
+								</p>
+							</div>
 							<div>
 								<label className="text-textSec block mb-1">Fornecedor</label>
 								<p className="font-medium text-textMain">
 									{measurement.supplier.name}
 								</p>
-								<p className="text-xs text-textSec">
-									{measurement.supplier.document}
+							</div>
+							<div>
+								<label className="text-textSec block mb-1">Serviço</label>
+								<p className="font-medium text-textMain">
+									{measurement.contract.service}
 								</p>
 							</div>
 							<div>
-								<label className="text-textSec block mb-1">Criado por</label>
-								<p className="font-medium text-textMain">
-									{measurement.creatorName}
-								</p>
-								<p className="text-xs text-textSec">
-									{measurement.createdAt
-										? new Date(measurement.createdAt).toLocaleString()
-										: 'N/A'}
-								</p>
-							</div>
-							<div className="bg-green-50 p-3 rounded-md border border-green-100">
-								<label className="text-primary font-bold mb-1 flex items-center gap-1">
-									<span>Chave Pix</span>
+								<label className="text-textSec block mb-1">
+									Data de Emissão
 								</label>
-								<p className="text-sm text-textMain font-mono break-all">
-									{measurement.supplier.pix || 'Não informado'}
-								</p>
-								<p className="text-[10px] text-textSec mt-1">
-									Verificado para pagamentos.
+								<p className="font-medium text-textMain">
+									{new Date(measurement.issueDate).toLocaleDateString('pt-BR')}
 								</p>
 							</div>
+							{measurement.approvalDate && (
+								<div>
+									<label className="text-textSec block mb-1">
+										Data de Aprovação
+									</label>
+									<p className="font-medium text-textMain">
+										{new Date(measurement.approvalDate).toLocaleDateString(
+											'pt-BR'
+										)}
+									</p>
+								</div>
+							)}
 						</div>
 					</Card>
 
 					{canApprove && isPending && (
 						<Card
-							title="Aprovação Diretoria"
+							title="Aprovação"
 							className="border-t-4 border-t-primary shadow-md"
 						>
 							<div className="space-y-4">

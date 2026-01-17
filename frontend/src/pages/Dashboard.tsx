@@ -142,11 +142,10 @@ export const Dashboard = () => {
 									<Tr>
 										<Th>Obra</Th>
 										<Th>Fornecedor</Th>
-										<Th>Objeto</Th>
+										<Th>Serviço</Th>
 										<Th>Nº</Th>
 										<Th>Data</Th>
 										<Th className="text-right">Valor</Th>
-										<Th className="text-center">Ações</Th>
 									</Tr>
 								</Thead>
 								<tbody>
@@ -165,18 +164,6 @@ export const Dashboard = () => {
 											<Td className="text-right font-semibold">
 												{formatCurrency(m.totalNetValue)}
 											</Td>
-											<Td className="text-center">
-												<Button
-													size="sm"
-													variant="secondary"
-													onClick={(e) => {
-														e.stopPropagation()
-														navigate(`/measurement/${m.id}`)
-													}}
-												>
-													Avaliar
-												</Button>
-											</Td>
 										</Tr>
 									))}
 								</tbody>
@@ -190,7 +177,7 @@ export const Dashboard = () => {
 								<Tr>
 									<Th>Obra</Th>
 									<Th>Fornecedor</Th>
-									<Th>Objeto do Contrato</Th>
+									<Th>Serviço do Contrato</Th>
 									<Th className="text-right">Valor Contrato</Th>
 									<Th className="text-right">Medido (Acum.)</Th>
 									<Th className="text-center">%</Th>
@@ -243,7 +230,7 @@ export const Dashboard = () => {
 						<Thead>
 							<Tr>
 								<Th>Fornecedor</Th>
-								<Th>Objeto</Th>
+								<Th>Serviço</Th>
 								<Th className="text-right">Valor Contrato</Th>
 								<Th className="text-right">Executado</Th>
 								<Th className="text-center">%</Th>
