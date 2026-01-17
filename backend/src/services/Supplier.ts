@@ -1,9 +1,7 @@
 import { randomUUID } from 'node:crypto'
-import type { Supplier } from '../types/supplier.js'
-import type { UUID } from '../types/common.js'
+import type { Supplier, UUID, UpdateSupplierRequest } from '../types/index.js'
 import { ISupplierRepository } from '../repository/suppliers.js'
 import { NotFoundError } from '../errors/index.js'
-import { UpdateSupplierRequest } from '../types/api/supplier.js'
 import { mapUpdateSupplierRequestToDb } from '../utils/mappers/supplierMapper.js'
 
 export type CreateSupplierParams = {

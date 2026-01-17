@@ -8,8 +8,7 @@ import {
 } from '../../test-helpers/db-helpers'
 import { supplierService, workService } from '../instances'
 import { randomUUID } from 'crypto'
-import type { Work } from '../../types/works'
-import type { SupplierDatabaseRow } from '../../types/database'
+import type { Work, SupplierDatabaseRow } from '../../types/index.js'
 
 describe('Contract - integration crud test', () => {
 	let testWork: Work

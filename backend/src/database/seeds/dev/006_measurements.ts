@@ -4,7 +4,6 @@ export async function seed(knex: Knex): Promise<void> {
 	await knex('measurement_items').del()
 	await knex('measurements').del()
 
-	// Contract 1 - Estrutura de Concreto Armado
 	const measurement1_1Id = 'c1111111-1111-4111-8111-111111111111'
 	await knex('measurements').insert({
 		id: measurement1_1Id,
@@ -75,9 +74,9 @@ export async function seed(knex: Knex): Promise<void> {
 		contract_id: 'b1111111-1111-4111-8111-111111111111',
 		issue_date: new Date('2025-04-10'),
 		approval_status: 'PENDENTE',
-		total_gross_value: 104125.0,
-		retention_value: 5206.25,
-		total_net_value: 98918.75,
+		total_gross_value: 103875.0,
+		retention_value: 5193.75,
+		total_net_value: 98681.25,
 		notes: 'Terceira medição - Restante da ferragem e formas',
 	})
 
@@ -94,13 +93,12 @@ export async function seed(knex: Knex): Promise<void> {
 			id: 'e1111111-1111-4111-8111-111111111132',
 			measurement_id: measurement1_3Id,
 			contract_item_id: 'd1111111-1111-4111-8111-111111111113',
-			quantity: 850,
+			quantity: 845.833333333,
 			unit_labor_value: 60.0,
-			total_gross_value: 51000.0,
+			total_gross_value: 50750.0,
 		},
 	])
 
-	// Contract 2 - Instalações Elétricas
 	const measurement2_1Id = 'c2222222-2222-4222-8222-222222222221'
 	await knex('measurements').insert({
 		id: measurement2_1Id,
@@ -204,7 +202,6 @@ export async function seed(knex: Knex): Promise<void> {
 		},
 	])
 
-	// Contract 3 - Cobertura Metálica
 	const measurement3_1Id = 'c3333333-3333-4333-8333-333333333331'
 	await knex('measurements').insert({
 		id: measurement3_1Id,
@@ -259,9 +256,9 @@ export async function seed(knex: Knex): Promise<void> {
 		contract_id: 'b3333333-3333-4333-8333-333333333333',
 		issue_date: new Date('2025-05-15'),
 		approval_status: 'PENDENTE',
-		total_gross_value: 315750.0,
-		retention_value: 15787.5,
-		total_net_value: 299962.5,
+		total_gross_value: 105750.0,
+		retention_value: 15862.5,
+		total_net_value: 89887.5,
 		notes: 'Segunda medição - estrutura restante, calhas e claraboias',
 	})
 
@@ -270,9 +267,9 @@ export async function seed(knex: Knex): Promise<void> {
 			id: 'e3333333-3333-4333-8333-333333333331',
 			measurement_id: measurement3_3Id,
 			contract_item_id: 'd3333333-3333-4333-8333-333333333331',
-			quantity: 2100,
+			quantity: 350,
 			unit_labor_value: 120.0,
-			total_gross_value: 252000.0,
+			total_gross_value: 42000.0,
 		},
 		{
 			id: 'e3333333-3333-4333-8333-333333333332',
@@ -292,7 +289,6 @@ export async function seed(knex: Knex): Promise<void> {
 		},
 	])
 
-	// Contract 4 - Pintura e Revestimento Anticorrosivo
 	const measurement4_1Id = 'c4444444-4444-4444-8444-444444444441'
 	await knex('measurements').insert({
 		id: measurement4_1Id,
@@ -372,7 +368,6 @@ export async function seed(knex: Knex): Promise<void> {
 		},
 	])
 
-	// Contract 5 - Serralheria e Esquadrias
 	const measurement5_1Id = 'c5555555-5555-4555-8555-555555555551'
 	await knex('measurements').insert({
 		id: measurement5_1Id,

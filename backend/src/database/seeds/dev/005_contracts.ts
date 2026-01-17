@@ -17,6 +17,7 @@ export async function seed(knex: Knex): Promise<void> {
 		start_date: new Date('2025-01-15'),
 		delivery_time: new Date('2025-07-15'),
 		status: 'Ativo',
+		approval_status: 'APROVADO',
 	})
 
 	await knex('contract_items').insert([
@@ -60,6 +61,7 @@ export async function seed(knex: Knex): Promise<void> {
 		start_date: new Date('2025-02-01'),
 		delivery_time: new Date('2025-05-30'),
 		status: 'Ativo',
+		approval_status: 'APROVADO',
 	})
 
 	await knex('contract_items').insert([
@@ -112,6 +114,7 @@ export async function seed(knex: Knex): Promise<void> {
 		start_date: new Date('2025-03-01'),
 		delivery_time: new Date('2025-08-31'),
 		status: 'Ativo',
+		approval_status: 'APROVADO',
 	})
 
 	await knex('contract_items').insert([
@@ -155,6 +158,7 @@ export async function seed(knex: Knex): Promise<void> {
 		start_date: new Date('2025-01-20'),
 		delivery_time: new Date('2025-04-20'),
 		status: 'Ativo',
+		approval_status: 'APROVADO',
 	})
 
 	await knex('contract_items').insert([
@@ -189,6 +193,7 @@ export async function seed(knex: Knex): Promise<void> {
 		start_date: new Date('2025-02-10'),
 		delivery_time: new Date('2025-06-30'),
 		status: 'Ativo',
+		approval_status: 'APROVADO',
 	})
 
 	await knex('contract_items').insert([
@@ -232,6 +237,7 @@ export async function seed(knex: Knex): Promise<void> {
 		start_date: new Date('2025-01-01'),
 		delivery_time: new Date('2026-12-31'),
 		status: 'Ativo',
+		approval_status: 'APROVADO',
 	})
 
 	await knex('contract_items').insert([

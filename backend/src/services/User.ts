@@ -1,9 +1,12 @@
 import { randomUUID } from 'node:crypto'
-import { UserResponse, UpdateUserRequest } from '../types/api/users.js'
-import type { User } from '../types/users.js'
+import type {
+	UserResponse,
+	UpdateUserRequest,
+	User,
+	UUID,
+} from '../types/index.js'
 import type { IUserRepository } from '../repository/users.js'
 import type { IUserTypeRepository } from '../repository/userTypes.js'
-import type { UUID } from '../types/common.js'
 import { hashPassword } from '../utils/passwordHash.js'
 import { mapUpdateUserRequestToDb } from '../utils/mappers/userMapper.js'
 import { NotFoundError } from '../errors/index.js'

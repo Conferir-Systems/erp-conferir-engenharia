@@ -1,4 +1,4 @@
-import { UpdateUserRequest } from '../../types/api/users.js'
+import type { UpdateUserRequest } from '../../types/index.js'
 import { hashPassword } from '../passwordHash.js'
 
 export async function mapUpdateUserRequestToDb(

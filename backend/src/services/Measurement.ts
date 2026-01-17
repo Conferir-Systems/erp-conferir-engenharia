@@ -1,14 +1,13 @@
 import { randomUUID } from 'crypto'
-import {
+import type {
 	Measurement,
 	MeasurementParams,
 	EnrichedMeasurement,
-} from '../types/measurements.js'
-import {
 	MeasurementItem,
 	MeasurementItemInputRepository,
-} from '../types/measurementItems.js'
-import type { UUID } from '../types/common.js'
+	UUID,
+	MeasurementWithItemsResponse,
+} from '../types/index.js'
 import { IMeasurementRepository } from '../repository/measurements.js'
 import { IContractRepository } from '../repository/contracts.js'
 import { IContractItemRepository } from '../repository/contractItems.js'
@@ -17,7 +16,6 @@ import { IWorkRepository } from '../repository/works.js'
 import { ISupplierRepository } from '../repository/suppliers.js'
 import { NotFoundError } from '../errors/NotFoundError.js'
 import { ValidationError } from '../errors/ValidationError.js'
-import { MeasurementWithItemsResponse } from '../types/api/measurements.js'
 
 export class MeasurementService {
 	constructor(

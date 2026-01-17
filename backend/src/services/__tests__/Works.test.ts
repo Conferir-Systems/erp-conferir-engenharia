@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { workService } from '../instances'
-import type { CreateWorkRequest } from '../../types/api/works'
+import type { ApiCreateWorkRequest as CreateWorkRequest } from '../../types/index.js'
 import { db } from '../../database/db'
 
 describe('Works - integration crud tests', () => {

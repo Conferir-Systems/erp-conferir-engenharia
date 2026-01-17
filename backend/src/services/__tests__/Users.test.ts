@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { userService, userTypeService } from '../instances'
 import type { CreateUserParams, UpdateUserParams } from '../User'
-import type { UUID } from '../../types/common.js'
+import type { UUID } from '../../types/index.js'
 import { db } from '../../database/db'
 import { verifyPassword } from '../../utils/passwordHash'
 import { cleanDatabase } from '../../test-helpers/db-helpers'

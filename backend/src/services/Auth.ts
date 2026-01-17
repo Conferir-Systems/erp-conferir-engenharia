@@ -8,13 +8,13 @@ import {
 	generateRefreshToken,
 	verifyRefreshToken,
 } from '../utils/jwt.js'
-import {
+import type {
 	LoginRequest,
 	LoginResponse,
 	RefreshTokenRequest,
 	RefreshTokenResponse,
 	JwtPayload,
-} from '../types/auth.js'
+} from '../types/index.js'
 import { UnauthorizedError } from '../errors/index.js'
 
 export class AuthService {
