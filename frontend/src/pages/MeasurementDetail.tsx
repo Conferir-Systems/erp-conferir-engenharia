@@ -28,8 +28,8 @@ export const MeasurementDetail = () => {
 	if (!measurement) return <div className="p-8">Medição não encontrada.</div>
 
 	const canApprove = authUser?.permissions?.approveMeasurement ?? false
-	const isPending = measurement.status === 'PENDENTE'
-	const isApproved = measurement.status === 'APROVADA'
+	const isPending = measurement.approvalStatus === 'PENDENTE'
+	const isApproved = measurement.approvalStatus === 'APROVADA'
 	const handleApprove = () => {
 		if (
 			window.confirm(
@@ -47,7 +47,7 @@ export const MeasurementDetail = () => {
 			alert('Para reprovar, é necessário inserir uma observação.')
 			return
 		}
-		updateMeasurementStatus(measurement.id, 'REPROVADA', directorNote)
+		updateMeasurementStatus(measurement.id, 'REJEITADA', directorNote)
 		navigate('/director')
 	}
 
@@ -65,9 +65,9 @@ export const MeasurementDetail = () => {
 					<div>
 						<div className="flex items-center gap-3">
 							<h1 className="text-2xl font-bold text-textMain">
-								Medição #{measurement.number}
+								Medição #{measurement.id.slice(0, 8)}
 							</h1>
-							<Badge status={measurement.status} />
+							<Badge status={measurement.approvalStatus} />
 						</div>
 						<p className="text-textSec mt-1">
 							{measurement.work.name} • {measurement.contract.service}
@@ -111,13 +111,13 @@ export const MeasurementDetail = () => {
 												{contractItem?.unitMeasure}
 											</Td>
 											<Td className="text-right font-medium">
-												{item.currentQuantity}
+												{item.quantity}
 											</Td>
 											<Td className="text-right text-textSec">
-												{formatCurrency(item.unitPrice)}
+												{formatCurrency(item.unitLaborValue)}
 											</Td>
 											<Td className="text-right font-bold">
-												{formatCurrency(item.totalValue)}
+												{formatCurrency(item.totalGrossValue)}
 											</Td>
 										</Tr>
 									)
@@ -126,15 +126,9 @@ export const MeasurementDetail = () => {
 						</Table>
 						<div className="p-4 flex justify-end border-t border-border bg-surfaceHighlight">
 							<span className="text-lg font-bold text-textMain">
-								Total: {formatCurrency(measurement.totalValue)}
+								Total: {formatCurrency(measurement.totalNetValue)}
 							</span>
 						</div>
-					</Card>
-
-					<Card title="Observações da Obra">
-						<p className="text-textSec italic">
-							{measurement.siteObservation || 'Nenhuma observação registrada.'}
-						</p>
 					</Card>
 				</div>
 
@@ -156,7 +150,9 @@ export const MeasurementDetail = () => {
 									{measurement.creatorName}
 								</p>
 								<p className="text-xs text-textSec">
-									{new Date(measurement.createdAt).toLocaleString()}
+									{measurement.createdAt
+										? new Date(measurement.createdAt).toLocaleString()
+										: 'N/A'}
 								</p>
 							</div>
 							<div className="bg-green-50 p-3 rounded-md border border-green-100">
@@ -197,20 +193,6 @@ export const MeasurementDetail = () => {
 									Ao aprovar, o PDF será enviado ao financeiro.
 								</p>
 							</div>
-						</Card>
-					)}
-
-					{!isPending && measurement.directorObservation && (
-						<Card title="Parecer da Diretoria">
-							<p
-								className={`text-sm italic p-3 rounded ${
-									measurement.status === 'REPROVADA'
-										? 'bg-red-50 text-red-800'
-										: 'bg-green-50 text-green-800'
-								}`}
-							>
-								&quot;{measurement.directorObservation}&quot;
-							</p>
 						</Card>
 					)}
 				</div>

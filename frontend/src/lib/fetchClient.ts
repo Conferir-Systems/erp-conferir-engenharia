@@ -1,4 +1,4 @@
-export interface RequestConfig {
+export type RequestConfig = {
 	headers?: Record<string, string>
 	_retry?: boolean
 	method?: string

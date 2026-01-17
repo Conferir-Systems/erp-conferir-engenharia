@@ -1,19 +1,17 @@
 import { api } from './api'
 
-// Request types (matches backend validation schema)
-export interface CreateMeasurementItemRequest {
+export type CreateMeasurementItemRequest = {
 	contractItemId: string
 	quantity: number
 }
 
-export interface CreateMeasurementRequest {
+export type CreateMeasurementRequest = {
 	contractId: string
 	notes?: string
 	items: CreateMeasurementItemRequest[]
 }
 
-// Response types (matches backend response)
-export interface MeasurementItemResponse {
+export type MeasurementItemResponse = {
 	id: string
 	measurementId: string
 	contractItemId: string
