@@ -31,6 +31,16 @@ export abstract class BaseRepository<TDomain> {
 		return rows
 	}
 
+	async findByIds(ids: UUID[]): Promise<TDomain[]> {
+		if (ids.length === 0) {
+			return []
+		}
+		const rows = (await this.db(this.tableName)
+			.whereIn('id', ids)
+			.select('*')) as TDomain[]
+		return rows
+	}
+
 	async create(data: TDomain): Promise<void> {
 		await this.db(this.tableName).insert(data)
 	}

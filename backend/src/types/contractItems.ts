@@ -1,4 +1,4 @@
-import { Status } from './contracts.js'
+import { Status, ApprovalStatus } from './contracts.js'
 import type { UUID } from './common.js'
 
 export type ContractItemParams = {
@@ -25,4 +25,6 @@ export type ContractListItem = {
 	startDate: Date
 	deliveryTime: Date | null
 	status: Status
+	approvalStatus: ApprovalStatus
+	retentionPercentage: number
 }

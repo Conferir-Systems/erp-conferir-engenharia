@@ -6,6 +6,7 @@ export type IWorkRepository = {
 	update(id: UUID, updates: Partial<Omit<Work, 'id'>>): Promise<void>
 	delete(id: UUID): Promise<void>
 	findById(id: UUID): Promise<Work | null>
+	findByIds(ids: UUID[]): Promise<Work[]>
 	findAll(): Promise<Work[]>
 }
 

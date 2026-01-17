@@ -2,13 +2,16 @@ import type {
 	Contract,
 	CreateContractInputRepository,
 	Status,
-	ContractQueryRow,
 	UUID,
 	ContractItem,
 	ContractListItem,
 } from '../types/index.js'
 import { BaseRepository } from './BaseRepository.js'
 import { ValidationError } from '../errors/ValidationError.js'
+import { ApprovalStatus } from '../types/contracts.js'
+import { contractItemRepository } from './contractItems.js'
+import { workRepository } from './works.js'
+import { supplierRepository } from './suppliers.js'
 
 export type IContractRepository = {
 	createContractWithItems(
@@ -18,7 +21,7 @@ export type IContractRepository = {
 		workId?: string
 		supplierId?: string
 		status?: Status
-		approvalStatus?: 'Pendente' | 'Aprovado'
+		approvalStatus?: ApprovalStatus
 	}): Promise<ContractListItem[]>
 	findById(id: UUID): Promise<Contract | null>
 	findAll(): Promise<Contract[] | null>
@@ -57,8 +60,7 @@ class ContractRepository
 
 		await this.db.transaction(async (trx) => {
 			await trx(this.tableName).insert(contract)
-
-			await trx('contract_items').insert(contractItems)
+			await contractItemRepository.createMany(contractItems, trx)
 		})
 
 		const createdContract = await this.findById(data.id)
@@ -79,44 +81,56 @@ class ContractRepository
 		workId?: UUID
 		supplierId?: UUID
 		status?: Status
-		approvalStatus?: 'Pendente' | 'Aprovado'
+		approvalStatus?: ApprovalStatus
 	}): Promise<ContractListItem[]> {
-		let query = this.db('contracts')
-			.select<
-				ContractQueryRow[]
-			>('contracts.id', 'contracts.service', 'contracts.total_value', 'contracts.retention_percentage', 'contracts.start_date', 'contracts.delivery_time', 'contracts.status', 'works.id as work_id', 'works.name as work_name', 'suppliers.id as supplier_id', 'suppliers.name as supplier_name')
-			.leftJoin('works', 'contracts.work_id', 'works.id')
-			.leftJoin('suppliers', 'contracts.supplier_id', 'suppliers.id')
+		let query = this.db(this.tableName).select<Contract[]>('*')
 
 		if (filters?.workId) {
-			query = query.where('contracts.work_id', filters.workId)
+			query = query.where('work_id', filters.workId)
 		}
 
 		if (filters?.supplierId) {
-			query = query.where('contracts.supplier_id', filters.supplierId)
+			query = query.where('supplier_id', filters.supplierId)
 		}
 
 		if (filters?.status) {
-			query = query.where('contracts.status', filters.status)
+			query = query.where('status', filters.status)
 		}
 
 		if (filters?.approvalStatus) {
-			query = query.where('contracts.approval_status', filters.approvalStatus)
+			query = query.where('approval_status', filters.approvalStatus)
 		}
 
-		const rows = await query
+		const contracts = await query
 
-		return rows.map((row: ContractQueryRow) => ({
-			id: row.id,
-			work: { id: row.workId, name: row.workName },
-			supplier: { id: row.supplierId, name: row.supplierName },
-			service: row.service,
-			totalValue: row.totalValue,
-			startDate: row.startDate,
-			deliveryTime: row.deliveryTime,
-			status: row.status,
-			retentionPercentage: row.retentionPercentage,
-		}))
+		const workIds = [...new Set(contracts.map((c) => c.workId))]
+		const supplierIds = [...new Set(contracts.map((c) => c.supplierId))]
+
+		const [works, suppliers] = await Promise.all([
+			workRepository.findByIds(workIds),
+			supplierRepository.findByIds(supplierIds),
+		])
+
+		const worksMap = new Map(works.map((w) => [w.id, w]))
+		const suppliersMap = new Map(suppliers.map((s) => [s.id, s]))
+
+		return contracts.map((contract) => {
+			const work = worksMap.get(contract.workId)
+			const supplier = suppliersMap.get(contract.supplierId)
+
+			return {
+				id: contract.id,
+				work: { id: contract.workId, name: work?.name ?? '' },
+				supplier: { id: contract.supplierId, name: supplier?.name ?? '' },
+				service: contract.service,
+				totalValue: contract.totalValue,
+				startDate: contract.startDate,
+				deliveryTime: contract.deliveryTime,
+				status: contract.status,
+				approvalStatus: contract.approvalStatus,
+				retentionPercentage: contract.retentionPercentage,
+			}
+		})
 	}
 }
 

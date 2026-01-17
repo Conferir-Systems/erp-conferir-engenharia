@@ -5,6 +5,7 @@ import { duplicateError } from '../utils/duplicateValueError.js'
 export type ISupplierRepository = {
 	create(supplier: Supplier): Promise<void>
 	findById(id: UUID): Promise<Supplier | null>
+	findByIds(ids: UUID[]): Promise<Supplier[]>
 	findAll(): Promise<Supplier[] | null>
 	update(id: UUID, updates: Partial<Omit<Supplier, 'id'>>): Promise<void>
 	delete(id: UUID): Promise<void>

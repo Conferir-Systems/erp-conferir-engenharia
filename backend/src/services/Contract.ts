@@ -64,8 +64,8 @@ export class ContractService {
 				retentionPercentage: params.retentionPercentage,
 				startDate: params.startDate,
 				deliveryTime: params.deliveryTime,
-				status: 'Ativo',
-				approvalStatus: 'Pendente',
+				status: 'Active',
+				approvalStatus: 'Pending',
 				items: contractItems,
 			})
 
@@ -150,8 +150,8 @@ export class ContractService {
 		filters?: {
 			workId?: string
 			supplierId?: string
-			status?: 'Ativo' | 'Concluído'
-			approvalStatus?: 'Pendente' | 'Aprovado'
+			status?: 'Active' | 'Completed'
+			approvalStatus?: 'Pending' | 'Approved'
 		},
 		includeDetails?: boolean
 	): Promise<ContractListItem[] | ContractResponse[]> {

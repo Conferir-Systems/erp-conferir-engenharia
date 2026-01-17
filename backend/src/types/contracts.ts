@@ -1,8 +1,8 @@
 import { ContractItem } from './contractItems.js'
 import type { UUID } from './common.js'
 
-export type Status = 'Ativo' | 'Concluído'
-export type ApprovalStatus = 'Pendente' | 'Aprovado'
+export type Status = 'Active' | 'Completed'
+export type ApprovalStatus = 'Pending' | 'Approved'
 
 export type Contract = {
 	id: UUID
@@ -35,18 +35,4 @@ export type CreateContractInputRepository = CreateContractInput & {
 	status: Status
 	approvalStatus: ApprovalStatus
 	items: ContractItem[]
-}
-
-export type ContractQueryRow = {
-	id: UUID
-	service: string
-	totalValue: number
-	retentionPercentage: number
-	startDate: Date
-	deliveryTime: Date | null
-	status: Status
-	workId: UUID
-	workName: string
-	supplierId: UUID
-	supplierName: string
 }

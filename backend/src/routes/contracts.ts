@@ -13,7 +13,7 @@ import {
 const router = express.Router()
 
 router.post('/contracts', validate(createContractSchema), createContractHandler)
-router.get('/contracts', getContractsHandler)
 router.get('/contracts/:id', validate(getContractSchema), getContractHandler)
+router.get('/contracts', getContractsHandler)
 
 export default router

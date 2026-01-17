@@ -1,9 +1,12 @@
+import type { Knex } from 'knex'
 import type { ContractItem, UUID } from '../types/index.js'
 import { BaseRepository } from './BaseRepository.js'
 
 export type IContractItemRepository = {
-	create(contractItem: ContractItem): Promise<void>
-	createMany(contractItems: ContractItem[]): Promise<void>
+	createMany(
+		contractItems: ContractItem[],
+		trx?: Knex.Transaction
+	): Promise<void>
 	findById(id: UUID): Promise<ContractItem | null>
 	findByIds(ids: UUID[]): Promise<ContractItem[]>
 	findByContractId(contractId: UUID): Promise<ContractItem[]>
@@ -18,8 +21,12 @@ class ContractItemRepository
 		super('contract_items')
 	}
 
-	async createMany(contractItems: ContractItem[]): Promise<void> {
-		await this.db(this.tableName).insert(contractItems)
+	async createMany(
+		contractItems: ContractItem[],
+		trx?: Knex.Transaction
+	): Promise<void> {
+		const query = trx ?? this.db
+		await query(this.tableName).insert(contractItems)
 	}
 
 	async findByIds(ids: UUID[]): Promise<ContractItem[]> {

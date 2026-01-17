@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { asyncHandler } from '../utils/asyncHandler.js'
 import { contractService } from '../services/instances.js'
+import { UUID } from '../types/index.js'
 
 export const createContractHandler = asyncHandler(
 	async (req: Request, res: Response) => {
@@ -8,25 +9,6 @@ export const createContractHandler = asyncHandler(
 		const contract =
 			await contractService.createContractWithItems(contractParams)
 		res.status(201).json(contract)
-	}
-)
-
-export const getContractsHandler = asyncHandler(
-	async (req: Request, res: Response) => {
-		const { workId, supplierId, status, approvalStatus, includeDetails } =
-			req.query
-
-		const contracts = await contractService.getContracts(
-			{
-				workId: workId as string | undefined,
-				supplierId: supplierId as string | undefined,
-				status: status as 'Ativo' | 'Concluído' | undefined,
-				approvalStatus: approvalStatus as 'Pendente' | 'Aprovado' | undefined,
-			},
-			includeDetails === 'true'
-		)
-
-		res.status(200).json(contracts)
 	}
 )
 
@@ -42,5 +24,24 @@ export const getContractHandler = asyncHandler(
 		}
 
 		res.status(200).json(contract)
+	}
+)
+
+export const getContractsHandler = asyncHandler(
+	async (req: Request, res: Response) => {
+		const { workId, supplierId, status, approvalStatus, includeDetails } =
+			req.query
+
+		const contracts = await contractService.getContracts(
+			{
+				workId: workId as UUID | undefined,
+				supplierId: supplierId as UUID | undefined,
+				status: status as 'Active' | 'Completed' | undefined,
+				approvalStatus: approvalStatus as 'Pending' | 'Approved' | undefined,
+			},
+			includeDetails === 'true'
+		)
+
+		res.status(200).json(contracts)
 	}
 )
