@@ -2,16 +2,17 @@ import type { Supplier } from '../types/supplier.js'
 import type { SupplierDatabaseRow } from '../types/database.js'
 import { BaseRepository } from './BaseRepository.js'
 import { duplicateError } from '../utils/duplicateValueError.js'
+import type { UUID } from '../types/common.js'
 
 export type ISupplierRepository = {
 	create(supplier: Supplier): Promise<void>
-	findById(id: string): Promise<Supplier | null>
+	findById(id: UUID): Promise<Supplier | null>
 	findAll(): Promise<Supplier[] | null>
 	update(
-		id: string,
+		id: UUID,
 		updates: Partial<Omit<SupplierDatabaseRow, 'id'>>
 	): Promise<void>
-	delete(id: string): Promise<void>
+	delete(id: UUID): Promise<void>
 }
 
 class SupplierRepository

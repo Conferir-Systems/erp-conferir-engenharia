@@ -1,3 +1,4 @@
+import type { UUID } from '../common.js'
 import { Supplier } from '../supplier.js'
 
 export type CreateSupplierRequest = {
@@ -15,7 +16,7 @@ export type UpdateSupplierRequest = {
 }
 
 export type SupplierResponse = {
-	id: string
+	id: UUID
 	name: string
 	typePerson: 'FISICA' | 'JURIDICA'
 	document: string

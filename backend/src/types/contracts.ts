@@ -1,12 +1,13 @@
 import { ContractItem } from './contractItems.js'
+import type { UUID } from './common.js'
 
 export type Status = 'Ativo' | 'Concluído'
 export type ApprovalStatus = 'Pendente' | 'Aprovado'
 
 export type Contract = {
-	id: string
-	workId: string
-	supplierId: string
+	id: UUID
+	workId: UUID
+	supplierId: UUID
 	service: string
 	totalValue: number
 	retentionPercentage: number
@@ -19,8 +20,8 @@ export type Contract = {
 }
 
 export type CreateContractInput = {
-	workId: string
-	supplierId: string
+	workId: UUID
+	supplierId: UUID
 	retentionPercentage: number
 	service: string
 	startDate: string
@@ -29,7 +30,7 @@ export type CreateContractInput = {
 }
 
 export type CreateContractInputRepository = CreateContractInput & {
-	id: string
+	id: UUID
 	totalValue: number
 	status: Status
 	approvalStatus: ApprovalStatus

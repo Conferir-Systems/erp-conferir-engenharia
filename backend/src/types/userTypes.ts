@@ -1,5 +1,7 @@
+import type { UUID } from './common.js'
+
 export type UserType = {
-	id: string
+	id: UUID
 	name: string
 	approveMeasurement: boolean
 	createdAt?: Date

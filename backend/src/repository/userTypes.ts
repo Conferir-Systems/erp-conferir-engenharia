@@ -1,17 +1,18 @@
 import { UserType } from '../types/userTypes.js'
 import { UserTypeDatabaseRow } from '../types/database.js'
+import type { UUID } from '../types/common.js'
 import { BaseRepository } from './BaseRepository.js'
 import { ConflictError } from '../errors/index.js'
 
 export type IUserTypeRepository = {
 	create(userType: UserType): Promise<void>
-	findById(id: string): Promise<UserType | null>
+	findById(id: UUID): Promise<UserType | null>
 	findAll(): Promise<UserType[]>
 	update(
-		id: string,
+		id: UUID,
 		updates: Partial<Omit<UserTypeDatabaseRow, 'id'>>
 	): Promise<void>
-	delete(id: string): Promise<void>
+	delete(id: UUID): Promise<void>
 }
 
 class UserTypeRepository

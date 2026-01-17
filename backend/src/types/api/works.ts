@@ -1,3 +1,4 @@
+import type { UUID } from '../common.js'
 import { WorkStatus } from '../works.js'
 
 export type CreateWorkRequest = {
@@ -16,7 +17,7 @@ export type UpdateWorkRequest = {
 }
 
 export type WorkResponse = {
-	id: string
+	id: UUID
 	name: string
 	code: number
 	address: string

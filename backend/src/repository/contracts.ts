@@ -8,6 +8,7 @@ import type {
 	ContractQueryRow,
 	ContractItemDatabaseRow,
 } from '../types/database.js'
+import type { UUID } from '../types/common.js'
 import type { ContractItem, ContractListItem } from '../types/contractItems.js'
 import { BaseRepository } from './BaseRepository.js'
 import { ValidationError } from '../errors/ValidationError.js'
@@ -21,9 +22,9 @@ export type IContractRepository = {
 		supplierId?: string
 		status?: Status
 	}): Promise<ContractListItem[]>
-	findById(id: string): Promise<Contract | null>
+	findById(id: UUID): Promise<Contract | null>
 	findAll(): Promise<Contract[] | null>
-	updateStatus(id: string, status: Status): Promise<void>
+	updateStatus(id: UUID, status: Status): Promise<void>
 }
 
 class ContractRepository
@@ -73,15 +74,15 @@ class ContractRepository
 		return { contract: createdContract, items: contractItems }
 	}
 
-	async updateStatus(id: string, status: Status): Promise<void> {
+	async updateStatus(id: UUID, status: Status): Promise<void> {
 		await this.db(this.tableName)
 			.where('id', id)
 			.update({ status, updated_at: new Date() })
 	}
 
 	async findAllWithFilters(filters?: {
-		workId?: string
-		supplierId?: string
+		workId?: UUID
+		supplierId?: UUID
 		status?: Status
 	}): Promise<ContractListItem[]> {
 		let query = this.db('contracts')

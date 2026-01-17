@@ -1,8 +1,9 @@
 import { Status } from './contracts.js'
+import type { UUID } from './common.js'
 
 export type ContractItem = {
-	id: string
-	contractId: string
+	id: UUID
+	contractId: UUID
 	unitMeasure: string
 	quantity: number
 	unitLaborValue: number
@@ -13,9 +14,9 @@ export type ContractItem = {
 }
 
 export type ContractListItem = {
-	id: string
-	work: { id: string; name: string }
-	supplier: { id: string; name: string }
+	id: UUID
+	work: { id: UUID; name: string }
+	supplier: { id: UUID; name: string }
 	service: string
 	totalValue: number
 	startDate: Date

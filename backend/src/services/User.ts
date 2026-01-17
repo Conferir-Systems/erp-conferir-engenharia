@@ -3,6 +3,7 @@ import { UserResponse, UpdateUserRequest } from '../types/api/users.js'
 import type { User } from '../types/users.js'
 import type { IUserRepository } from '../repository/users.js'
 import type { IUserTypeRepository } from '../repository/userTypes.js'
+import type { UUID } from '../types/common.js'
 import { hashPassword } from '../utils/passwordHash.js'
 import { mapUpdateUserRequestToDb } from '../utils/mappers/userMapper.js'
 import { NotFoundError } from '../errors/index.js'
@@ -57,7 +58,7 @@ export class UserService {
 		return userResponse
 	}
 
-	async getUserById(id: string): Promise<UserResponse | null> {
+	async getUserById(id: UUID): Promise<UserResponse | null> {
 		const userRegister = await this.userRepo.findById(id)
 
 		if (!userRegister) return null
@@ -80,7 +81,7 @@ export class UserService {
 	}
 
 	async updateUser(
-		id: string,
+		id: UUID,
 		updates: UpdateUserRequest
 	): Promise<UserResponse | null> {
 		const dbUpdates = await mapUpdateUserRequestToDb(updates)
@@ -120,7 +121,7 @@ export class UserService {
 		return userReponse
 	}
 
-	async deleteUser(id: string): Promise<void> {
+	async deleteUser(id: UUID): Promise<void> {
 		await this.userRepo.delete(id)
 	}
 }

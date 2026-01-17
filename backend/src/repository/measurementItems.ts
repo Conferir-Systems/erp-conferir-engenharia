@@ -1,11 +1,12 @@
 import type { MeasurementItem } from '../types/measurementItems'
 import type { MeasurementItemDatabaseRow } from '../types/database'
 import { BaseRepository } from './BaseRepository'
+import type { UUID } from '../types/common.js'
 
 export type IMeasurementItemRepository = {
 	create(measurementItem: MeasurementItem): Promise<void>
 	createMany(measurementItems: MeasurementItem[]): Promise<void>
-	findByContractId(contractId: string): Promise<MeasurementItem[]>
+	findByContractId(contractId: UUID): Promise<MeasurementItem[]>
 }
 
 class MeasurementItemRepository
@@ -21,7 +22,7 @@ class MeasurementItemRepository
 		await this.db(this.tableName).insert(databaseRows)
 	}
 
-	async findByContractId(contractId: string): Promise<MeasurementItem[]> {
+	async findByContractId(contractId: UUID): Promise<MeasurementItem[]> {
 		const rows = (await this.db(this.tableName)
 			.join(
 				'measurements',

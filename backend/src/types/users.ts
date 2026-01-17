@@ -1,5 +1,7 @@
+import type { UUID } from './common.js'
+
 export type User = {
-	id: string
+	id: UUID
 	firstName: string
 	lastName: string
 	email: string

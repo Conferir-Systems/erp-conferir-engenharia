@@ -1,13 +1,14 @@
 import type { ContractItem } from '../types/contractItems.js'
 import type { ContractItemDatabaseRow } from '../types/database.js'
 import { BaseRepository } from './BaseRepository.js'
+import type { UUID } from '../types/common.js'
 
 export type IContractItemRepository = {
 	create(contractItem: ContractItem): Promise<void>
 	createMany(contractItems: ContractItem[]): Promise<void>
-	findById(id: string): Promise<ContractItem | null>
-	findByIds(ids: string[]): Promise<ContractItem[]>
-	findByContractId(contractId: string): Promise<ContractItem[]>
+	findById(id: UUID): Promise<ContractItem | null>
+	findByIds(ids: UUID[]): Promise<ContractItem[]>
+	findByContractId(contractId: UUID): Promise<ContractItem[]>
 	findAll(): Promise<ContractItem[]>
 }
 
@@ -24,7 +25,7 @@ class ContractItemRepository
 		await this.db(this.tableName).insert(databaseRows)
 	}
 
-	async findByIds(ids: string[]): Promise<ContractItem[]> {
+	async findByIds(ids: UUID[]): Promise<ContractItem[]> {
 		if (ids.length === 0) {
 			return []
 		}
@@ -35,7 +36,7 @@ class ContractItemRepository
 		return rows.map((row) => this.toDomain(row))
 	}
 
-	async findByContractId(contractId: string): Promise<ContractItem[]> {
+	async findByContractId(contractId: UUID): Promise<ContractItem[]> {
 		const rows = (await this.db(this.tableName)
 			.where({ contract_id: contractId })
 			.select('*')) as ContractItemDatabaseRow[]

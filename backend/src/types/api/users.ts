@@ -1,3 +1,4 @@
+import type { UUID } from '../common.js'
 import { UserType } from '../userTypes.js'
 
 export type CreateUserRequest = {
@@ -17,7 +18,7 @@ export type UpdateUserRequest = {
 }
 
 export type UserResponse = {
-	id: string
+	id: UUID
 	fullName: string
 	email: string
 	userType: UserType | null

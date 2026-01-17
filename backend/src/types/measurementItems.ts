@@ -1,11 +1,13 @@
+import type { UUID } from './common.js'
+
 export type MeasurementItemParams = {
-	contractItemId: string
+	contractItemId: UUID
 	quantity: number
 }
 
 export type MeasurementItem = MeasurementItemParams & {
-	id: string
-	measurementId: string
+	id: UUID
+	measurementId: UUID
 	unitLaborValue: number
 	totalGrossValue: number
 	createdAt?: Date
@@ -13,6 +15,5 @@ export type MeasurementItem = MeasurementItemParams & {
 }
 
 export type MeasurementItemInputRepository = MeasurementItem & {
-	id: string
-	measurementId: string
+	measurementId: UUID
 }

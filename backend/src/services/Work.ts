@@ -4,6 +4,7 @@ import type {
 	CreateWorkRequest,
 	UpdateWorkRequest,
 } from '../types/api/works.js'
+import type { UUID } from '../types/common.js'
 import type { IWorkRepository } from '../repository/works.js'
 import { ConflictError } from '../errors/index.js'
 
@@ -47,7 +48,7 @@ export class WorkService {
 		return createdWork
 	}
 
-	async getWorkById(id: string): Promise<Work | null> {
+	async getWorkById(id: UUID): Promise<Work | null> {
 		return await this.workRepo.findById(id)
 	}
 
@@ -55,10 +56,7 @@ export class WorkService {
 		return await this.workRepo.findAll()
 	}
 
-	async updateWork(
-		id: string,
-		updates: UpdateWorkRequest
-	): Promise<Work | null> {
+	async updateWork(id: UUID, updates: UpdateWorkRequest): Promise<Work | null> {
 		try {
 			await this.workRepo.update(id, updates)
 		} catch (err) {
@@ -77,7 +75,7 @@ export class WorkService {
 		return await this.workRepo.findById(id)
 	}
 
-	async deleteWork(id: string): Promise<void> {
+	async deleteWork(id: UUID): Promise<void> {
 		await this.workRepo.delete(id)
 	}
 }

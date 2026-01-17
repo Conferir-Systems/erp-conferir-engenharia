@@ -1,6 +1,7 @@
 import { randomUUID } from 'crypto'
 import { Contract } from '../types/contracts.js'
 import { ContractItem, ContractListItem } from '../types/contractItems.js'
+import type { UUID } from '../types/common.js'
 import { IContractRepository } from '../repository/contracts.js'
 import { IWorkRepository } from '../repository/works.js'
 import { ISupplierRepository } from '../repository/suppliers.js'
@@ -9,8 +10,8 @@ import { IMeasurementItemRepository } from '../repository/measurementItems.js'
 import { ContractResponse } from '../types/api/contracts.js'
 
 export type CreateContractParams = {
-	workId: string
-	supplierId: string
+	workId: UUID
+	supplierId: UUID
 	service: string
 	retentionPercentage: number
 	startDate: string
@@ -146,12 +147,12 @@ export class ContractService {
 		)
 	}
 
-	async getContractInfo(id: string): Promise<Contract | null> {
+	async getContractInfo(id: UUID): Promise<Contract | null> {
 		const contract = await this.contractRepo.findById(id)
 		return contract
 	}
 
-	async getContract(id: string): Promise<ContractResponse | null> {
+	async getContract(id: UUID): Promise<ContractResponse | null> {
 		const contract = await this.contractRepo.findById(id)
 
 		if (!contract) return null

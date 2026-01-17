@@ -1,5 +1,6 @@
 import * as jose from 'jose'
 import { JwtPayload } from '../types/auth.js'
+import type { UUID } from '../types/common.js'
 
 function getJwtSecret(): Uint8Array {
 	if (!process.env.JWT_SECRET) {
@@ -30,7 +31,7 @@ export async function generateAccessToken(
 }
 
 export async function generateRefreshToken(payload: {
-	userId: string
+	userId: UUID
 }): Promise<string> {
 	const jwt = await new jose.SignJWT(payload)
 		.setProtectedHeader({ alg: 'HS256' })
@@ -48,7 +49,7 @@ export async function verifyAccessToken(token: string): Promise<JwtPayload> {
 
 export async function verifyRefreshToken(
 	token: string
-): Promise<{ userId: string }> {
+): Promise<{ userId: UUID }> {
 	const { payload } = await jose.jwtVerify(token, getJwtRefreshSecret())
 	return { userId: payload.userId as string }
 }

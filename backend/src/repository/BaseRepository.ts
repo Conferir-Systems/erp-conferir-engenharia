@@ -1,6 +1,7 @@
 import { Knex } from 'knex'
 import { db } from '../database/db.js'
 import { NotFoundError } from '../errors/index.js'
+import type { UUID } from '../types/common.js'
 
 export abstract class BaseRepository<TDomain, TDatabase = TDomain> {
 	constructor(protected readonly tableName: string) {}
@@ -9,7 +10,7 @@ export abstract class BaseRepository<TDomain, TDatabase = TDomain> {
 		return db
 	}
 
-	async findById(id: string): Promise<TDomain | null> {
+	async findById(id: UUID): Promise<TDomain | null> {
 		return this.findBy({ id })
 	}
 
@@ -34,7 +35,7 @@ export abstract class BaseRepository<TDomain, TDatabase = TDomain> {
 		await this.db(this.tableName).insert(this.toDatabase(data))
 	}
 
-	async update(id: string, updates: Partial<TDatabase>): Promise<void> {
+	async update(id: UUID, updates: Partial<TDatabase>): Promise<void> {
 		const result = await this.db(this.tableName).where({ id }).update(updates)
 
 		if (result === 0) {
@@ -42,7 +43,7 @@ export abstract class BaseRepository<TDomain, TDatabase = TDomain> {
 		}
 	}
 
-	async delete(id: string): Promise<void> {
+	async delete(id: UUID): Promise<void> {
 		const result = await this.db(this.tableName).where({ id }).del()
 
 		if (result === 0) {

@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto'
 import type { UserType } from '../types/userTypes.js'
 import type { UpdateUserTypeRequest } from '../types/api/userTypes.js'
 import type { IUserTypeRepository } from '../repository/userTypes.js'
+import type { UUID } from '../types/common.js'
 import { NotFoundError } from '../errors/index.js'
 
 export type CreateUserTypeParams = {
@@ -34,7 +35,7 @@ export class UserTypeService {
 		return createdUserType
 	}
 
-	async getUserTypeById(id: string): Promise<UserType | null> {
+	async getUserTypeById(id: UUID): Promise<UserType | null> {
 		return await this.userTypeRepo.findById(id)
 	}
 
@@ -43,7 +44,7 @@ export class UserTypeService {
 	}
 
 	async updateUserType(
-		id: string,
+		id: UUID,
 		update: UpdateUserTypeRequest
 	): Promise<UserType | null> {
 		await this.userTypeRepo.update(id, update)
@@ -51,7 +52,7 @@ export class UserTypeService {
 		return await this.userTypeRepo.findById(id)
 	}
 
-	async deleteUserType(id: string): Promise<void> {
+	async deleteUserType(id: UUID): Promise<void> {
 		await this.userTypeRepo.delete(id)
 	}
 }

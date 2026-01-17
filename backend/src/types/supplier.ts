@@ -1,7 +1,9 @@
+import type { UUID } from './common.js'
+
 export type TypePerson = 'FISICA' | 'JURIDICA'
 
 export type Supplier = {
-	id: string
+	id: UUID
 	name: string
 	typePerson: TypePerson
 	document: string

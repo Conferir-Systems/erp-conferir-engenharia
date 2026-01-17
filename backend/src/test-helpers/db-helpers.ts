@@ -1,6 +1,7 @@
 import { db } from '../database/db.js'
 import type { Work } from '../types/works.js'
 import type { UserDatabaseRow, SupplierDatabaseRow } from '../types/database.js'
+import type { UUID } from '../types/common.js'
 
 export async function createTestWork(overrides?: Partial<Work>): Promise<Work> {
 	const defaultWork: Work = {
@@ -90,6 +91,6 @@ export async function getAllWorks(): Promise<Work[]> {
 	return db('works').select('*')
 }
 
-export async function getWorkById(id: string): Promise<Work | null> {
+export async function getWorkById(id: UUID): Promise<Work | null> {
 	return db('works').where({ id }).first()
 }

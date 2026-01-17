@@ -1,17 +1,21 @@
 import { MeasurementItem } from '../measurementItems.js'
 import { ApprovalStatus } from '../measurements.js'
+import type { UUID } from '../common.js'
 
 export type MeasurementResponse = {
-	id: string
-	contractId: string
+	id: UUID
+	contractId: UUID
 	issueDate: Date
 	totalGrossValue: number
 	retentionValue: number
 	totalNetValue: number
 	approvalDate?: Date | null
-	status: ApprovalStatus
+	approvalStatus: ApprovalStatus
 	notes?: string
 	createdAt?: Date
 	updatedAt?: Date
+}
+
+export type MeasurementWithItemsResponse = MeasurementResponse & {
 	items: MeasurementItem[]
 }

@@ -7,6 +7,8 @@ import type {
 	MeasurementItemDatabaseRow,
 } from '../types/database.ts'
 import type { MeasurementItem } from '../types/measurementItems.ts'
+import type { MeasurementResponse } from '../types/api/measurements'
+import type { UUID } from '../types/common.js'
 import { BaseRepository } from './BaseRepository.js'
 import { ValidationError } from '../errors/ValidationError.js'
 
@@ -15,8 +17,8 @@ export type IMeasurementRepository = {
 	createMeasurementWithItems(
 		data: CreateMeasurementInputRepository
 	): Promise<{ measurement: Measurement; items: MeasurementItem[] }>
-	findById(id: string): Promise<Measurement | null>
-	findAll(): Promise<Measurement[] | null>
+	findById(id: UUID): Promise<MeasurementResponse | null>
+	findAll(): Promise<MeasurementResponse[] | null>
 }
 
 class MeasurementRepository
@@ -27,12 +29,12 @@ class MeasurementRepository
 		super('measurements')
 	}
 
-	async findById(id: string): Promise<Measurement | null> {
+	async findById(id: UUID): Promise<MeasurementResponse | null> {
 		const row = await this.db(this.tableName).where('id', id).first()
 		return row ? this.toDomain(row) : null
 	}
 
-	async findAll(): Promise<Measurement[]> {
+	async findAll(): Promise<MeasurementResponse[]> {
 		const rows = await this.db(this.tableName).orderBy('created_at', 'desc')
 		return rows.map((row) => this.toDomain(row))
 	}
@@ -69,7 +71,7 @@ class MeasurementRepository
 		return { measurement, items: measurementItems }
 	}
 
-	protected toDomain(row: MeasurementDatabaseRow): Measurement {
+	protected toDomain(row: MeasurementDatabaseRow): MeasurementResponse {
 		return {
 			id: row.id,
 			contractId: row.contract_id,

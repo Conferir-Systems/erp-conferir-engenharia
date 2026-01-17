@@ -5,18 +5,19 @@ import {
 import { ApprovalStatus as MeasurementApprovalStatus } from './measurements.js'
 import { TypePerson } from './supplier.js'
 import { WorkStatus } from './works.js'
+import type { UUID } from './common.js'
 
 export type UserDatabaseRow = {
-	id: string
+	id: UUID
 	first_name: string
 	last_name: string
 	email: string
 	password: string
-	type_user_id: string
+	type_user_id: UUID
 }
 
 export type UserTypeDatabaseRow = {
-	id: string
+	id: UUID
 	name: string
 	approve_measurement: boolean
 	created_at?: Date
@@ -24,7 +25,7 @@ export type UserTypeDatabaseRow = {
 }
 
 export type WorkDatabaseRow = {
-	id: string
+	id: UUID
 	name: string
 	code: number
 	address: string
@@ -35,7 +36,7 @@ export type WorkDatabaseRow = {
 }
 
 export type SupplierDatabaseRow = {
-	id: string
+	id: UUID
 	name: string
 	type_person: TypePerson
 	document: string
@@ -45,9 +46,9 @@ export type SupplierDatabaseRow = {
 }
 
 export type ContractDatabaseRow = {
-	id: string
-	work_id: string
-	supplier_id: string
+	id: UUID
+	work_id: UUID
+	supplier_id: UUID
 	service: string
 	total_value: number
 	retention_percentage: number
@@ -60,22 +61,22 @@ export type ContractDatabaseRow = {
 }
 
 export type ContractQueryRow = {
-	id: string
+	id: UUID
 	service: string
 	total_value: number
 	retention_percentage: number
 	start_date: Date
 	delivery_time: Date | null
 	status: Status
-	work_id: string
+	work_id: UUID
 	work_name: string
-	supplier_id: string
+	supplier_id: UUID
 	supplier_name: string
 }
 
 export type ContractItemDatabaseRow = {
-	id: string
-	contract_id: string
+	id: UUID
+	contract_id: UUID
 	unit_measure: string
 	quantity: number
 	unit_labor_value: number
@@ -86,8 +87,8 @@ export type ContractItemDatabaseRow = {
 }
 
 export type MeasurementDatabaseRow = {
-	id: string
-	contract_id: string
+	id: UUID
+	contract_id: UUID
 	issue_date: Date
 	approval_date?: Date | null
 	approval_status: MeasurementApprovalStatus
@@ -100,9 +101,9 @@ export type MeasurementDatabaseRow = {
 }
 
 export type MeasurementItemDatabaseRow = {
-	id: string
-	measurement_id: string
-	contract_item_id: string
+	id: UUID
+	measurement_id: UUID
+	contract_item_id: UUID
 	quantity: number
 	unit_labor_value: number
 	total_gross_value: number
@@ -111,8 +112,8 @@ export type MeasurementItemDatabaseRow = {
 }
 
 export type RefreshTokenDatabaseRow = {
-	id: string
-	user_id: string
+	id: UUID
+	user_id: UUID
 	token: string
 	expires_at: Date
 	created_at: Date

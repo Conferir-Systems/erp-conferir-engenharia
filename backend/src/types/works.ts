@@ -1,7 +1,9 @@
+import type { UUID } from './common.js'
+
 export type WorkStatus = 'ATIVA' | 'CONCLUIDA'
 
 export type Work = {
-	id: string
+	id: UUID
 	name: string
 	code: number
 	address: string

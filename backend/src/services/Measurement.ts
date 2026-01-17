@@ -8,6 +8,7 @@ import {
 	MeasurementItem,
 	MeasurementItemInputRepository,
 } from '../types/measurementItems.js'
+import type { UUID } from '../types/common.js'
 import { IMeasurementRepository } from '../repository/measurements.js'
 import { IContractRepository } from '../repository/contracts.js'
 import { IContractItemRepository } from '../repository/contractItems.js'
@@ -27,7 +28,7 @@ export class MeasurementService {
 		private supplierRepo: ISupplierRepository
 	) {}
 
-	async getMeasurement(id: string): Promise<Measurement> {
+	async getMeasurement(id: UUID): Promise<Measurement> {
 		const measurement = await this.measurementRepo.findById(id)
 
 		if (!measurement) {
@@ -182,8 +183,8 @@ export class MeasurementService {
 	}
 
 	private async validateAvailableQuantities(
-		contractId: string,
-		items: { contractItemId: string; quantity: number }[],
+		contractId: UUID,
+		items: { contractItemId: UUID; quantity: number }[],
 		contractItemsMap: Map<string, { quantity: number; description: string }>
 	): Promise<void> {
 		const existingMeasurementItems =

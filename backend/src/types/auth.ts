@@ -1,5 +1,7 @@
+import type { UUID } from './common.js'
+
 export type JwtPayload = {
-	userId: string
+	userId: UUID
 	email: string
 	userType: string
 	userTypeName: string
@@ -9,8 +11,8 @@ export type JwtPayload = {
 }
 
 export type RefreshToken = {
-	id: string
-	userId: string
+	id: UUID
+	userId: UUID
 	token: string
 	expiresAt: Date
 	createdAt: Date
@@ -18,8 +20,8 @@ export type RefreshToken = {
 }
 
 export type RefreshTokenDatabaseRow = {
-	id: string
-	user_id: string
+	id: UUID
+	user_id: UUID
 	token: string
 	expires_at: Date
 	created_at: Date
@@ -35,7 +37,7 @@ export type LoginResponse = {
 	accessToken: string
 	refreshToken: string
 	user: {
-		id: string
+		id: UUID
 		firstName: string
 		lastName: string
 		email: string

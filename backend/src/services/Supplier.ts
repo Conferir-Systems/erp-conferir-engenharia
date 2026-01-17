@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto'
-import { Supplier } from '../types/supplier.js'
+import type { Supplier } from '../types/supplier.js'
+import type { UUID } from '../types/common.js'
 import { ISupplierRepository } from '../repository/suppliers.js'
 import { NotFoundError } from '../errors/index.js'
 import { UpdateSupplierRequest } from '../types/api/supplier.js'
@@ -34,7 +35,7 @@ export class SupplierService {
 		return createdSupplier
 	}
 
-	async getSupplierById(id: string): Promise<Supplier | null> {
+	async getSupplierById(id: UUID): Promise<Supplier | null> {
 		const supplier = await this.supplierRepo.findById(id)
 
 		if (!supplier) return null
@@ -51,7 +52,7 @@ export class SupplierService {
 	}
 
 	async updateSupplier(
-		id: string,
+		id: UUID,
 		updates: UpdateSupplierRequest
 	): Promise<Supplier | null> {
 		const dbUpdates = mapUpdateSupplierRequestToDb(updates)
@@ -65,7 +66,7 @@ export class SupplierService {
 		return updatedSupplier
 	}
 
-	async deleteSupplier(id: string): Promise<void> {
+	async deleteSupplier(id: UUID): Promise<void> {
 		await this.supplierRepo.delete(id)
 	}
 }

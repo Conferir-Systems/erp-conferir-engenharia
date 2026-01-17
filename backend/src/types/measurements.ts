@@ -2,12 +2,19 @@ import {
 	MeasurementItemInputRepository,
 	MeasurementItemParams,
 } from './measurementItems.js'
+import type { UUID } from './common.js'
 
 export type ApprovalStatus = 'PENDENTE' | 'APROVADO' | 'REJEITADO'
 
+export type MeasurementParams = {
+	contractId: UUID
+	notes?: string
+	items: MeasurementItemParams[]
+}
+
 export type Measurement = {
-	id: string
-	contractId: string
+	id: UUID
+	contractId: UUID
 	issueDate: Date
 	totalGrossValue: number
 	retentionValue: number
@@ -15,41 +22,25 @@ export type Measurement = {
 	approvalDate?: Date | null
 	approvalStatus: ApprovalStatus
 	notes?: string
-	createdAt?: Date
-	updatedAt?: Date
 }
 
-export type MeasurementParams = {
-	contractId: string
-	notes: string
-	items: MeasurementItemParams[]
-}
-
-export type CreateMeasurementInputRepository = {
-	id: string
-	contractId: string
-	issueDate: Date
-	totalGrossValue: number
-	retentionValue: number
-	totalNetValue: number
-	approvalStatus: ApprovalStatus
-	notes?: string
+export type CreateMeasurementInputRepository = Measurement & {
 	items: MeasurementItemInputRepository[]
 }
 
 export type EnrichedMeasurement = Measurement & {
 	contract: {
-		id: string
+		id: UUID
 		service: string
-		workId: string
-		supplierId: string
+		workId: UUID
+		supplierId: UUID
 	}
 	work: {
-		id: string
+		id: UUID
 		name: string
 	}
 	supplier: {
-		id: string
+		id: UUID
 		name: string
 	}
 }

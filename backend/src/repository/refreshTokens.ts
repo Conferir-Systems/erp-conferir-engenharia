@@ -1,11 +1,12 @@
 import { BaseRepository } from './BaseRepository.js'
 import { RefreshToken, RefreshTokenDatabaseRow } from '../types/auth.js'
+import type { UUID } from '../types/common.js'
 
 export type IRefreshTokenRepository = {
 	create(token: RefreshToken): Promise<void>
 	findByToken(token: string): Promise<RefreshToken | null>
 	revokeToken(token: string): Promise<void>
-	revokeAllUserTokens(userId: string): Promise<void>
+	revokeAllUserTokens(userId: UUID): Promise<void>
 	deleteExpiredTokens(): Promise<void>
 }
 
@@ -33,7 +34,7 @@ class RefreshTokenRepository
 			.update({ revoked_at: new Date() })
 	}
 
-	async revokeAllUserTokens(userId: string): Promise<void> {
+	async revokeAllUserTokens(userId: UUID): Promise<void> {
 		await this.db(this.tableName)
 			.where({ user_id: userId })
 			.update({ revoked_at: new Date() })

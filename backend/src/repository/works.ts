@@ -1,12 +1,13 @@
 import type { Work } from '../types/works.js'
 import type { WorkDatabaseRow } from '../types/database.js'
 import { BaseRepository } from './BaseRepository.js'
+import type { UUID } from '../types/common.js'
 
 export type IWorkRepository = {
 	create(work: Work): Promise<void>
-	update(id: string, updates: Partial<Omit<Work, 'id'>>): Promise<void>
-	delete(id: string): Promise<void>
-	findById(id: string): Promise<Work | null>
+	update(id: UUID, updates: Partial<Omit<Work, 'id'>>): Promise<void>
+	delete(id: UUID): Promise<void>
+	findById(id: UUID): Promise<Work | null>
 	findAll(): Promise<Work[]>
 }
 

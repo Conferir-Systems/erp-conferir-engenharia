@@ -2,16 +2,14 @@ import type { User } from '../types/users.js'
 import type { UserDatabaseRow } from '../types/database.js'
 import { BaseRepository } from './BaseRepository.js'
 import { ConflictError } from '../errors/index.js'
+import type { UUID } from '../types/common.js'
 
 export type IUserRepository = {
 	create(user: User): Promise<void>
-	update(
-		id: string,
-		updates: Partial<Omit<UserDatabaseRow, 'id'>>
-	): Promise<void>
-	delete(id: string): Promise<void>
+	update(id: UUID, updates: Partial<Omit<UserDatabaseRow, 'id'>>): Promise<void>
+	delete(id: UUID): Promise<void>
 	findByEmail(email: string): Promise<User | null>
-	findById(id: string): Promise<User | null>
+	findById(id: UUID): Promise<User | null>
 }
 
 class UserRepository
@@ -30,7 +28,7 @@ class UserRepository
 	}
 
 	async update(
-		id: string,
+		id: UUID,
 		updates: Partial<Omit<UserDatabaseRow, 'id'>>
 	): Promise<void> {
 		try {
@@ -49,7 +47,7 @@ class UserRepository
 		}
 	}
 
-	async delete(id: string): Promise<void> {
+	async delete(id: UUID): Promise<void> {
 		await super.delete(id)
 	}
 
@@ -61,7 +59,7 @@ class UserRepository
 		return this.toDomain(row)
 	}
 
-	async findById(id: string): Promise<User | null> {
+	async findById(id: UUID): Promise<User | null> {
 		const row = await this.db('users').where({ id }).first<UserDatabaseRow>()
 
 		if (!row) return null

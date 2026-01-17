@@ -1,3 +1,5 @@
+import type { UUID } from '../common.js'
+
 export type CreateUserTypeRequest = {
 	name: string
 }
@@ -8,7 +10,7 @@ export type UpdateUserTypeRequest = {
 }
 
 export type UserTypeResponse = {
-	id: string
+	id: UUID
 	name: string
 }
 
