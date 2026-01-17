@@ -21,18 +21,19 @@ import {
 	CheckCircle,
 	Download,
 } from 'lucide-react'
-import { Supplier, Work } from '../types'
+import {
+	Supplier,
+	Work,
+	CreateContractRequest,
+	ContractResponse,
+} from '../types/index'
 import { SupplierModal } from '../components/SupplierModal'
 import {
 	suppliersApi,
 	CreateSupplierRequest,
 	UpdateSupplierRequest,
 } from './services/suppliers'
-import {
-	CreateContractRequest,
-	contractsApi,
-	ContractResponse,
-} from './services/contracts'
+import { contractsApi } from './services/contracts'
 import { worksApi } from './services/works'
 import { FetchError } from '../lib/fetchClient'
 import { PDFDownloadLink } from '@react-pdf/renderer'

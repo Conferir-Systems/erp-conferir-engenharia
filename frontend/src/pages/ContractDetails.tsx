@@ -11,13 +11,13 @@ import {
 	Wallet,
 } from 'lucide-react'
 import { PDFDownloadLink } from '@react-pdf/renderer'
-import { contractsApi, ContractResponse } from './services/contracts'
+import { contractsApi } from './services/contracts'
 import { Card, Table, Thead, Th, Tr, Td, Button, Badge } from '../components/UI'
 import { ContractDocument } from '../components/pdf/ContractDocument'
 import { formatCurrency, formatDate, formatDocument } from '../utils/formatters'
 import { prepareContractData } from '../helpers/contractHelpers'
 import { Tooltip } from '../components/Tooltip'
-import { Work, Supplier } from '../types'
+import { Work, Supplier, ContractResponse } from '../types/index'
 
 const WorkTooltipContent = ({ work }: { work: Work }) => (
 	<div className="space-y-2">

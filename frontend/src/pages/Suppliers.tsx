@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Card, Button, Table, Thead, Th, Tr, Td } from '../components/UI'
 import { ArrowLeft, Plus, Loader2, Pencil, Trash2 } from 'lucide-react'
-import { Supplier } from '../types'
+import { Supplier } from '../types/index'
 import { SupplierModal } from '../components/SupplierModal'
 import {
 	suppliersApi,

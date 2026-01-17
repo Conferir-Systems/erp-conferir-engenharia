@@ -1,42 +1,11 @@
-import { ContractListItem, Work, Supplier } from '../../types'
+import {
+	ContractListItem,
+	CreateContractRequest,
+	ContractResponse,
+} from '../../types/index'
 import { api } from './api'
 
-export type CreateContractRequest = {
-	workId: string
-	supplierId: string
-	service: string
-	retentionPercentage: number
-	startDate: string
-	deliveryTime: string
-	items: {
-		description: string
-		unitMeasure: string
-		quantity: number
-		unitLaborValue: number
-	}[]
-}
-
-export type ContractResponse = {
-	id: string
-	work: Work | null
-	supplier: Supplier | null
-	service: string
-	totalValue: number
-	retentionPercentage: number
-	startDate: Date
-	deliveryTime: Date
-	status: string
-	items: {
-		id: string
-		contractId: string
-		description: string
-		unitMeasure: string
-		quantity: number
-		unitLaborValue: number
-		totalValue: number
-		accumulatedQuantity: number
-	}[]
-}
+export type { ContractListItem, CreateContractRequest, ContractResponse }
 
 export const contractsApi = {
 	create: async (data: CreateContractRequest): Promise<ContractResponse> => {
@@ -51,11 +20,10 @@ export const contractsApi = {
 		const params = new URLSearchParams()
 		if (filters?.workId) params.append('workId', filters.workId)
 		if (filters?.supplierId) params.append('supplierId', filters.supplierId)
+		params.append('includeDetails', 'true')
 
 		const queryString = params.toString()
-		const url = queryString
-			? `/contracts/details?${queryString}`
-			: '/contracts/details'
+		const url = `/contracts?${queryString}`
 		const response = await api.get<ContractListItem[]>(url)
 		return response.data
 	},
@@ -72,11 +40,11 @@ export const contractsApi = {
 		const params = new URLSearchParams()
 		if (filters?.workId) params.append('workId', filters.workId)
 		if (filters?.supplierId) params.append('supplierId', filters.supplierId)
+		params.append('status', 'Ativo')
+		params.append('includeDetails', 'true')
 
 		const queryString = params.toString()
-		const url = queryString
-			? `/contracts/active?${queryString}`
-			: '/contracts/active'
+		const url = `/contracts?${queryString}`
 		const response = await api.get<ContractResponse[]>(url)
 		return response.data
 	},

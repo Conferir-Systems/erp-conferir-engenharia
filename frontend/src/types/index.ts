@@ -1,24 +1,28 @@
-export type { UUID } from './common.js'
+export type { UUID } from './common'
 
-export type { UserPermission, User } from './user.js'
+export type { UserPermission, User } from './user'
 
-export type { Work } from './work.js'
+export type { Work } from './work'
 
-export type { Supplier } from './supplier.js'
+export type { Supplier } from './supplier'
 
 export type {
 	ContractStatus,
 	ContractItem,
 	Contract,
 	ContractListItem,
-} from './contract.js'
+	CreateContractItemRequest,
+	CreateContractRequest,
+	ContractResponseItem,
+	ContractResponse,
+} from './contract'
 
 export type {
 	ApprovalStatus,
 	MeasurementItem,
 	Measurement,
 	EnrichedMeasurement,
-} from './measurement.js'
+} from './measurement'
 
 export type {
 	AuthUser,
@@ -28,6 +32,6 @@ export type {
 	RefreshTokenResponse,
 	LogoutRequest,
 	AuthContextType,
-} from './auth.js'
+} from './auth'
 
-export type { ItemData, ContractData } from './contractPdf.js'
+export type { ItemData, ContractData } from './contractPdf'

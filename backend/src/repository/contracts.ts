@@ -20,6 +20,7 @@ export type IContractRepository = {
 		workId?: string
 		supplierId?: string
 		status?: Status
+		approvalStatus?: 'Pendente' | 'Aprovado'
 	}): Promise<ContractListItem[]>
 	findById(id: UUID): Promise<Contract | null>
 	findAll(): Promise<Contract[] | null>
@@ -83,6 +84,7 @@ class ContractRepository
 		workId?: UUID
 		supplierId?: UUID
 		status?: Status
+		approvalStatus?: 'Pendente' | 'Aprovado'
 	}): Promise<ContractListItem[]> {
 		let query = this.db('contracts')
 			.select<
@@ -101,6 +103,10 @@ class ContractRepository
 
 		if (filters?.status) {
 			query = query.where('contracts.status', filters.status)
+		}
+
+		if (filters?.approvalStatus) {
+			query = query.where('contracts.approval_status', filters.approvalStatus)
 		}
 
 		const rows = await query

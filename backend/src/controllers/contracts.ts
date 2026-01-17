@@ -13,12 +13,18 @@ export const createContractHandler = asyncHandler(
 
 export const getContractsHandler = asyncHandler(
 	async (req: Request, res: Response) => {
-		const { workId, supplierId } = req.query
+		const { workId, supplierId, status, approvalStatus, includeDetails } =
+			req.query
 
-		const contracts = await contractService.getContracts({
-			workId: workId as string | undefined,
-			supplierId: supplierId as string | undefined,
-		})
+		const contracts = await contractService.getContracts(
+			{
+				workId: workId as string | undefined,
+				supplierId: supplierId as string | undefined,
+				status: status as 'Ativo' | 'Concluído' | undefined,
+				approvalStatus: approvalStatus as 'Pendente' | 'Aprovado' | undefined,
+			},
+			includeDetails === 'true'
+		)
 
 		res.status(200).json(contracts)
 	}
@@ -36,31 +42,5 @@ export const getContractHandler = asyncHandler(
 		}
 
 		res.status(200).json(contract)
-	}
-)
-
-export const getContractsDetailsHandler = asyncHandler(
-	async (req: Request, res: Response) => {
-		const { workId, supplierId } = req.query
-
-		const contracts = await contractService.getContractsDetails({
-			workId: workId as string | undefined,
-			supplierId: supplierId as string | undefined,
-		})
-
-		res.status(200).json(contracts)
-	}
-)
-
-export const getActiveContractsHandler = asyncHandler(
-	async (req: Request, res: Response) => {
-		const { workId, supplierId } = req.query
-
-		const contracts = await contractService.getActiveContracts({
-			workId: workId as string | undefined,
-			supplierId: supplierId as string | undefined,
-		})
-
-		res.status(200).json(contracts)
 	}
 )

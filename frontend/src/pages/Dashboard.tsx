@@ -9,7 +9,8 @@ import {
 	measurementsApi,
 	EnrichedMeasurementResponse,
 } from './services/measurements'
-import { contractsApi, ContractResponse } from './services/contracts'
+import { contractsApi } from './services/contracts'
+import { ContractResponse } from '../types/index'
 import { formatDate } from '../utils/formatters'
 
 const mapApprovalStatusToBadge = (status: string): string => {

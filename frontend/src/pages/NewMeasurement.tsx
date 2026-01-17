@@ -4,9 +4,9 @@ import { useAuth } from '../context/AuthContext'
 import { Card, Table, Thead, Th, Tr, Td, Button } from '../components/UI'
 import { formatCurrency } from '../utils/formatters'
 import { ArrowLeft, Send } from 'lucide-react'
-import { Work, ContractListItem } from '../types'
+import { Work, ContractListItem, ContractResponse } from '../types/index'
 import { worksApi } from './services/works'
-import { contractsApi, ContractResponse } from './services/contracts'
+import { contractsApi } from './services/contracts'
 import {
 	measurementsApi,
 	CreateMeasurementRequest,

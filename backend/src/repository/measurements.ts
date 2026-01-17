@@ -74,6 +74,7 @@ class MeasurementRepository
 			id: row.id,
 			contractId: row.contract_id,
 			issueDate: row.issue_date,
+			approvalDate: row.approval_date || null,
 			approvalStatus: row.approval_status,
 			totalGrossValue: row.total_gross_value,
 			retentionValue: row.retention_value,

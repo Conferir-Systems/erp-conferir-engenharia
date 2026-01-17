@@ -6,8 +6,7 @@ import {
 	Work,
 	Supplier,
 	EnrichedMeasurement,
-} from '../types'
-import { CONTRACTS, WORKS, SUPPLIERS } from '../constants'
+} from '../types/index'
 import { useAuth } from './AuthContext'
 import { convertAuthUserToUser } from '../utils/authAdapter'
 
@@ -39,10 +38,9 @@ export const AppProvider = ({ children }: { children?: ReactNode }) => {
 	}, [authUser])
 
 	const [measurements, setMeasurements] = useState<Measurement[]>([])
-	const [contracts, setContracts] = useState<Contract[]>(CONTRACTS)
-
-	const [works, setWorks] = useState<Work[]>(WORKS)
-	const [suppliers, setSuppliers] = useState<Supplier[]>(SUPPLIERS)
+	const [contracts, setContracts] = useState<Contract[]>([])
+	const [works, setWorks] = useState<Work[]>([])
+	const [suppliers, setSuppliers] = useState<Supplier[]>([])
 
 	const addMeasurement = (measurement: Measurement) => {
 		setMeasurements((prev) => [measurement, ...prev])

@@ -11,7 +11,7 @@ import {
 	Select,
 } from '../components/UI'
 import { ArrowLeft, Loader2 } from 'lucide-react'
-import { ContractListItem, Work, Supplier } from '../types'
+import { ContractListItem, Work, Supplier } from '../types/index'
 import { contractsApi } from './services/contracts'
 import { worksApi } from './services/works'
 import { suppliersApi } from './services/suppliers'

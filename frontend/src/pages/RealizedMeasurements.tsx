@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Card, Table, Thead, Th, Tr, Td, Button } from '../components/UI'
-import { formatCurrency } from '../utils/formatters'
+import { formatCurrency, formatDate } from '../utils/formatters'
 import { Search, Eye } from 'lucide-react'
 import { worksApi } from './services/works'
 import { suppliersApi } from './services/suppliers'
@@ -9,7 +9,7 @@ import {
 	measurementsApi,
 	EnrichedMeasurementResponse,
 } from './services/measurements'
-import { Work, Supplier } from '../types'
+import { Work, Supplier } from '../types/index'
 
 export const RealizedMeasurements = () => {
 	const navigate = useNavigate()
@@ -170,7 +170,7 @@ export const RealizedMeasurements = () => {
 										<Td className="font-bold">#{index + 1}</Td>
 										<Td>
 											{m.approvalDate
-												? new Date(m.approvalDate).toLocaleDateString()
+												? formatDate(new Date(m.approvalDate))
 												: '-'}
 										</Td>
 										<Td>{m.supplier.name}</Td>

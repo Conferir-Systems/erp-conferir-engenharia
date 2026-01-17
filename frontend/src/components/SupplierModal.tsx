@@ -5,7 +5,7 @@ import {
 	CreateSupplierRequest,
 	UpdateSupplierRequest,
 } from '../pages/services/suppliers'
-import { Supplier } from '../types'
+import { Supplier } from '../types/index'
 import { FetchError } from '../lib/fetchClient'
 
 type SupplierModalProps = {

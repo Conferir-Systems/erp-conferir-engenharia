@@ -21,7 +21,7 @@ import {
 	Pencil,
 	Trash2,
 } from 'lucide-react'
-import { Work } from '../types'
+import { Work } from '../types/index'
 import { worksApi } from './services/works'
 import { FetchError } from '../lib/fetchClient'
 
