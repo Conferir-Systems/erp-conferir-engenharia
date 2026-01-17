@@ -5,6 +5,6 @@ export type User = {
 	firstName: string
 	lastName: string
 	email: string
-	passwordHash: string
-	userType: string
+	password: string
+	userTypeId: string
 }

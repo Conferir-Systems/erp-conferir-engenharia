@@ -33,16 +33,13 @@ export class AuthService {
 			throw new UnauthorizedError('Invalid credentials')
 		}
 
-		const isValidPassword = await verifyPassword(
-			user.passwordHash,
-			params.password
-		)
+		const isValidPassword = await verifyPassword(user.password, params.password)
 
 		if (!isValidPassword) {
 			throw new UnauthorizedError('Invalid credentials')
 		}
 
-		const userType = await this.userTypeRepo.findById(user.userType)
+		const userType = await this.userTypeRepo.findById(user.userTypeId)
 
 		if (!userType) {
 			throw new Error('User type not found')
@@ -51,7 +48,7 @@ export class AuthService {
 		const jwtPayload: JwtPayload = {
 			userId: user.id,
 			email: user.email,
-			userType: user.userType,
+			userType: user.userTypeId,
 			userTypeName: userType.name,
 			permissions: {
 				approveMeasurement: userType.approveMeasurement,
@@ -81,7 +78,7 @@ export class AuthService {
 				firstName: user.firstName,
 				lastName: user.lastName,
 				email: user.email,
-				userType: user.userType,
+				userType: user.userTypeId,
 				userTypeName: userType.name,
 				permissions: {
 					approveMeasurement: userType.approveMeasurement,
@@ -114,7 +111,7 @@ export class AuthService {
 			throw new UnauthorizedError('User not found')
 		}
 
-		const userType = await this.userTypeRepo.findById(user.userType)
+		const userType = await this.userTypeRepo.findById(user.userTypeId)
 
 		if (!userType) {
 			throw new Error('User type not found')
@@ -123,7 +120,7 @@ export class AuthService {
 		const jwtPayload: JwtPayload = {
 			userId: user.id,
 			email: user.email,
-			userType: user.userType,
+			userType: user.userTypeId,
 			userTypeName: userType.name,
 			permissions: {
 				approveMeasurement: userType.approveMeasurement,

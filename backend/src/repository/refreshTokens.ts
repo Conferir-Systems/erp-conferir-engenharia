@@ -1,9 +1,5 @@
 import { BaseRepository } from './BaseRepository.js'
-import type {
-	RefreshToken,
-	RefreshTokenDatabaseRow,
-	UUID,
-} from '../types/index.js'
+import type { RefreshToken, UUID } from '../types/index.js'
 
 export type IRefreshTokenRepository = {
 	create(token: RefreshToken): Promise<void>
@@ -14,7 +10,7 @@ export type IRefreshTokenRepository = {
 }
 
 class RefreshTokenRepository
-	extends BaseRepository<RefreshToken, RefreshTokenDatabaseRow>
+	extends BaseRepository<RefreshToken>
 	implements IRefreshTokenRepository
 {
 	constructor() {
@@ -24,49 +20,27 @@ class RefreshTokenRepository
 	async findByToken(token: string): Promise<RefreshToken | null> {
 		const row = await this.db(this.tableName)
 			.where({ token })
-			.whereNull('revoked_at')
-			.where('expires_at', '>', new Date())
+			.whereNull('revokedAt')
+			.where('expiresAt', '>', new Date())
 			.first()
 
-		return row ? this.toDomain(row) : null
+		return row ? row : null
 	}
 
 	async revokeToken(token: string): Promise<void> {
 		await this.db(this.tableName)
 			.where({ token })
-			.update({ revoked_at: new Date() })
+			.update({ revokedAt: new Date() })
 	}
 
 	async revokeAllUserTokens(userId: UUID): Promise<void> {
 		await this.db(this.tableName)
-			.where({ user_id: userId })
-			.update({ revoked_at: new Date() })
+			.where({ userId })
+			.update({ revokedAt: new Date() })
 	}
 
 	async deleteExpiredTokens(): Promise<void> {
-		await this.db(this.tableName).where('expires_at', '<', new Date()).delete()
-	}
-
-	protected toDomain(row: RefreshTokenDatabaseRow): RefreshToken {
-		return {
-			id: row.id,
-			userId: row.user_id,
-			token: row.token,
-			expiresAt: row.expires_at,
-			createdAt: row.created_at,
-			revokedAt: row.revoked_at,
-		}
-	}
-
-	protected toDatabase(token: RefreshToken): Partial<RefreshTokenDatabaseRow> {
-		return {
-			id: token.id,
-			user_id: token.userId,
-			token: token.token,
-			expires_at: token.expiresAt,
-			created_at: token.createdAt,
-			revoked_at: token.revokedAt,
-		}
+		await this.db(this.tableName).where('expiresAt', '<', new Date()).delete()
 	}
 }
 

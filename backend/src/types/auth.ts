@@ -19,15 +19,6 @@ export type RefreshToken = {
 	revokedAt: Date | null
 }
 
-export type RefreshTokenDatabaseRow = {
-	id: UUID
-	user_id: UUID
-	token: string
-	expires_at: Date
-	created_at: Date
-	revoked_at: Date | null
-}
-
 export type LoginRequest = {
 	email: string
 	password: string

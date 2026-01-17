@@ -34,7 +34,7 @@ export async function seed(knex: Knex): Promise<void> {
 			last_name: 'de Carvalho',
 			email: 'mauriciovcarvalho@hotmail.com',
 			password: await generateHash(passwdMauricio),
-			type_user_id: engineerType.id,
+			user_type_id: engineerType.id,
 		},
 		{
 			id: randomUUID(),
@@ -42,7 +42,7 @@ export async function seed(knex: Knex): Promise<void> {
 			last_name: 'Langer',
 			email: 'juan.langer@gmail.com',
 			password: await generateHash(passwdJuan),
-			type_user_id: lawyerType.id,
+			user_type_id: lawyerType.id,
 		},
 		{
 			id: randomUUID(),
@@ -50,7 +50,7 @@ export async function seed(knex: Knex): Promise<void> {
 			last_name: 'Winter',
 			email: 'administrativo@conferirengenharia.com',
 			password: await generateHash(passwdKariane),
-			type_user_id: visitantType.id,
+			user_type_id: visitantType.id,
 		},
 		{
 			id: randomUUID(),
@@ -58,7 +58,7 @@ export async function seed(knex: Knex): Promise<void> {
 			last_name: 'Silvestri',
 			email: 'alexandretunni03@gmail.com',
 			password: await generateHash(passwdAlexandre),
-			type_user_id: visitantType.id,
+			user_type_id: visitantType.id,
 		},
 	])
 }

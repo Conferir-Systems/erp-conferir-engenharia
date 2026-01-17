@@ -26,7 +26,7 @@ export async function seed(knex: Knex): Promise<void> {
 			last_name: 'System',
 			email: 'admin@conferir.com',
 			password: hashedPassword,
-			type_user_id: adminUserType.id,
+			user_type_id: adminUserType.id,
 		})
 		console.log('OK: Admin user created (admin@conferir.com)')
 	} else {

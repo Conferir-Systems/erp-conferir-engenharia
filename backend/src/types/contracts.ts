@@ -36,3 +36,17 @@ export type CreateContractInputRepository = CreateContractInput & {
 	approvalStatus: ApprovalStatus
 	items: ContractItem[]
 }
+
+export type ContractQueryRow = {
+	id: UUID
+	service: string
+	totalValue: number
+	retentionPercentage: number
+	startDate: Date
+	deliveryTime: Date | null
+	status: Status
+	workId: UUID
+	workName: string
+	supplierId: UUID
+	supplierName: string
+}

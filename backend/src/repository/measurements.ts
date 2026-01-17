@@ -1,8 +1,6 @@
 import type {
 	Measurement,
 	CreateMeasurementInputRepository,
-	MeasurementDatabaseRow,
-	MeasurementItemDatabaseRow,
 	MeasurementItem,
 	MeasurementResponse,
 	UUID,
@@ -20,7 +18,7 @@ export type IMeasurementRepository = {
 }
 
 class MeasurementRepository
-	extends BaseRepository<Measurement, MeasurementDatabaseRow>
+	extends BaseRepository<Measurement>
 	implements IMeasurementRepository
 {
 	constructor() {
@@ -28,13 +26,15 @@ class MeasurementRepository
 	}
 
 	async findById(id: UUID): Promise<MeasurementResponse | null> {
-		const row = await this.db(this.tableName).where('id', id).first()
-		return row ? this.toDomain(row) : null
+		const row = await this.db(this.tableName)
+			.where('id', id)
+			.first<MeasurementResponse>()
+		return row ? row : null
 	}
 
 	async findAll(): Promise<MeasurementResponse[]> {
-		const rows = await this.db(this.tableName).orderBy('created_at', 'desc')
-		return rows.map((row) => this.toDomain(row))
+		const rows = await this.db(this.tableName).orderBy('createdAt', 'desc')
+		return rows
 	}
 
 	async createMeasurementWithItems(
@@ -58,58 +58,12 @@ class MeasurementRepository
 		}
 
 		await this.db.transaction(async (trx) => {
-			await trx(this.tableName).insert(this.toDatabase(measurement))
+			await trx(this.tableName).insert(measurement)
 
-			const itemsToInsert = measurementItems.map((item) =>
-				this.measurementItemToDatabase(item)
-			)
-			await trx('measurement_items').insert(itemsToInsert)
+			await trx('measurement_items').insert(measurementItems)
 		})
 
 		return { measurement, items: measurementItems }
-	}
-
-	protected toDomain(row: MeasurementDatabaseRow): MeasurementResponse {
-		return {
-			id: row.id,
-			contractId: row.contract_id,
-			issueDate: row.issue_date,
-			approvalDate: row.approval_date || null,
-			approvalStatus: row.approval_status,
-			totalGrossValue: row.total_gross_value,
-			retentionValue: row.retention_value,
-			totalNetValue: row.total_net_value,
-			notes: row.notes,
-			createdAt: row.created_at,
-			updatedAt: row.updated_at,
-		}
-	}
-
-	protected toDatabase(data: Measurement): Partial<MeasurementDatabaseRow> {
-		return {
-			id: data.id,
-			contract_id: data.contractId,
-			issue_date: data.issueDate,
-			approval_date: data.approvalDate || null,
-			approval_status: data.approvalStatus,
-			total_gross_value: data.totalGrossValue,
-			retention_value: data.retentionValue,
-			total_net_value: data.totalNetValue,
-			notes: data.notes,
-		}
-	}
-
-	private measurementItemToDatabase(
-		data: MeasurementItem
-	): Partial<MeasurementItemDatabaseRow> {
-		return {
-			id: data.id,
-			measurement_id: data.measurementId,
-			contract_item_id: data.contractItemId,
-			quantity: data.quantity,
-			unit_labor_value: data.unitLaborValue,
-			total_gross_value: data.totalGrossValue,
-		}
 	}
 }
 

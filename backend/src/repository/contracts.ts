@@ -2,9 +2,7 @@ import type {
 	Contract,
 	CreateContractInputRepository,
 	Status,
-	ContractDatabaseRow,
 	ContractQueryRow,
-	ContractItemDatabaseRow,
 	UUID,
 	ContractItem,
 	ContractListItem,
@@ -28,7 +26,7 @@ export type IContractRepository = {
 }
 
 class ContractRepository
-	extends BaseRepository<Contract, ContractDatabaseRow>
+	extends BaseRepository<Contract>
 	implements IContractRepository
 {
 	constructor() {
@@ -58,12 +56,9 @@ class ContractRepository
 		}
 
 		await this.db.transaction(async (trx) => {
-			await trx(this.tableName).insert(this.toDatabase(contract))
+			await trx(this.tableName).insert(contract)
 
-			const itemsToInsert = contractItems.map((item) =>
-				this.contractItemToDatabase(item)
-			)
-			await trx('contract_items').insert(itemsToInsert)
+			await trx('contract_items').insert(contractItems)
 		})
 
 		const createdContract = await this.findById(data.id)
@@ -77,7 +72,7 @@ class ContractRepository
 	async updateStatus(id: UUID, status: Status): Promise<void> {
 		await this.db(this.tableName)
 			.where('id', id)
-			.update({ status, updated_at: new Date() })
+			.update({ status, updatedAt: new Date() })
 	}
 
 	async findAllWithFilters(filters?: {
@@ -113,63 +108,15 @@ class ContractRepository
 
 		return rows.map((row: ContractQueryRow) => ({
 			id: row.id,
-			work: { id: row.work_id, name: row.work_name },
-			supplier: { id: row.supplier_id, name: row.supplier_name },
+			work: { id: row.workId, name: row.workName },
+			supplier: { id: row.supplierId, name: row.supplierName },
 			service: row.service,
-			totalValue: row.total_value,
-			startDate: row.start_date,
-			deliveryTime: row.delivery_time,
+			totalValue: row.totalValue,
+			startDate: row.startDate,
+			deliveryTime: row.deliveryTime,
 			status: row.status,
-			retentionPercentage: row.retention_percentage,
+			retentionPercentage: row.retentionPercentage,
 		}))
-	}
-
-	protected toDomain(row: ContractDatabaseRow): Contract {
-		return {
-			id: row.id,
-			workId: row.work_id,
-			supplierId: row.supplier_id,
-			service: row.service,
-			totalValue: row.total_value,
-			retentionPercentage: row.retention_percentage,
-			startDate: row.start_date,
-			deliveryTime: row.delivery_time,
-			status: row.status,
-			approvalStatus: row.approval_status,
-			createdAt: row.created_at,
-			updatedAt: row.updated_at,
-		}
-	}
-
-	protected toDatabase(data: Contract): ContractDatabaseRow {
-		return {
-			id: data.id,
-			work_id: data.workId,
-			supplier_id: data.supplierId,
-			service: data.service,
-			total_value: data.totalValue,
-			retention_percentage: data.retentionPercentage,
-			start_date: data.startDate,
-			delivery_time: data.deliveryTime,
-			status: data.status,
-			approval_status: data.approvalStatus,
-			created_at: data.createdAt ?? new Date(),
-			updated_at: data.updatedAt ?? new Date(),
-		}
-	}
-
-	private contractItemToDatabase(
-		data: ContractItem
-	): Partial<ContractItemDatabaseRow> {
-		return {
-			id: data.id,
-			contract_id: data.contractId,
-			unit_measure: data.unitMeasure,
-			quantity: data.quantity,
-			unit_labor_value: data.unitLaborValue,
-			total_value: data.totalValue,
-			description: data.description,
-		}
 	}
 }
 

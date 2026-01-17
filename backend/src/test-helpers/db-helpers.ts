@@ -1,10 +1,5 @@
 import { db } from '../database/db.js'
-import type {
-	Work,
-	UserDatabaseRow,
-	SupplierDatabaseRow,
-	UUID,
-} from '../types/index.js'
+import type { Work, User, Supplier, UUID } from '../types/index.js'
 
 export async function createTestWork(overrides?: Partial<Work>): Promise<Work> {
 	const defaultWork: Work = {
@@ -36,9 +31,7 @@ export async function createTestWorks(count: number): Promise<Work[]> {
 	return works
 }
 
-export async function createTestUser(
-	overrides?: Partial<UserDatabaseRow>
-): Promise<UserDatabaseRow> {
+export async function createTestUser(overrides?: Partial<User>): Promise<User> {
 	const userTypeExists = await db('user_types').where({ id: 1 }).first()
 	if (!userTypeExists) {
 		await db('user_types').insert({
@@ -49,13 +42,13 @@ export async function createTestUser(
 		})
 	}
 
-	const defaultUser: UserDatabaseRow = {
+	const defaultUser: User = {
 		id: crypto.randomUUID(),
-		first_name: 'Test',
-		last_name: 'User',
+		firstName: 'Test',
+		lastName: 'User',
 		email: 'test@example.com',
 		password: 'hashed_password',
-		type_user_id: '1',
+		userTypeId: '1',
 		...overrides,
 	}
 
@@ -64,16 +57,16 @@ export async function createTestUser(
 }
 
 export async function createTestSupplier(
-	overrides?: Partial<SupplierDatabaseRow>
-): Promise<SupplierDatabaseRow> {
-	const defaultSupplier: SupplierDatabaseRow = {
+	overrides?: Partial<Supplier>
+): Promise<Supplier> {
+	const defaultSupplier: Supplier = {
 		id: crypto.randomUUID(),
-		type_person: 'FISICA',
+		typePerson: 'FISICA',
 		name: 'Test Supplier',
 		document: '123.456.789-00',
 		pix: '12345678900',
-		created_at: new Date(),
-		updated_at: new Date(),
+		createdAt: new Date(),
+		updatedAt: new Date(),
 		...overrides,
 	}
 

@@ -3,26 +3,28 @@ import { hashPassword } from '../passwordHash.js'
 
 export async function mapUpdateUserRequestToDb(
 	updates: UpdateUserRequest
-): Promise<{
-	first_name?: string
-	last_name?: string
-	email?: string
-	password?: string
-	type_user_id?: string
-}> {
-	const dbUpdates: {
-		first_name?: string
-		last_name?: string
-		email?: string
-		password?: string
-		type_user_id?: string
-	} = {}
+): Promise<
+	Partial<{
+		firstName: string
+		lastName: string
+		email: string
+		password: string
+		userTypeId: string
+	}>
+> {
+	const dbUpdates: Partial<{
+		firstName: string
+		lastName: string
+		email: string
+		password: string
+		userTypeId: string
+	}> = {}
 
 	if (updates.firstName !== undefined) {
-		dbUpdates.first_name = updates.firstName.trim()
+		dbUpdates.firstName = updates.firstName.trim()
 	}
 	if (updates.lastName !== undefined) {
-		dbUpdates.last_name = updates.lastName.trim()
+		dbUpdates.lastName = updates.lastName.trim()
 	}
 	if (updates.email !== undefined) {
 		dbUpdates.email = updates.email.trim().toLowerCase()
@@ -30,8 +32,8 @@ export async function mapUpdateUserRequestToDb(
 	if (updates.password !== undefined) {
 		dbUpdates.password = await hashPassword(updates.password)
 	}
-	if (updates.userType !== undefined) {
-		dbUpdates.type_user_id = updates.userType
+	if (updates.userTypeId !== undefined) {
+		dbUpdates.userTypeId = updates.userTypeId
 	}
 
 	return dbUpdates

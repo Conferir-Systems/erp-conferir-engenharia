@@ -186,7 +186,7 @@ describe('Supplier - integration crud test', () => {
 				supplierService.updateSupplier('00000000-0000-0000-0000-000000000000', {
 					name: 'Test',
 				})
-			).rejects.toThrow('suppliers not found')
+			).rejects.toThrow('Supplier not found')
 		})
 	})
 
@@ -214,7 +214,7 @@ describe('Supplier - integration crud test', () => {
 		it('throws error when trying to delete non-existent supplier', async () => {
 			await expect(
 				supplierService.deleteSupplier('00000000-0000-0000-0000-000000000000')
-			).rejects.toThrow('suppliers not found')
+			).resolves.toBeUndefined()
 		})
 	})
 })

@@ -3,7 +3,6 @@ export type { UUID } from './common.js'
 export type {
 	JwtPayload,
 	RefreshToken,
-	RefreshTokenDatabaseRow as AuthRefreshTokenDatabaseRow,
 	LoginRequest,
 	LoginResponse,
 	RefreshTokenRequest,
@@ -23,19 +22,6 @@ export type {
 	ContractItem,
 	ContractListItem,
 } from './contractItems.js'
-
-export type {
-	UserDatabaseRow,
-	UserTypeDatabaseRow,
-	WorkDatabaseRow,
-	SupplierDatabaseRow,
-	ContractDatabaseRow,
-	ContractQueryRow,
-	ContractItemDatabaseRow,
-	MeasurementDatabaseRow,
-	MeasurementItemDatabaseRow,
-	RefreshTokenDatabaseRow,
-} from './database.js'
 
 export type {
 	MeasurementItemParams,

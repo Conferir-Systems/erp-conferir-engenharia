@@ -1,4 +1,4 @@
-import type { UserType, UserTypeDatabaseRow, UUID } from '../types/index.js'
+import type { UserType, UUID } from '../types/index.js'
 import { BaseRepository } from './BaseRepository.js'
 import { ConflictError } from '../errors/index.js'
 
@@ -6,15 +6,12 @@ export type IUserTypeRepository = {
 	create(userType: UserType): Promise<void>
 	findById(id: UUID): Promise<UserType | null>
 	findAll(): Promise<UserType[]>
-	update(
-		id: UUID,
-		updates: Partial<Omit<UserTypeDatabaseRow, 'id'>>
-	): Promise<void>
+	update(id: UUID, updates: Partial<Omit<UserType, 'id'>>): Promise<void>
 	delete(id: UUID): Promise<void>
 }
 
 class UserTypeRepository
-	extends BaseRepository<UserType, UserTypeDatabaseRow>
+	extends BaseRepository<UserType>
 	implements IUserTypeRepository
 {
 	constructor() {
@@ -27,24 +24,6 @@ class UserTypeRepository
 		}
 
 		await super.create(userType)
-	}
-
-	protected toDomain(row: UserTypeDatabaseRow): UserType {
-		return {
-			id: row.id,
-			name: row.name,
-			approveMeasurement: row.approve_measurement,
-			createdAt: row.created_at,
-			updatedAt: row.updated_at,
-		}
-	}
-
-	protected toDatabase(data: UserType): UserTypeDatabaseRow {
-		return {
-			id: data.id,
-			name: data.name,
-			approve_measurement: data.approveMeasurement,
-		}
 	}
 }
 

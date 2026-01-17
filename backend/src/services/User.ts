@@ -16,7 +16,7 @@ export type CreateUserParams = {
 	lastName: string
 	email: string
 	password: string
-	userType: string
+	userTypeId: string
 }
 
 export type UpdateUserParams = {
@@ -24,7 +24,7 @@ export type UpdateUserParams = {
 	lastName?: string
 	email?: string
 	password?: string
-	userType?: string
+	userTypeId?: string
 }
 
 export class UserService {
@@ -39,8 +39,8 @@ export class UserService {
 			firstName: params.firstName.trim(),
 			lastName: params.lastName.trim(),
 			email: params.email.trim().toLowerCase(),
-			passwordHash: await hashPassword(params.password),
-			userType: params.userType,
+			password: await hashPassword(params.password),
+			userTypeId: params.userTypeId,
 		}
 
 		await this.userRepo.create(createUserIntent)
@@ -48,7 +48,7 @@ export class UserService {
 
 		if (!createdUser) throw new NotFoundError('Failed to create user')
 
-		const userTypeId = createUserIntent.userType
+		const userTypeId = createUserIntent.userTypeId
 		const fullName: string = `${createUserIntent.firstName} ${createUserIntent.lastName}`
 
 		const userResponse: UserResponse = {
@@ -67,7 +67,7 @@ export class UserService {
 		if (!userRegister) return null
 
 		const fullName: string = `${userRegister.firstName} ${userRegister.lastName}`
-		const userTypeId = userRegister.userType
+		const userTypeId = userRegister.userTypeId
 
 		const userResponse: UserResponse = {
 			id: userRegister.id,
@@ -97,7 +97,7 @@ export class UserService {
 				id: row.id,
 				fullName: `${row.firstName} ${row.lastName}`,
 				email: row.email,
-				userType: await this.userTypeRepo.findById(row.userType),
+				userType: await this.userTypeRepo.findById(row.userTypeId),
 			}
 		}
 
@@ -118,7 +118,7 @@ export class UserService {
 			id: row.id,
 			fullName: `${row.firstName} ${row.lastName}`,
 			email: row.email,
-			userType: await this.userTypeRepo.findById(row.userType),
+			userType: await this.userTypeRepo.findById(row.userTypeId),
 		}
 
 		return userReponse

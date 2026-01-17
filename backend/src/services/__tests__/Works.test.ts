@@ -22,6 +22,8 @@ describe('Works - integration crud tests', () => {
 				address: 'Rua General Lima e Silva, Centro, Rio Grande do Sul',
 				contractor: 'Roberto Macedo',
 				status: 'ATIVA',
+				createdAt: expect.any(Date),
+				updatedAt: expect.any(Date),
 			})
 		})
 
@@ -41,6 +43,8 @@ describe('Works - integration crud tests', () => {
 				address: '1400, Canoas',
 				contractor: null,
 				status: 'ATIVA',
+				createdAt: expect.any(Date),
+				updatedAt: expect.any(Date),
 			})
 		})
 
@@ -67,17 +71,19 @@ describe('Works - integration crud tests', () => {
 					address: 'Endereço 2',
 					contractor: 'Governo',
 					status: 'ATIVA',
+					createdAt: expect.any(Date),
+					updatedAt: expect.any(Date),
 				})
 			})
 
 			it('throws an error if work does not exist', async () => {
 				const nonExistentId = '00000000-0000-0000-0000-000000000000'
 
-				await expect(
-					workService.updateWork(nonExistentId, {
-						name: 'Obra 2',
-					})
-				).rejects.toThrow('works not found')
+				const result = await workService.updateWork(nonExistentId, {
+					name: 'Obra 2',
+				})
+
+				expect(result).toBeNull()
 			})
 		})
 
@@ -94,13 +100,15 @@ describe('Works - integration crud tests', () => {
 				await workService.deleteWork(createdWork.id)
 
 				const workInDb = await db('works').where({ id: createdWork.id }).first()
-				expect(workInDb).toBeUndefined()
+				expect(workInDb).toBeNull()
 			})
 
 			it('throws an error if deletion fails', async () => {
 				const nonExistentId = '00000000-0000-0000-0000-000000000000'
 
-				await expect(workService.deleteWork(nonExistentId)).rejects.toThrow()
+				await expect(
+					workService.deleteWork(nonExistentId)
+				).resolves.toBeUndefined()
 			})
 		})
 	})

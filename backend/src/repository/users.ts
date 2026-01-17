@@ -1,19 +1,16 @@
-import type { User, UserDatabaseRow, UUID } from '../types/index.js'
+import type { User, UUID } from '../types/index.js'
 import { BaseRepository } from './BaseRepository.js'
 import { ConflictError } from '../errors/index.js'
 
 export type IUserRepository = {
 	create(user: User): Promise<void>
-	update(id: UUID, updates: Partial<Omit<UserDatabaseRow, 'id'>>): Promise<void>
+	update(id: UUID, updates: Partial<Omit<User, 'id'>>): Promise<void>
 	delete(id: UUID): Promise<void>
 	findByEmail(email: string): Promise<User | null>
 	findById(id: UUID): Promise<User | null>
 }
 
-class UserRepository
-	extends BaseRepository<User, UserDatabaseRow>
-	implements IUserRepository
-{
+class UserRepository extends BaseRepository<User> implements IUserRepository {
 	constructor() {
 		super('users')
 	}
@@ -25,10 +22,7 @@ class UserRepository
 		await super.create(user)
 	}
 
-	async update(
-		id: UUID,
-		updates: Partial<Omit<UserDatabaseRow, 'id'>>
-	): Promise<void> {
+	async update(id: UUID, updates: Partial<Omit<User, 'id'>>): Promise<void> {
 		try {
 			await super.update(id, updates)
 		} catch (err) {
@@ -50,41 +44,19 @@ class UserRepository
 	}
 
 	async findByEmail(email: string): Promise<User | null> {
-		const row = await this.db('users').where({ email }).first<UserDatabaseRow>()
+		const row = await this.db('users').where({ email }).first<User>()
 
 		if (!row) return null
 
-		return this.toDomain(row)
+		return row
 	}
 
 	async findById(id: UUID): Promise<User | null> {
-		const row = await this.db('users').where({ id }).first<UserDatabaseRow>()
+		const row = await this.db('users').where({ id }).first<User>()
 
 		if (!row) return null
 
-		return this.toDomain(row)
-	}
-
-	protected toDomain(row: UserDatabaseRow): User {
-		return {
-			id: row.id,
-			firstName: row.first_name,
-			lastName: row.last_name,
-			email: row.email,
-			passwordHash: row.password,
-			userType: row.type_user_id,
-		}
-	}
-
-	protected toDatabase(user: User): UserDatabaseRow {
-		return {
-			id: user.id,
-			first_name: user.firstName,
-			last_name: user.lastName,
-			email: user.email,
-			password: user.passwordHash,
-			type_user_id: user.userType,
-		}
+		return row
 	}
 }
 

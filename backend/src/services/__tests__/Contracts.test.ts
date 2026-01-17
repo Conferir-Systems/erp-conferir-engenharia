@@ -8,11 +8,11 @@ import {
 } from '../../test-helpers/db-helpers'
 import { supplierService, workService } from '../instances'
 import { randomUUID } from 'crypto'
-import type { Work, SupplierDatabaseRow } from '../../types/index.js'
+import type { Work, Supplier } from '../../types/index.js'
 
 describe('Contract - integration crud test', () => {
 	let testWork: Work
-	let testSupplier: SupplierDatabaseRow
+	let testSupplier: Supplier
 
 	beforeEach(async () => {
 		await cleanDatabase()

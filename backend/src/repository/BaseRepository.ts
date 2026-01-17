@@ -3,7 +3,7 @@ import { db } from '../database/db.js'
 import { NotFoundError } from '../errors/index.js'
 import type { UUID } from '../types/index.js'
 
-export abstract class BaseRepository<TDomain, TDatabase = TDomain> {
+export abstract class BaseRepository<TDomain> {
 	constructor(protected readonly tableName: string) {}
 
 	protected get db(): Knex {
@@ -16,26 +16,26 @@ export abstract class BaseRepository<TDomain, TDatabase = TDomain> {
 
 	async findBy(conditions: Record<string, unknown>): Promise<TDomain | null> {
 		const row = (await this.db(this.tableName).where(conditions).first()) as
-			| TDatabase
+			| TDomain
 			| undefined
 
 		if (!row) {
 			return null
 		}
 
-		return this.toDomain(row)
+		return row
 	}
 
 	async findAll(): Promise<TDomain[]> {
-		const rows = (await this.db(this.tableName).select('*')) as TDatabase[]
-		return rows.map((row) => this.toDomain(row))
+		const rows = (await this.db(this.tableName).select('*')) as TDomain[]
+		return rows
 	}
 
 	async create(data: TDomain): Promise<void> {
-		await this.db(this.tableName).insert(this.toDatabase(data))
+		await this.db(this.tableName).insert(data)
 	}
 
-	async update(id: UUID, updates: Partial<TDatabase>): Promise<void> {
+	async update(id: UUID, updates: Partial<TDomain>): Promise<void> {
 		const result = await this.db(this.tableName).where({ id }).update(updates)
 
 		if (result === 0) {
@@ -49,13 +49,5 @@ export abstract class BaseRepository<TDomain, TDatabase = TDomain> {
 		if (result === 0) {
 			throw new NotFoundError(`${this.tableName} not found`)
 		}
-	}
-
-	protected toDomain(row: TDatabase): TDomain {
-		return row as unknown as TDomain
-	}
-
-	protected toDatabase(data: TDomain): Partial<TDatabase> {
-		return data as unknown as Partial<TDatabase>
 	}
 }

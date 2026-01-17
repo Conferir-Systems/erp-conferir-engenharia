@@ -1,8 +1,4 @@
-import type {
-	ContractItem,
-	ContractItemDatabaseRow,
-	UUID,
-} from '../types/index.js'
+import type { ContractItem, UUID } from '../types/index.js'
 import { BaseRepository } from './BaseRepository.js'
 
 export type IContractItemRepository = {
@@ -15,7 +11,7 @@ export type IContractItemRepository = {
 }
 
 class ContractItemRepository
-	extends BaseRepository<ContractItem, ContractItemDatabaseRow>
+	extends BaseRepository<ContractItem>
 	implements IContractItemRepository
 {
 	constructor() {
@@ -23,55 +19,22 @@ class ContractItemRepository
 	}
 
 	async createMany(contractItems: ContractItem[]): Promise<void> {
-		const databaseRows = contractItems.map((item) => this.toDatabase(item))
-		await this.db(this.tableName).insert(databaseRows)
+		await this.db(this.tableName).insert(contractItems)
 	}
 
 	async findByIds(ids: UUID[]): Promise<ContractItem[]> {
 		if (ids.length === 0) {
 			return []
 		}
-		const rows = (await this.db(this.tableName)
-			.whereIn('id', ids)
-			.select('*')) as ContractItemDatabaseRow[]
+		const rows = await this.db(this.tableName).whereIn('id', ids).select('*')
 
-		return rows.map((row) => this.toDomain(row))
+		return rows
 	}
 
 	async findByContractId(contractId: UUID): Promise<ContractItem[]> {
-		const rows = (await this.db(this.tableName)
-			.where({ contract_id: contractId })
-			.select('*')) as ContractItemDatabaseRow[]
+		const rows = await this.db(this.tableName).where({ contractId }).select('*')
 
-		return rows.map((row) => this.toDomain(row))
-	}
-
-	protected toDomain(row: ContractItemDatabaseRow): ContractItem {
-		return {
-			id: row.id,
-			contractId: row.contract_id,
-			unitMeasure: row.unit_measure,
-			quantity: row.quantity,
-			unitLaborValue: row.unit_labor_value,
-			totalValue: row.total_value,
-			description: row.description,
-			createdAt: row.created_at,
-			updatedAt: row.updated_at,
-		}
-	}
-
-	protected toDatabase(data: ContractItem): ContractItemDatabaseRow {
-		return {
-			id: data.id,
-			contract_id: data.contractId,
-			unit_measure: data.unitMeasure,
-			quantity: data.quantity,
-			unit_labor_value: data.unitLaborValue,
-			total_value: data.totalValue,
-			description: data.description,
-			created_at: data.createdAt ?? new Date(),
-			updated_at: data.updatedAt ?? new Date(),
-		}
+		return rows
 	}
 }
 
